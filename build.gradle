@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.BookStoreProject'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.3.0'
+    compileOnly 'org.projectlombok:lombok:1.18.22' // Updated to the latest version
+    annotationProcessor 'org.projectlombok:lombok:1.18.22' // Updated to the latest version
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.0'
+    testImplementation 'org.springframework.security:spring-security-test:5.6.0' // Updated to the latest version
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.8.3' // Updated to the latest version
+    implementation 'org.modelmapper:modelmapper:2.4.4' // or the latest version
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+
+
+
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

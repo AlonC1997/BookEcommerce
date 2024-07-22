@@ -1,0 +1,10 @@
+package com.bookstoreproject.mybookstore.repository;
+
+import com.bookstoreproject.mybookstore.entity.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByUserId(Long userId);
+}

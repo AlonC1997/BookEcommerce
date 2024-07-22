@@ -1,0 +1,60 @@
+/* Navbar CSS */
+.navbar {
+  font-family: 'Open Sans', sans-serif !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(190, 132, 17, 0.8) ; /* Green background with 80% opacity */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px); /* Apply blur effect for transparency */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  z-index: 1000; /* Ensure navbar stays on top of other content */
+}
+
+.brand {
+  /*font-family: "du AU VIC WA NT Hand", cursive;*/
+  /*font-family: 'Lora', sans-serif;*/
+  font-size: 1.5rem;
+  color: rgb(7, 10, 4); /* White text color */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.nav-links a, .continue-without-login {
+  color: white; /* White text color for links */
+  text-decoration: none;
+  padding: 10px 20px;
+  margin-right: 30px; /* Adjust margin to reduce the right spacing */
+  transition: all 0.3s ease;
+  border-radius: 5px; /* Add border radius to match the image */
+}
+
+.nav-links a:hover, .continue-without-login:hover {
+  background-color: rgba(141, 99, 190, 0.8); /* Light green background on hover with 80% opacity */
+}
+
+.active {
+  font-weight: bold;
+  background-color: rgba(122, 121, 127, 0.8); /* Light green background for active link */
+  color: white;
+}
+
+button {
+  font-size: 1rem;
+  color: rgb(255, 255, 255); /* White text color */
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px; /* Add border radius to match the image */
+}

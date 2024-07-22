@@ -1,0 +1,60 @@
+.book-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: transform 0.2s ease-in-out;
+  height: auto; /* Adjust height based on content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+
+.book-image {
+  text-align: center;
+  margin-bottom: 10px;
+  height: 200px; /* Adjust to ensure image fits */
+  overflow: hidden; /* Hide overflow */
+}
+
+.book-image img {
+  width: 100%; /* Ensure image fits container width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Cover the container without stretching */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.book-details {
+  padding: 10px;
+}
+
+.book-details h3 {
+  font-size: 18px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.book-details p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666666;
+  margin-bottom: 8px;
+}
+
+/* Stock status styles */
+.out-of-stock {
+  color: red;
+}
+
+.low-stock {
+  color: orange;
+}
+
+.high-stock {
+  color: green;
+}
