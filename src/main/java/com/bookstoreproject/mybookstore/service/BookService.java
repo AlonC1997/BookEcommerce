@@ -71,4 +71,22 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
         return book.getStockQuantity();
     }
+
+    @Transactional
+    public void decreaseStockQuantity(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        if (book.getStockQuantity() > 0) {
+            book.setStockQuantity(book.getStockQuantity() - 1);
+            bookRepository.save(book);
+        } else {
+            throw new IllegalArgumentException("Stock quantity cannot be less than zero");
+        }
+    }
+
+    @Transactional
+    public void increaseStockQuantity(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        book.setStockQuantity(book.getStockQuantity() + 1);
+        bookRepository.save(book);
+    }
 }

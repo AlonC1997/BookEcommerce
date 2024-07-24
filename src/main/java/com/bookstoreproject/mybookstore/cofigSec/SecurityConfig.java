@@ -22,7 +22,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -36,20 +39,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authz) -> authz.
-                         requestMatchers("/auth/**", "/carts/**", "/orders/**","/books/getAllBooks").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority(ADMIN)
+        http
+                .cors(withDefaults()) // Apply CORS configuration
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/auth/**", "/orders/**").permitAll()
+                        .requestMatchers("/carts/**").hasAuthority("USER")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET).permitAll()
-                        .requestMatchers(HttpMethod.PUT).hasAuthority(USER)
-                        //.requestMatchers(HttpMethod.POST).permitAll()
-                        .anyRequest()
-                        .authenticated());
-
-        http.exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(authEntryPoint));
-        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.csrf(AbstractHttpConfigurer::disable)
-        .cors(AbstractHttpConfigurer::disable); // Enable CORS in Security
+                        .requestMatchers(HttpMethod.PUT).permitAll()//hasAuthority("USER")//
+                        .requestMatchers(HttpMethod.POST).permitAll()//hasAuthority("USER")//
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authEntryPoint))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
@@ -72,51 +76,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    /*
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/users/**", "/register", "/public/**").permitAll()
-                        .requestMatchers("/admin/addAdmin").hasAuthority("ADMIN")
-                        .anyRequest().authenticated())
-                .httpBasic(withDefaults())
-                .formLogin(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
-
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
-    }
-
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
-
-    }
-    */
-
-
 }

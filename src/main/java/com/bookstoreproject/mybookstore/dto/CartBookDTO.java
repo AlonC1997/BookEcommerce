@@ -8,13 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-public class CartItemDTO {
+public class CartBookDTO {
     private Long bookId;
     private Integer quantity;
 
-    public CartItemDTO(Long bookId, Integer quantity) {
+    public CartBookDTO(Long bookId, Integer quantity) {
         this.bookId = bookId;
         this.quantity = quantity;
     }
+
+    public CartBookDTO() {}
 
 }

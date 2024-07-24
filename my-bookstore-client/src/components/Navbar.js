@@ -47,9 +47,7 @@ const Navbar = ({ isLoggedIn, isAdmin, onLogout }) => {
       <Link to="/home" className={location.pathname === '/home' ? 'active' : ''}>
         Home
       </Link>
-      <Link to="/book-catalog" className={location.pathname === '/book-catalog' ? 'active' : ''}>
-        Book Catalog
-      </Link>
+      
       {/* Add other user-specific links here */}
     </>
   );

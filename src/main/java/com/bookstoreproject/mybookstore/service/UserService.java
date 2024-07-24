@@ -52,7 +52,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDTO getUserById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
@@ -78,39 +78,5 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
     }
-
-
-    /*
-    @Transactional
-    public void registerUser(UserDTO userDTO) throws UserRegistrationException {
-        // Check if username already exists
-        if (userRepository.existsByUsername(userDTO.getUsername())) {
-            throw new UserRegistrationException("Username already exists: " + userDTO.getUsername());
-        }
-
-        // Convert UserDTO to User entity
-        User user = modelMapper.map(userDTO, User.class);
-
-        // Encode password before saving
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-        // Save user
-        userRepository.save(user);
-    }
-     */
-
-    /* Already defined in AuthController
-    @Transactional
-    public UserDTO loginUser(String username, String password) throws UserNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new UserNotFoundException("Invalid password");
-        }
-
-        return modelMapper.map(user, UserDTO.class);
-    }
-    */
 
 }

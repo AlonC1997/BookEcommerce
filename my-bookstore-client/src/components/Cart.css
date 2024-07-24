@@ -1,50 +1,80 @@
-.cart-container {
-    position: fixed;
-    top: 0;
-    left: -300px; /* Hide initially */
-    width: 300px;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-    transition: left 0.3s ease;
-    z-index: 1000;
-    overflow-y: auto;
-  }
-  
-  .cart-container.show {
-    left: 0;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #f00;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .cart-items {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .submit-cart-button {
-    margin: 10px;
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
+.cart {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 50%; /* Increase width */
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.cart h2 {
+  margin-top: 0;
+  font-size: 1.5em; /* Adjust font size */
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cart li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px; /* Increased spacing */
+  padding: 10px; /* Padding for better spacing */
+  border-bottom: 1px solid #ddd; /* Light border for separation */
+}
+
+.cart img {
+  width: 80px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 10px; /* Space between image and text */
+}
+
+.cart span {
+  flex: 1; /* Flex property for better alignment */
+}
+
+.cart button {
+  background-color: #dc3545; /* Red for remove button */
+  color: white;
+  border: none;
+  padding: 10px 15px; /* Adjust padding for better appearance */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 0 5px; /* Space between buttons */
+}
+
+.cart button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cart button:hover:not(:disabled) {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.cart .close-cart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff; /* Blue for close button */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.cart .close-cart:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

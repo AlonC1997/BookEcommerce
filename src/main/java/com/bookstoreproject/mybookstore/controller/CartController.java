@@ -4,9 +4,12 @@ import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.CartNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
 import com.bookstoreproject.mybookstore.dto.CartDTO;
+import com.bookstoreproject.mybookstore.dto.CartBookDTO;
+import com.bookstoreproject.mybookstore.service.CartBookService;
 import com.bookstoreproject.mybookstore.service.CartService;
 import com.bookstoreproject.mybookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -15,43 +18,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/carts")
+@CrossOrigin(origins = "http://localhost:3000/**")
 public class CartController {
 
-    private final CartService cartService;
-    private final UserService userService;
+    @Autowired
+    private  CartService cartService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public CartController(CartService cartService, UserService userService) {
-        this.cartService = cartService;
-        this.userService = userService;
-    }
-
-
-    /*
-    @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/addOneBook")
-    public ResponseEntity<?> addOneBookToCart(@RequestParam Long bookId) {
-        // Retrieve authenticated user's cartId
-        Long cartId = getLoggedInUserCartId();
-        try {
-            cartService.addOneBookToCart(cartId, bookId);
-            return ResponseEntity.ok("Book added to cart successfully");
-        } catch (CartNotFoundException | BookNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-*/
+    private CartBookService cartBookService;
 
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/addOneBook")
-    public ResponseEntity<?> addOneBookToCart(@RequestParam Long bookId) {
+    public ResponseEntity<String> addOneBookToCart(@RequestParam Long bookId) {
+        System.out.println("I got here");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
         try {
             // Retrieve the logged-in user's cart ID
             Long cartId = userService.getLoggedInUserCartId(username);
@@ -59,8 +47,11 @@ public class CartController {
             return ResponseEntity.ok("Book added to cart successfully");
         } catch (CartNotFoundException | BookNotFoundException | UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // For out-of-stock case
         }
     }
+
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/removeBook")
@@ -76,13 +67,16 @@ public class CartController {
         } catch (CartNotFoundException | BookNotFoundException | UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/submitCart")
-    public ResponseEntity<?> submitCart(@RequestParam Long cartId) {
+    public ResponseEntity<?> submitCart() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         try {
+            // Retrieve the logged-in user's cart ID
+            Long cartId = userService.getLoggedInUserCartId(username);
             cartService.submitCart(cartId);
             return ResponseEntity.ok("Cart submitted successfully");
         } catch (CartNotFoundException e) {
@@ -93,8 +87,11 @@ public class CartController {
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/sumCart") //http://localhost:8080/sumCart?cartId=1 (Calling example)
-    public ResponseEntity<?> sumAllCartProducts(@RequestParam Long cartId) {
+    public ResponseEntity<?> sumAllCartProducts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         try {
+            Long cartId = userService.getLoggedInUserCartId(username);
             BigDecimal total = cartService.sumAllCartProducts(cartId);
             return ResponseEntity.ok("Total price of cart products: " + total);
         } catch (CartNotFoundException e) {
@@ -102,14 +99,27 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getCart")
-    public ResponseEntity<CartDTO> getCartById(@RequestParam Long id) {
+    public ResponseEntity<CartDTO> getCart() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         try {
-            CartDTO cartDTO = cartService.getCartById(id);
+            // Retrieve the logged-in user's cart ID
+            Long cartId = userService.getLoggedInUserCartId(username);
+            CartDTO cartDTO = cartService.getCartById(cartId);
             return ResponseEntity.ok(cartDTO);
         } catch (CartNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/getCartBooks")
+    public List<CartBookDTO> getCartItems() throws CartNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Long cartId = userService.getLoggedInUserCartId(username);
+        return cartBookService.getCartBooksByCartId(cartId);
     }
 }

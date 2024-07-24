@@ -4,7 +4,7 @@ import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.OrderNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.OutOfStockException;
 import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
-import com.bookstoreproject.mybookstore.dto.CartItemDTO;
+import com.bookstoreproject.mybookstore.dto.CartBookDTO;
 import com.bookstoreproject.mybookstore.dto.OrderDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.entity.Order;
@@ -36,9 +36,6 @@ public class OrderService {
     private BookRepository bookRepository;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     public Order createOrder(OrderDTO orderDTO) throws UserNotFoundException, BookNotFoundException, OutOfStockException {
@@ -50,9 +47,9 @@ public class OrderService {
         List<Book> orderedBooks = new ArrayList<>();
         BigDecimal totalPrice = BigDecimal.ZERO;
 
-        for (CartItemDTO cartItemDTO : orderDTO.getCartItems()) {
-            Long bookId = cartItemDTO.getBookId();
-            Integer quantity = cartItemDTO.getQuantity();
+        for (CartBookDTO cartBookDTO : orderDTO.getCartBooks()) {
+            Long bookId = cartBookDTO.getBookId();
+            Integer quantity = cartBookDTO.getQuantity();
 
             // Fetch book
             Book book = bookRepository.findById(bookId)

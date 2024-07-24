@@ -1,0 +1,60 @@
+.book-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.book-card img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+}
+
+.book-details {
+  padding: 10px;
+}
+
+.book-details h3 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.book-details p {
+  margin: 5px 0;
+}
+
+.book-details h5 {
+  margin: 10px 0;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.out-of-stock {
+  color: red;
+}
+
+.low-stock {
+  color: orange;
+}
+
+.high-stock {
+  color: green;
+}
