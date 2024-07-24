@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './BookCard.css';
+import styles from './BookCard.module.css'; // Import CSS Module
 import axios from 'axios';
 
 const BookCard = ({ book }) => {
@@ -17,7 +17,6 @@ const BookCard = ({ book }) => {
           console.error('Error fetching stock quantity', error);
         }
       };
-      
 
       fetchStockQuantity();
     } else {
@@ -29,22 +28,22 @@ const BookCard = ({ book }) => {
     if (stockQuantity === null) {
       return 'Loading...';
     } else if (stockQuantity === 0) {
-      return <span className="out-of-stock">OUT OF STOCK</span>;
+      return <span className={styles.outOfStock}>OUT OF STOCK</span>;
     } else if (stockQuantity <= 5) {
-      return <span className="low-stock">LOW STOCK</span>;
+      return <span className={styles.lowStock}>LOW STOCK</span>;
     } else {
-      return <span className="high-stock">IN STOCK</span>;
+      return <span className={styles.highStock}>IN STOCK</span>;
     }
   };
 
   const imageSrc = `${process.env.PUBLIC_URL}${book.img_link}`;
 
   return (
-    <div className="book-card">
-      <div className="book-image">
+    <div className={styles.bookCard}>
+      <div className={styles.bookImage}>
         <img src={imageSrc} alt={book.name} />
       </div>
-      <div className="book-details">
+      <div className={styles.bookDetails}>
         <h3>{book.name}</h3>
         <p><strong>Author:</strong> {book.author}</p>
         <p>{book.description}</p>

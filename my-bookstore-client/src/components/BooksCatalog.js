@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BookCard from './BookCard';
 import BottomNavbar from './BottomNavbar'; // Assuming you have a BottomNavbar component
-import './BooksCatalog.css';
+import styles from './BooksCatalog.module.css'; // Import CSS module
 
 const BooksCatalog = () => {
   const [books, setBooks] = useState([]);
@@ -36,14 +36,14 @@ const BooksCatalog = () => {
   }, [categoryFilter, searchQuery]);
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   // Apply filters and search
   const filteredBooks = books
     .filter(book =>
-      (categoryFilter.football && book.category === 'football') ||
-      (categoryFilter.otherSports && book.category === 'other')
+      (categoryFilter.football && book.category === 'Football') ||
+      (categoryFilter.otherSports && book.category === 'Other')
     )
     .filter(book =>
       book.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,9 +55,9 @@ const BooksCatalog = () => {
   const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
 
   // Categorize books
-  const footballBooks = filteredBooks.filter(book => book.category === 'football');
-  const otherSportsBooks = filteredBooks.filter(book => book.category === 'other');
-
+  const footballBooks = filteredBooks.filter(book => book.category === 'Football');
+  const otherSportsBooks = filteredBooks.filter(book => book.category === 'Other');
+  
   // Determine if the category has books on the current page
   const hasFootballBooks = footballBooks.length > 0 && footballBooks.some(book => filteredBooks.includes(book));
   const hasOtherSportsBooks = otherSportsBooks.length > 0 && otherSportsBooks.some(book => filteredBooks.includes(book));
@@ -71,10 +71,10 @@ const BooksCatalog = () => {
   };
 
   return (
-    <div className="books-catalog">
-      <h1 className="page-title">Discover Our Collection</h1> {/* New title */}
+    <div className={styles.booksCatalog}>
+      <h1 className={styles.pageTitle}>Discover Our Collection</h1> {/* New title */}
       
-      <div className="filters">
+      <div className={styles.filters}>
         <h3>Filter by Category:</h3>
         <label>
           <input
@@ -82,7 +82,7 @@ const BooksCatalog = () => {
             checked={categoryFilter.football}
             onChange={() => handleCategoryChange('football')}
           />
-          Football Autobiographies ({filteredBooks.filter(book => book.category === 'football').length})
+          Football Autobiographies ({filteredBooks.filter(book => book.category === 'Football').length})
         </label>
         <label>
           <input
@@ -90,11 +90,11 @@ const BooksCatalog = () => {
             checked={categoryFilter.otherSports}
             onChange={() => handleCategoryChange('otherSports')}
           />
-          Other Sports Autobiographies ({filteredBooks.filter(book => book.category === 'other').length})
+          Other Sports Autobiographies ({filteredBooks.filter(book => book.category === 'Other').length})
         </label>
       </div>
 
-      <div className="search">
+      <div className={styles.search}>
         <input
           type="text"
           placeholder="Search by book name..."
@@ -103,45 +103,42 @@ const BooksCatalog = () => {
         />
       </div>
 
-      <div className="section">
-        {categoryFilter.football && hasFootballBooks && (
-          <>
-            <h2>Football Autobiographies</h2>
-            <div className="book-container">
-              {footballBooks.slice(indexOfFirstBook, indexOfLastBook).map(book => (
-                <BookCard key={book.id} book={book} />
-              ))}
-            </div>
-          </>
-        )}
-        {categoryFilter.otherSports && hasOtherSportsBooks && (
-          <>
-            <h2>Other Sports Autobiographies</h2>
-            <div className="book-container">
-              {otherSportsBooks.slice(indexOfFirstBook, indexOfLastBook).map(book => (
-                <BookCard key={book.id} book={book} />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+      {hasFootballBooks && (
+        <section className={styles.section}>
+          <h2>Football Autobiographies</h2>
+          <div className={styles.bookContainer}>
+            {footballBooks.slice(indexOfFirstBook, indexOfLastBook).map(book => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      )}
 
-      <div className="pagination">
+      {hasOtherSportsBooks && (
+        <section className={styles.section}>
+          <h2>Other Sports Autobiographies</h2>
+          <div className={styles.bookContainer}>
+            {otherSportsBooks.slice(indexOfFirstBook, indexOfLastBook).map(book => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className={styles.pagination}>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1 || totalPages === 0}
+          disabled={currentPage === 1}
         >
-          Previous
+          Prev
         </button>
-        <span>Page {totalPages === 0 ? 0 : currentPage} of {totalPages}</span>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || totalPages === 0}
+          disabled={currentPage === totalPages}
         >
           Next
         </button>
       </div>
-
 
     </div>
   );

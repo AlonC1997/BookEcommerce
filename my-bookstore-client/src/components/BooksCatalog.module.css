@@ -1,10 +1,8 @@
-/* BooksCatalog.css */
-
 /* Books Catalog Container */
-.books-catalog {
+.booksCatalog {
   max-width: 88% !important; /* Container max width */
-  margin: 40px auto 10px ; /* Margin to avoid overlap with navbar */
-  padding: 30px ;
+  margin: 40px auto 10px; /* Margin to avoid overlap with navbar */
+  padding: 30px;
   box-sizing: border-box !important; /* Padding included in max-width */
   background-color: #fff !important; /* Background color for better contrast */
   border-radius: 8px !important; /* Rounded corners for a clean look */
@@ -12,7 +10,7 @@
 }
 
 /* Page Title */
-.page-title {
+.pageTitle {
   text-align: center;
   font-size: 36px;
   font-weight: bold;
@@ -70,14 +68,14 @@
 }
 
 /* Book Container Grid */
-.book-container {
+.bookContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ensure 3 columns max */
   gap: 20px; /* Space between items */
 }
 
 /* Book Card */
-.book-card {
+.bookCard {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -90,19 +88,19 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.book-card:hover {
+.bookCard:hover {
   transform: translateY(-5px);
 }
 
 /* Book Image */
-.book-image {
+.bookImage {
   text-align: center;
   margin-bottom: 10px;
   height: 200px; /* Adjust to ensure image fits */
   overflow: hidden; /* Hide overflow */
 }
 
-.book-image img {
+.bookImage img {
   width: 100%; /* Ensure image fits container width */
   height: auto; /* Maintain aspect ratio */
   object-fit: cover; /* Cover the container without stretching */
@@ -111,17 +109,17 @@
 }
 
 /* Book Details */
-.book-details {
+.bookDetails {
   padding: 10px;
 }
 
-.book-details h3 {
+.bookDetails h3 {
   font-size: 18px;
   margin-top: 12px;
   margin-bottom: 8px;
 }
 
-.book-details p {
+.bookDetails p {
   font-size: 14px;
   line-height: 1.6;
   color: #666666;
@@ -129,15 +127,15 @@
 }
 
 /* Stock Status Styles */
-.out-of-stock {
+.outOfStock {
   color: red;
 }
 
-.low-stock {
+.lowStock {
   color: orange;
 }
 
-.high-stock {
+.highStock {
   color: green;
 }
 
@@ -169,18 +167,4 @@
   background-color: #f0f0f0; /* Background for disabled state */
 }
 
-/* Bottom Navbar */
-.bottom-navbar {
-  margin-top: 40px;
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
 
-.bottom-navbar p {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-}

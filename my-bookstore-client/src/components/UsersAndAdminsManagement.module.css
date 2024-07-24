@@ -1,0 +1,116 @@
+/* UsersAndAdminsManagement.module.css */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.header {
+  font-size: 2.5em;
+  text-align: center;
+  margin: 10% 0 20px; /* Adjust top margin to push it down */
+  color: #333;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  position: relative; /* Ensure it stays within its parent container */
+  z-index: 1; /* Ensure it appears above other content if needed */
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.searchBox {
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 300px;
+}
+
+.checkboxes {
+  display: flex;
+  gap: 10px;
+}
+
+.addButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.addButton:hover {
+  background-color: #0056b3;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.formContainer {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.subTitle {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  margin-bottom: 5px;
+  display: block;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.submitButton {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #218838;
+}

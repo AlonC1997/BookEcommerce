@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Data
 public class BookDTO {
-    public  Long id;
+    private Long id;
     private String name;
     private String author;
     private BigDecimal price;
@@ -18,8 +18,10 @@ public class BookDTO {
     private String img_link;
     private String description;
     private String category;
+    private Boolean isDeleted;
 
     public BookDTO(Long id, String name, String author, BigDecimal price, Integer stockQuantity, String img_link, String description, String category) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.price = price;
@@ -27,7 +29,7 @@ public class BookDTO {
         this.img_link = img_link;
         this.description = description;
         this.category = category;
-        this.id = id;
+        this.isDeleted = false;
     }
 
     public BookDTO() {}

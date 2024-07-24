@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './Navbar.css';
+import styles from './Navbar.module.css';
 import WarningModal from './WarningModal';
 
-const Navbar = ({ isLoggedIn, isAdmin, onLogout }) => {
+const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,54 +33,55 @@ const Navbar = ({ isLoggedIn, isAdmin, onLogout }) => {
 
   const renderAdminLinks = () => (
     <>
-      <Link to="/order-management" className={location.pathname === '/order-management' ? 'active' : ''}>
+      <Link to="/order-management" className={location.pathname === '/order-management' ? styles.active : ''}>
         Orders Management
       </Link>
-      <Link to="/stock-management" className={location.pathname === '/stock-management' ? 'active' : ''}>
+      <Link to="/stock-management" className={location.pathname === '/stock-management' ? styles.active : ''}>
         Stock Management
       </Link>
+      {isMainAdmin && (
+        <Link to="/users-and-admins-management" className={location.pathname === '/users-and-admins-management' ? styles.active : ''}>
+          Users and Admins Management
+        </Link>
+      )}
     </>
   );
 
   const renderUserLinks = () => (
     <>
-      <Link to="/home" className={location.pathname === '/home' ? 'active' : ''}>
+      <Link to="/home" className={location.pathname === '/home' ? styles.active : ''}>
         Home
       </Link>
-      
       {/* Add other user-specific links here */}
     </>
   );
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/home" className="brand">
+      <nav className={styles.navbar}>
+        <Link to="/home" className={styles.brand}>
           InalaBook
         </Link>
-        <div className="nav-links">
-          {isLoggedIn && (
+        <div className={styles.navLinks}>
+          {isLoggedIn ? (
             <>
-              {isAdmin ? renderAdminLinks() : renderUserLinks()}
+              {isAdmin || isMainAdmin ? renderAdminLinks() : renderUserLinks()}
+              <button onClick={handleLogout} className={styles.button}>Logout</button>
             </>
-          )}
-          {!isLoggedIn && (
+          ) : (
             <>
-              <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}>
+              <Link to="/login" className={location.pathname === '/login' ? styles.active : ''}>
                 Login
               </Link>
-              <Link to="/signup" className={location.pathname === '/signup' ? 'active' : ''}>
+              <Link to="/signup" className={location.pathname === '/signup' ? styles.active : ''}>
                 Sign Up 
               </Link>
               {location.pathname !== '/login' && location.pathname !== '/book-catalog' && (
-                <button onClick={handleContinueWithoutLogin} className="continue-without-login">
+                <button onClick={handleContinueWithoutLogin} className={styles.continueWithoutLogin}>
                   Collection
                 </button>
               )}
             </>
-          )}
-          {isLoggedIn && (
-            <button onClick={handleLogout}>Logout</button>
           )}
         </div>
       </nav>

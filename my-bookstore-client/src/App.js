@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import BottomNavbar from './components/BottomNavbar'; // Import BottomNavbar component
+import BottomNavbar from './components/BottomNavbar';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
-import BookCatalog from './components/BooksCatalog'; // Import your BookCatalog component
+import BookCatalog from './components/BooksCatalog';
 import Home from './components/Home';
 import OrderManagement from './components/OrdersManagement';
 import StockManagement from './components/StockManagement';
+import UsersAndAdminsManagement from './components/UsersAndAdminsManagement';
 import axios from 'axios';
 
-
 const App = () => {
-  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // Track admin status
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isMainAdmin, setIsMainAdmin] = useState(false);
 
-  // Function to handle login
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = parseJwt(token);
+      if (decodedToken) {
+        setIsLoggedIn(true);
+        setIsAdmin(decodedToken.role === 'ADMIN');
+        setIsMainAdmin(decodedToken.role === 'MAIN_ADMIN');
+      }
+    }
+  }, []);
+
   const handleLogin = async (username, password) => {
     try {
       const response = await axios.post('http://localhost:8080/auth/login', {
@@ -25,22 +36,20 @@ const App = () => {
         password,
       });
       const token = response.data.accessToken;
-      localStorage.setItem('token', token); // Store token in local storage
+      localStorage.setItem('token', token);
 
-      // Decode token to determine user role (admin or user)
       const decodedToken = parseJwt(token);
       const userRole = decodedToken.role;
 
-      // Update states based on user role
-      setIsLoggedIn(true); // Set logged in status
-      setIsAdmin(userRole === 'ADMIN'); // Set admin status based on user role
-      return userRole; // Return role
+      setIsLoggedIn(true);
+      setIsAdmin(userRole === 'ADMIN');
+      setIsMainAdmin(userRole === 'MAIN_ADMIN');
+      return userRole;
     } catch (error) {
       throw new Error('Invalid username or password');
     }
   };
 
-  // Function to parse JWT token
   const parseJwt = (token) => {
     try {
       return JSON.parse(atob(token.split('.')[1]));
@@ -50,29 +59,38 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from local storage
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
-    setIsAdmin(false); // Reset admin status on logout
+    setIsAdmin(false);
+    setIsMainAdmin(false);
   };
-
 
   return (
     <Router>
       <div className="App">
-        <Navbar isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
+        <Navbar isLoggedIn={isLoggedIn} isAdmin={isAdmin} isMainAdmin={isMainAdmin} onLogout={handleLogout} />
         <Routes>
           <Route path="/book-catalog" element={<BookCatalog />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
-          <Route path="/order-management" element={<OrderManagement />} />
-          <Route path="/stock-management" element={<StockManagement />} />
+          <Route
+            path="/order-management"
+            element={isLoggedIn && (isAdmin || isMainAdmin) ? <OrderManagement /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/stock-management"
+            element={isLoggedIn && (isAdmin || isMainAdmin) ? <StockManagement /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/users-and-admins-management"
+            element={isLoggedIn && isMainAdmin ? <UsersAndAdminsManagement /> : <Navigate to="/login" />}
+          />
         </Routes>
-        <BottomNavbar /> {/* Add BottomNavbar component */}
+        {!isAdmin && !isMainAdmin && <BottomNavbar />}
       </div>
     </Router>
   );
 };
 
 export default App;
-

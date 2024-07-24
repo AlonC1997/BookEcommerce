@@ -15,9 +15,5 @@ public class CartBookService {
     @Autowired
     private CartService cartService;
 
-    @Transactional
-    public List<CartBookDTO> getCartBooksByCartId(Long cartId) throws CartNotFoundException {
-        CartDTO cartDTO = cartService.getCartById(cartId);
-        return cartDTO.getCartBooks();
-    }
+
 }

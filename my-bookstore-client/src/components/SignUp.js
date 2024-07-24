@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './SignUp.css';
+import styles from './SignUp.module.css';
 
 const SignUp = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -9,10 +9,9 @@ const SignUp = ({ onLogin }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [showPopup, setShowPopup] = useState(false); // State to manage popup display
+  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
-  // Function to parse JWT token
   const parseJwt = (token) => {
     try {
       return JSON.parse(atob(token.split('.')[1]));
@@ -31,7 +30,6 @@ const SignUp = ({ onLogin }) => {
         address,
       });
       if (response.status === 200) {
-        // Show popup message on successful signup
         setShowPopup(true);
       }
     } catch (error) {
@@ -41,7 +39,6 @@ const SignUp = ({ onLogin }) => {
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    // Perform login after signup
     try {
       axios.post('http://localhost:8080/auth/login', {
         username,
@@ -49,10 +46,8 @@ const SignUp = ({ onLogin }) => {
       }).then(response => {
         const token = response.data.accessToken;
         localStorage.setItem('token', token);
-        // Decode token to determine user role (admin or user)
         const decodedToken = parseJwt(token);
         const userRole = decodedToken.role;
-        // Call onLogin prop passed from App.js to set login state
         onLogin(username, password);
         navigate('/home');
       }).catch(error => {
@@ -64,24 +59,24 @@ const SignUp = ({ onLogin }) => {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-form">
-        <h2 className="signup-title">Join InalaBook</h2>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
+    <div className={styles.signupContainer}>
+      <div className={styles.signupForm}>
+        <h2 className={styles.signupTitle}>Join InalaBook</h2>
+        {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Username:</label>
             <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Name:</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Address:</label>
             <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
           </div>
@@ -89,12 +84,12 @@ const SignUp = ({ onLogin }) => {
         </form>
       </div>
       {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <p className="popup-message">User created! Let's read</p>
-            <div className="popup-buttons">
-              <button className="popup-button" onClick={handlePopupClose}>Go to Home Page</button>
-              <button className="popup-button" onClick={() => setShowPopup(false)}>Later</button>
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <p className={styles.popupMessage}>User created! Let's read</p>
+            <div className={styles.popupButtons}>
+              <button className={styles.popupButton} onClick={handlePopupClose}>Go to Home Page</button>
+              <button className={styles.popupButton} onClick={() => setShowPopup(false)}>Later</button>
             </div>
           </div>
         </div>

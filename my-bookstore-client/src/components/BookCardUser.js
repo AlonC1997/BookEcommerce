@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './BookCardUser.css';
+import styles from './BookCardUser.module.css';
 
-const BookCardUser = ({ book, onCartUpdate }) => {
+const BookCardUser = ({ book, onCartUpdate, onAddToCart }) => {
   const [stockQuantity, setStockQuantity] = useState(null);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ const BookCardUser = ({ book, onCartUpdate }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (onCartUpdate) {
-        onCartUpdate(); // Notify Home component to refresh cart
+      if (onAddToCart) {
+        onAddToCart(); // Notify Home component to refresh cart immediately
       }
     } catch (error) {
       console.error('Error adding book to cart:', error);
@@ -39,20 +39,20 @@ const BookCardUser = ({ book, onCartUpdate }) => {
     if (stockQuantity === null) {
       return 'Loading...';
     } else if (stockQuantity === 0) {
-      return <span className="out-of-stock">OUT OF STOCK</span>;
+      return <span className={styles.outOfStock}>OUT OF STOCK</span>;
     } else if (stockQuantity <= 5) {
-      return <span className="low-stock">LOW STOCK</span>;
+      return <span className={styles.lowStock}>LOW STOCK</span>;
     } else {
-      return <span className="high-stock">IN STOCK</span>;
+      return <span className={styles.highStock}>IN STOCK</span>;
     }
   };
 
   const imageSrc = `${process.env.PUBLIC_URL}${book.img_link}`;
 
   return (
-    <div className="book-card">
-      <img src={imageSrc} alt={book.name} />
-      <div className="book-details">
+    <div className={styles.bookCard}>
+      <img src={imageSrc} alt={book.name} className={styles.bookImage} />
+      <div className={styles.bookDetails}>
         <h3>{book.name}</h3>
         <p><strong>Author:</strong> {book.author}</p>
         <p>{book.description}</p>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Cart.css';
+import styles from './Cart.module.css';
 
 const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -13,20 +13,20 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
         const cartResponse = await axios.get('http://localhost:8080/carts/getCartBooks', {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         const bookDetailsRequests = cartResponse.data.map(item =>
           axios.get(`http://localhost:8080/books/getBook?bookId=${item.bookId}`)
         );
         const booksResponse = await Promise.all(bookDetailsRequests);
         const books = booksResponse.map(res => res.data);
-  
+
         const cartItemsWithDetails = cartResponse.data.map(item => {
           const book = books.find(b => b.id === item.bookId);
           return { ...item, img_link: book.img_link };
         });
-  
+
         setCartItems(cartItemsWithDetails);
-  
+
         const stockRequests = cartResponse.data.map(item =>
           axios.get(`http://localhost:8080/books/getStockQuantity?bookId=${item.bookId}`)
         );
@@ -36,14 +36,14 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
           return acc;
         }, {});
         setStockQuantities(stockData);
-  
+
       } catch (error) {
         console.error('Error fetching cart:', error);
         setCartItems([]);
         setStockQuantities({});
       }
     };
-  
+
     if (cartVisible) {
       fetchCartItems();
     }
@@ -80,7 +80,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
       setStockQuantities(stockData);
 
       if (onCartUpdate) {
-        onCartUpdate(); // Notify Home component to refresh
+        onCartUpdate();
       }
 
     } catch (error) {
@@ -97,7 +97,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        refreshCart();
+        await refreshCart();
       }
     } catch (error) {
       console.error('Error adding book to cart:', error);
@@ -111,7 +111,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      refreshCart();
+      await refreshCart();
     } catch (error) {
       console.error('Error removing book from cart:', error);
     }
@@ -126,7 +126,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
       setCartItems([]);
       setCartVisible(false);
       if (onCartUpdate) {
-        onCartUpdate(); // Notify Home component to refresh
+        onCartUpdate();
       }
     } catch (error) {
       console.error('Error submitting cart:', error);
@@ -134,34 +134,41 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate }) => {
   };
 
   return (
-    <div className={`cart ${cartVisible ? 'visible' : 'hidden'}`}>
-      <button className="close-cart" onClick={() => setCartVisible(false)}>Close</button>
-      <h2>Your Cart</h2>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <ul>
-          {cartItems.map(item => (
-            <li key={item.bookId}>
-              <img 
-                src={`${process.env.PUBLIC_URL}${item.img_link}`} 
-                alt={`Book ${item.bookId}`} 
-              />
-              <span>Book ID: {item.bookId}</span>
-              <span>Quantity: {item.quantity}</span>
-              <button onClick={() => handleRemoveOne(item.bookId)}>-</button>
-              <button
-                onClick={() => handleAddOne(item.bookId)}
-                disabled={(stockQuantities[item.bookId] || 0) <= 0}
-              >
-                +
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <button onClick={handleSubmitCart}>Submit Cart</button>
-    </div>
+    <>
+      <button className={styles.cartToggle} onClick={() => setCartVisible(!cartVisible)}>
+        🛒
+      </button>
+      <div className={`${styles.cart} ${cartVisible ? styles.visible : styles.hidden}`}>
+        <button className={styles.closeCart} onClick={() => setCartVisible(false)}>Close</button>
+        <h2 className={styles.header}>Your Cart</h2>
+        {cartItems.length === 0 ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <ul className={styles.list}>
+            {cartItems.map(item => (
+              <li key={item.bookId} className={styles.listItem}>
+                <img 
+                  src={`${process.env.PUBLIC_URL}${item.img_link}`} 
+                  alt={`Book ${item.bookId}`} 
+                  className={styles.img}
+                />
+                <span className={styles.info}>Book ID: {item.bookId}</span>
+                <span className={styles.info}>Quantity: {item.quantity}</span>
+                <button className={`${styles.button} ${styles.remove}`} onClick={() => handleRemoveOne(item.bookId)}>-</button>
+                <button
+                  className={styles.button}
+                  onClick={() => handleAddOne(item.bookId)}
+                  disabled={(stockQuantities[item.bookId] || 0) <= 0}
+                >
+                  +
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <button className={styles.submitButton} onClick={handleSubmitCart}>Submit Cart</button>
+      </div>
+    </>
   );
 };
 

@@ -1,0 +1,68 @@
+/* Body and HTML */
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+/* Main App Container */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+}
+
+/* Bottom Navbar CSS */
+.bottomNavbar {
+  background-color: #a6c0af; /* Light green background */
+  border-top: 1px solid #ddd;
+  padding: 10px 1%; /* Adjust padding as necessary */
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure it spans the full width */
+}
+
+.bottomNavbarContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.bottomNavbarDetails {
+  flex: 1;
+}
+
+.bottomNavbarDetails p {
+  margin: 0px 5%;
+  font-size: 14px;
+}
+
+.bottomNavbarAdvertisement p {
+  margin: 0px 5%;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.link {
+  color: #007bff; /* Link color */
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.joinUsButton {
+  color: #007bff; /* Button color */
+  text-decoration: none;
+}
+
+.joinUsButton:hover {
+  text-decoration: underline;
+}

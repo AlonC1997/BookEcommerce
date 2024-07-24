@@ -27,21 +27,16 @@ public class CartController {
 
     @Autowired
     private  CartService cartService;
+
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private CartBookService cartBookService;
-
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/addOneBook")
     public ResponseEntity<String> addOneBookToCart(@RequestParam Long bookId) {
-        System.out.println("I got here");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         try {
-            // Retrieve the logged-in user's cart ID
             Long cartId = userService.getLoggedInUserCartId(username);
             cartService.addBookToCart(cartId, bookId);
             return ResponseEntity.ok("Book added to cart successfully");
@@ -75,7 +70,6 @@ public class CartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         try {
-            // Retrieve the logged-in user's cart ID
             Long cartId = userService.getLoggedInUserCartId(username);
             cartService.submitCart(cartId);
             return ResponseEntity.ok("Cart submitted successfully");
@@ -86,7 +80,7 @@ public class CartController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/sumCart") //http://localhost:8080/sumCart?cartId=1 (Calling example)
+    @GetMapping("/sumCart")
     public ResponseEntity<?> sumAllCartProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -100,26 +94,11 @@ public class CartController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/getCart")
-    public ResponseEntity<CartDTO> getCart() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        try {
-            // Retrieve the logged-in user's cart ID
-            Long cartId = userService.getLoggedInUserCartId(username);
-            CartDTO cartDTO = cartService.getCartById(cartId);
-            return ResponseEntity.ok(cartDTO);
-        } catch (CartNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getCartBooks")
-    public List<CartBookDTO> getCartItems() throws CartNotFoundException {
+    public List<CartBookDTO> getCartBooks() throws CartNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Long cartId = userService.getLoggedInUserCartId(username);
-        return cartBookService.getCartBooksByCartId(cartId);
+        return cartService.getCartBooksByCartId(cartId);
     }
 }

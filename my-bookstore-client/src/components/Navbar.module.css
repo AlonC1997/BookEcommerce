@@ -1,10 +1,9 @@
-/* Navbar CSS */
 .navbar {
-  font-family: 'Open Sans', sans-serif !important;
-  position: fixed;;
+  font-family: 'Open Sans', sans-serif;
+  position: fixed;
   top: 0;
-  width: 100% !important;
-  background-color: rgba(190, 132, 17, 0.8) ; /* Green background with 80% opacity */
+  width: 100%;
+  background-color: rgba(190, 132, 17, 0.8); /* Green background with 80% opacity */
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -15,7 +14,6 @@
 }
 
 .brand {
-  /*font-family: "du AU VIC WA NT Hand", cursive;*/
   font-family: 'Lora', sans-serif;
   font-size: 1.5rem;
   color: rgb(7, 10, 4); /* White text color */
@@ -23,22 +21,22 @@
   font-weight: bold;
 }
 
-.nav-links {
+.navLinks {
   display: flex;
-  margin: 1px 30px !important;
+  margin: 1px 30px;
 }
 
-.nav-links a, .continue-without-login {
+.navLinks a, .continueWithoutLogin {
   color: white; /* White text color for links */
   text-decoration: none;
   padding: 10px 20px;
   margin-right: 20px; /* Adjust margin to reduce the right spacing */
   transition: all 0.3s ease;
-  border-radius: 5px; /* Add border radius to match the image */
+  border-radius: 5px; /* Add border radius */
 }
 
-.nav-links a:hover, .continue-without-login:hover {
-  background-color: rgba(141, 99, 190, 0.8); /* Light green background on hover with 80% opacity */
+.navLinks a:hover, .continueWithoutLogin:hover {
+  background-color: rgba(141, 99, 190, 0.8); /* Light green background on hover */
 }
 
 .active {
@@ -47,7 +45,7 @@
   color: white;
 }
 
-button {
+.button {
   font-size: 1rem;
   color: rgb(255, 255, 255); /* White text color */
   background: none;
@@ -56,6 +54,5 @@ button {
   margin-left: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 5px; /* Add border radius to match the image */
+  border-radius: 5px; /* Add border radius */
 }
-

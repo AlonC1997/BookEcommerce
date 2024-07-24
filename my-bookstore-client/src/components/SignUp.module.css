@@ -1,0 +1,129 @@
+.signupContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('/public/Images/SignUpBackGround.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.signupForm {
+  width: 400px;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-top: 50px;
+}
+
+.signupForm form {
+  display: flex;
+  flex-direction: column;
+}
+
+.signupForm .formGroup {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.signupForm label {
+  font-weight: bold;
+  color: #00796b;
+  width: 30%;
+  padding-right: 10px;
+  text-align: left;
+}
+
+.signupForm input {
+  padding: 12px;
+  border: 1px solid #004d40;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 70%;
+  box-sizing: border-box;
+}
+
+.signupForm button {
+  padding: 12px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+}
+
+.signupForm button:hover {
+  background-color: #004d40;
+}
+
+.signupTitle {
+  font-size: 28px;
+  font-weight: bold;
+  color: #004d40;
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.signupTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background-color: #4CAF50;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popupContent {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.popupMessage {
+  color: #00796b;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.popupButtons {
+  margin-top: 20px;
+}
+
+.popupButton {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #00796b;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.popupButton:hover {
+  background-color: #004d40;
+}

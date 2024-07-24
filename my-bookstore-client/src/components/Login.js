@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import styles from './Login.module.css';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -12,53 +12,55 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     try {
       const userRole = await onLogin(username, password);
-      // Clear form fields on successful login if needed
       setUsername('');
       setPassword('');
-      setErrorMessage(''); // Clear any previous error message on successful login
+      setErrorMessage('');
 
-      // Redirect based on user role
-      if (userRole === 'ADMIN') {
+      if (userRole === 'MAIN_ADMIN') {
+        navigate('/users-and-admins-management');
+      } else if (userRole === 'ADMIN') {
         navigate('/order-management');
       } else {
         navigate('/home');
       }
     } catch (error) {
-      setErrorMessage('Invalid username or password'); // Set error message on failed login
+      setErrorMessage('Invalid username or password');
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-form">
-        <h2 className="login-title">WELCOME BACK!</h2>
-        <h3 className="login-subtitle">Login:</h3>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
+    <div className={styles.loginContainer}>
+      <div className={styles.loginForm}>
+        <h2 className={styles.loginTitle}>WELCOME BACK!</h2>
+        <h3 className={styles.loginSubtitle}>Login:</h3>
+        {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username:</label>
+          <div className={styles.formGroup}>
+            <label htmlFor="username" className={styles.label}>Username:</label>
             <input
               type="text"
               id="username"
+              className={styles.input}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
+          <div className={styles.formGroup}>
+            <label htmlFor="password" className={styles.label}>Password:</label>
             <input
               type="password"
               id="password"
+              className={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className={styles.loginButton}>Login</button>
         </form>
-        <div className="signup-link">
-          <button onClick={() => navigate('/signup')} className="signup-button">
+        <div className={styles.signupLink}>
+          <button onClick={() => navigate('/signup')} className={styles.signupButton}>
             New? Join us now!
           </button>
         </div>

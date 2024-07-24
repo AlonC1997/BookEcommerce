@@ -29,7 +29,7 @@ public class Book implements Serializable {
     @Column
     private BigDecimal price;
 
-    @Column
+    @Column(length = 1000) // Adjust this length as needed
     private String description;
 
     @Column
@@ -46,6 +46,9 @@ public class Book implements Serializable {
 
     @ManyToMany(mappedBy = "books")
     private List<Order> orders;
+
+    @Column
+    private Boolean isDeleted = false;
 
     public Book() {}
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,13 +26,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String MAIN_ADMIN = "MAIN_ADMIN";
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
 
@@ -42,12 +44,10 @@ public class SecurityConfig {
         http
                 .cors(withDefaults()) // Apply CORS configuration
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**", "/orders/**").permitAll()
-                        .requestMatchers("/carts/**").hasAuthority("USER")
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET).permitAll()
-                        .requestMatchers(HttpMethod.PUT).permitAll()//hasAuthority("USER")//
-                        .requestMatchers(HttpMethod.POST).permitAll()//hasAuthority("USER")//
+                        .requestMatchers( "/auth/**","/books/getAllBooks", "/books/getStockQuantity", "books/getBook").permitAll()
+                        .requestMatchers("/carts/**").hasAuthority(USER)
+                        .requestMatchers("/books/**", "/orders/**").hasAuthority(ADMIN)
+                        .requestMatchers("/users/**").hasAuthority(MAIN_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authEntryPoint))
@@ -56,6 +56,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        String hierarchy = "MAIN_ADMIN > ADMIN\nADMIN > USER";
+        roleHierarchy.setHierarchy(hierarchy);
+        return roleHierarchy;
     }
 
     @Bean

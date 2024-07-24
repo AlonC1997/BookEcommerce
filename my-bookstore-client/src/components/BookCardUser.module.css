@@ -1,6 +1,7 @@
-.book-card {
+.bookCard {
   border: 1px solid #ddd;
   padding: 10px;
+  padding-bottom: 4%;
   margin: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -9,26 +10,26 @@
   vertical-align: top;
 }
 
-.book-card img {
+.bookImage {
   width: 100%;
   height: auto;
   border-bottom: 1px solid #ddd;
 }
 
-.book-details {
+.bookDetails {
   padding: 10px;
 }
 
-.book-details h3 {
+.bookDetails h3 {
   font-size: 1.2em;
   margin: 0;
 }
 
-.book-details p {
+.bookDetails p {
   margin: 5px 0;
 }
 
-.book-details h5 {
+.bookDetails h5 {
   margin: 10px 0;
 }
 
@@ -47,14 +48,14 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.out-of-stock {
+.outOfStock {
   color: red;
 }
 
-.low-stock {
+.lowStock {
   color: orange;
 }
 
-.high-stock {
+.highStock {
   color: green;
 }

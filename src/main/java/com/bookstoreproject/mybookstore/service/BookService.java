@@ -22,16 +22,11 @@ public class BookService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Transactional
-    public void addBook(BookDTO bookDTO) {
-        Book book = modelMapper.map(bookDTO, Book.class);
-        bookRepository.save(book);
-    }
-
-    //@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<BookDTO> getAllBooks() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
+                .filter(book -> !book.getIsDeleted())
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .collect(Collectors.toList());
     }
@@ -41,6 +36,28 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
         return modelMapper.map(book, BookDTO.class);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookDTO> getDeletedBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .filter(Book::getIsDeleted)
+                .map(book -> modelMapper.map(book, BookDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public int getStockQuantity(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        return book.getStockQuantity();
+    }
+
+    @Transactional
+    public void addBook(BookDTO bookDTO) {
+        Book book = modelMapper.map(bookDTO, Book.class);
+        book.setIsDeleted(false);
+        bookRepository.save(book);
     }
 
     @Transactional
@@ -55,6 +72,7 @@ public class BookService {
         existingBook.setImg_link(bookDTO.getImg_link());
         existingBook.setDescription(bookDTO.getDescription());
         existingBook.setCategory(bookDTO.getCategory());
+        existingBook.setIsDeleted(bookDTO.getIsDeleted());
 
         bookRepository.save(existingBook);
     }
@@ -63,13 +81,16 @@ public class BookService {
     public void deleteBook(Long id) throws BookNotFoundException {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
-        bookRepository.delete(book);
+        book.setIsDeleted(true);
+        bookRepository.save(book);
     }
 
     @Transactional
-    public int getStockQuantity(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
-        return book.getStockQuantity();
+    public void restoreBook(Long id) throws BookNotFoundException {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
+        book.setIsDeleted(false);
+        bookRepository.save(book);
     }
 
     @Transactional

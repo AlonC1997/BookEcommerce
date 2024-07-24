@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class Cart implements Serializable {
     private Long id;
 
     @Column
-    private Instant dateCreated;
+    private OffsetDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -35,6 +37,6 @@ public class Cart implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        dateCreated = Instant.now();
+        createdAt = OffsetDateTime.now(ZoneId.of("Asia/Jerusalem"));
     }
 }

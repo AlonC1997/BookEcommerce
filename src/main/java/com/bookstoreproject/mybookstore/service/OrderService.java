@@ -1,16 +1,13 @@
 package com.bookstoreproject.mybookstore.service;
 
-import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
-import com.bookstoreproject.mybookstore.Exceptions.OrderNotFoundException;
-import com.bookstoreproject.mybookstore.Exceptions.OutOfStockException;
-import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
+import com.bookstoreproject.mybookstore.Exceptions.*;
 import com.bookstoreproject.mybookstore.dto.CartBookDTO;
+import com.bookstoreproject.mybookstore.dto.OrderBookDTO;
 import com.bookstoreproject.mybookstore.dto.OrderDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.entity.Order;
 import com.bookstoreproject.mybookstore.entity.User;
 import com.bookstoreproject.mybookstore.repository.BookRepository;
-import com.bookstoreproject.mybookstore.repository.CartRepository;
 import com.bookstoreproject.mybookstore.repository.OrderRepository;
 import com.bookstoreproject.mybookstore.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -19,8 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,70 +29,53 @@ public class OrderService {
     private UserRepository userRepository;
 
     @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
-    public Order createOrder(OrderDTO orderDTO) throws UserNotFoundException, BookNotFoundException, OutOfStockException {
-        // Fetch user and validate
-        User user = userRepository.findById(orderDTO.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + orderDTO.getUserId()));
+    @Transactional
+    public OrderDTO getOrderById(Long orderId) throws OrderNotFoundException {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
 
-        // Validate cart items, deduct stock quantities, calculate total price
-        List<Book> orderedBooks = new ArrayList<>();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-
-        for (CartBookDTO cartBookDTO : orderDTO.getCartBooks()) {
-            Long bookId = cartBookDTO.getBookId();
-            Integer quantity = cartBookDTO.getQuantity();
-
-            // Fetch book
-            Book book = bookRepository.findById(bookId)
-                    .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + bookId));
-
-            // Check stock availability
-            if (book.getStockQuantity() < quantity) {
-                throw new OutOfStockException("Not enough stock available for book: " + book.getName());
-            }
-
-            // Update stock quantity
-            book.setStockQuantity(book.getStockQuantity() - quantity);
-            orderedBooks.add(book);
-
-            // Calculate total price
-            totalPrice = totalPrice.add(book.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        if (!orderOptional.isPresent()) {
+            throw new OrderNotFoundException("Order not found with id: " + orderId);
         }
 
-        // Create Order entity
-        Order order = new Order();
-        order.setTotalPrice(totalPrice);
-        order.setStatus(Order.OrderStatus.INPROCESS);
-        order.setUser(user);
-        order.setBooks(orderedBooks);
-
-        // Save order
-        order = orderRepository.save(order);
-
-        return order;
-    }
-
-
-
-    @Transactional(readOnly = true)
-    public OrderDTO getOrderById(Long id) throws OrderNotFoundException {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+        Order order = orderOptional.get();
         return modelMapper.map(order, OrderDTO.class);
     }
 
     @Transactional(readOnly = true)
+    public List<OrderBookDTO> getOrderBooksById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Map<Long, OrderBookDTO> bookMap = new HashMap<>();
+
+        for (Book book : order.getBooks()) {
+            OrderBookDTO dto = bookMap.get(book.getId());
+            if (dto == null) {
+                dto = new OrderBookDTO();
+                dto.setBookId(book.getId());
+                dto.setBookName(book.getName());
+                dto.setPrice(book.getPrice());
+                dto.setQuantity(1);
+                dto.setTotalPrice(book.getPrice());
+                bookMap.put(book.getId(), dto);
+            } else {
+                dto.setQuantity(dto.getQuantity() + 1);
+                dto.setTotalPrice(dto.getTotalPrice().add(book.getPrice()));
+            }
+        }
+
+        return new ArrayList<>(bookMap.values());
+    }
+
+    @Transactional
     public List<OrderDTO> getAllOrdersForUser(Long userId) throws UserNotFoundException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
         List<Order> orders = orderRepository.findByUserId(userId);
         return orders.stream()
-                .map(order -> modelMapper.map(order, OrderDTO.class))
+                .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
     }
 
@@ -109,18 +88,11 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancelOrder(Long orderId) throws OrderNotFoundException {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
-        order.setStatus(Order.OrderStatus.CANCELLED);
-        orderRepository.save(order);
-    }
-
-    @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrders() {
+        System.out.println("I Got here 2!!!");
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
-                .map(order -> modelMapper.map(order, OrderDTO.class))
+                .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
     }
 
@@ -131,20 +103,27 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    /*
-    @Transactional
-    public void updateOrder(Long id, OrderDTO orderDTO) throws OrderNotFoundException {
-        Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+    private OrderDTO convertToOrderDTO(Order order) {
+        System.out.println("I Got here 3!!!");
 
-        existingOrder.setTotalPrice(orderDTO.getTotalPrice());
-        existingOrder.setStatus(Order.OrderStatus.valueOf(orderDTO.getStatus()));
-        existingOrder.setCreatedAt(orderDTO.getCreatedAt());
-        existingOrder.setUpdatedAt(orderDTO.getUpdatedAt());
-
-
-        orderRepository.save(existingOrder);
+        OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+        List<CartBookDTO> cartBookDTOs = order.getBooks().stream()
+                .map(book -> new CartBookDTO(book.getId(), book.getName(), book.getPrice(), book.getStockQuantity()))
+                .collect(Collectors.toList());
+        orderDTO.setCartBooks(cartBookDTOs);
+        return orderDTO;
     }
-    */
 
+    @Transactional
+    public OrderDTO updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderDTO.getId())
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderDTO.getId()));
+
+        order.setTotalPrice(orderDTO.getTotalPrice());
+        order.setStatus(Order.OrderStatus.valueOf(orderDTO.getStatus()));
+        order.setUpdatedAt(orderDTO.getUpdatedAt());
+
+        Order updatedOrder = orderRepository.save(order);
+        return modelMapper.map(updatedOrder, OrderDTO.class);
+    }
 }

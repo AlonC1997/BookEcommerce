@@ -1,17 +1,12 @@
 package com.bookstoreproject.mybookstore.service;
 
 import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
-import com.bookstoreproject.mybookstore.Exceptions.UserRegistrationException;
 import com.bookstoreproject.mybookstore.dto.UserDTO;
 import com.bookstoreproject.mybookstore.entity.Cart;
 import com.bookstoreproject.mybookstore.entity.User;
 import com.bookstoreproject.mybookstore.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +21,10 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     public Long getLoggedInUserCartId(String username) throws UserNotFoundException {
@@ -68,6 +63,7 @@ public class UserService {
         existingUser.setUsername(userDTO.getUsername());
         existingUser.setName(userDTO.getName());
         existingUser.setAddress(userDTO.getAddress());
+        existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         userRepository.save(existingUser);
     }
@@ -77,6 +73,18 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
+    }
+
+
+    @Transactional
+    public User addAdmin(String username, String password, String address, String name, String role) {
+        User admin = new User();
+        admin.setUsername(username);
+        admin.setPassword(passwordEncoder.encode(password));
+        admin.setRole(role);
+        admin.setAddress(address);
+        admin.setName(name);
+        return userRepository.save(admin);
     }
 
 }

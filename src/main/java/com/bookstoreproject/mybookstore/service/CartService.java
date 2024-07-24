@@ -37,10 +37,8 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
-    private BookService bookService;
-
     @Autowired
-    private ModelMapper modelMapper;
+    private BookService bookService;
 
     public CartService(BookService bookService) {
         this.bookService = bookService;
@@ -87,7 +85,6 @@ public class CartService {
         }
     }
 
-
     @Transactional
     public void submitCart(Long cartId) throws CartNotFoundException, EmptyCartException {
 
@@ -128,7 +125,6 @@ public class CartService {
                 .map(Book::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
     @Transactional
     public CartDTO getCartById(Long id) throws CartNotFoundException {
         Cart cart = cartRepository.findById(id)
@@ -142,18 +138,29 @@ public class CartService {
 
         // Convert the map to a list of CartBookDTO
         List<CartBookDTO> cartBooks = bookQuantityMap.entrySet().stream()
-                .map(entry -> new CartBookDTO(entry.getKey(), entry.getValue()))
+                .map(entry -> {
+                    Book book = cart.getBooks().stream()
+                            .filter(b -> b.getId().equals(entry.getKey()))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Book not found with id: " + entry.getKey()));
+                    return new CartBookDTO(book.getId(), book.getName(), book.getPrice(), entry.getValue());
+                })
                 .collect(Collectors.toList());
 
         // Map Cart to CartDTO manually
         CartDTO cartDTO = new CartDTO();
         cartDTO.setCartID(cart.getId());
-        cartDTO.setDateCreated(cart.getDateCreated());
+        cartDTO.setDateCreated(cart.getCreatedAt());
         cartDTO.setUserId(cart.getUser().getId());
         cartDTO.setCartBooks(cartBooks);
 
         return cartDTO;
     }
 
+    @Transactional
+    public List<CartBookDTO> getCartBooksByCartId(Long cartId) throws CartNotFoundException {
+        CartDTO cartDTO = this.getCartById(cartId);
+        return cartDTO.getCartBooks();
+    }
 
 }

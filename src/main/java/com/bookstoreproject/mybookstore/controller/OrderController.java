@@ -1,14 +1,13 @@
 package com.bookstoreproject.mybookstore.controller;
 
-import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.OrderNotFoundException;
-import com.bookstoreproject.mybookstore.Exceptions.OutOfStockException;
 import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
+import com.bookstoreproject.mybookstore.dto.OrderBookDTO;
 import com.bookstoreproject.mybookstore.dto.OrderDTO;
-import com.bookstoreproject.mybookstore.entity.Order;
 import com.bookstoreproject.mybookstore.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,36 +19,24 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000/**")
 public class OrderController {
 
-    private final OrderService orderService;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
-    public OrderController(OrderService orderService, ModelMapper modelMapper) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.modelMapper = modelMapper;
     }
-
-    @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/createOrder")
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
-        try {
-            Order createdOrder = orderService.createOrder(orderDTO);
-            OrderDTO responseDTO = modelMapper.map(createdOrder, OrderDTO.class);
-            return ResponseEntity.ok(responseDTO);
-        } catch (UserNotFoundException | BookNotFoundException | OutOfStockException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/getOrder")
-    public ResponseEntity<OrderDTO> getOrderById(@RequestParam Long id) {
+    @GetMapping("/getOrderById")
+    public ResponseEntity<?> getOrderById(@RequestParam Long orderId) {
         try {
-            OrderDTO orderDTO = orderService.getOrderById(id);
+            OrderDTO orderDTO = orderService.getOrderById(orderId);
             return ResponseEntity.ok(orderDTO);
         } catch (OrderNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
 
@@ -76,20 +63,43 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/cancelOrder")
-    public ResponseEntity<?> cancelOrder(@RequestParam Long orderId) {
+    @GetMapping("/getAllOrders")
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        System.out.println("I Got here 1!!!");
+        List<OrderDTO> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getOrderBooksById")
+    public ResponseEntity<?> getOrderBooksById(@RequestParam Long orderId) {
+        List<OrderBookDTO> orderBooks = orderService.getOrderBooksById(orderId);
+        return ResponseEntity.ok(orderBooks);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/deleteOrder")
+    public ResponseEntity<?> deleteOrder(@RequestParam Long orderId) {
         try {
-            orderService.cancelOrder(orderId);
-            return ResponseEntity.ok("Order cancelled successfully");
+            orderService.deleteOrder(orderId);
+            return ResponseEntity.ok("Order deleted successfully");
         } catch (OrderNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/getAllOrders")
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        List<OrderDTO> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+    @PutMapping("/updateOrder")
+    public ResponseEntity<?> updateOrder(@RequestBody OrderDTO orderDTO) {
+        try {
+            OrderDTO updatedOrder = orderService.updateOrder(orderDTO);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }
     }
 }

@@ -1,0 +1,110 @@
+.cart {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.visible {
+  transform: translateX(0);
+}
+
+.hidden {
+  transform: translateX(-100%);
+}
+
+.closeCart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545; /* Red dark */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.closeCart:hover {
+  background-color: #c82333; /* Darker red */
+}
+
+.header {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.img {
+  width: 80px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.info {
+  flex: 1;
+}
+
+.button {
+  background-color: #35dc5c; /* Green for + button */
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 0 3%;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button:hover:not(:disabled) {
+  background-color: #28a745; /* Slightly darker green */
+}
+
+.button.remove { /* Specific style for - button */
+  background-color: #dc3545; /* Red */
+}
+
+.button.remove:hover:not(:disabled) {
+  background-color: #ff0019; /* Darker red */
+}
+
+.submitButton {
+  background-color: #28a745; /* Darker green for Submit Cart button */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 20px; /* Add space above the button */
+}
+
+.submitButton:hover {
+  background-color: #1e7e34; /* Even darker green */
+}

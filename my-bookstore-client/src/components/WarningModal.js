@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import './WarningModal.css';
+import styles from './WarningModal.module.css';
 
 Modal.setAppElement('#root');
 
@@ -10,14 +10,14 @@ const WarningModal = ({ isOpen, onRequestClose, onSignup, onDiscover }) => {
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Warning Modal"
-      className="modal"
-      overlayClassName="overlay"
+      className={styles.modal}
+      overlayClassName={styles.overlay}
     >
       <h2>Attention!</h2>
       <p>To purchase, you must sign up.</p>
-      <div className="modal-buttons">
+      <div className={styles.modalButtons}>
         <button onClick={onSignup}>Sign Up now</button>
-        <button onClick={onDiscover}>continue without signup</button>
+        <button onClick={onDiscover}>Continue without signup</button>
       </div>
     </Modal>
   );
