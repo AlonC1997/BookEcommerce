@@ -1,0 +1,27 @@
+/* src/components/Home.css */
+.home-container {
+  padding: 20px;
+}
+
+.books-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.cart-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.cart-toggle:hover {
+  background-color: #218838;
+}

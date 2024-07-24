@@ -14,8 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000/**")
 public class UserController {
-
 
     @Autowired
     private UserService userService;
@@ -60,27 +60,5 @@ public class UserController {
         }
     }
 
-    /* defined in Authcontroller
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO) {
-        try {
-            UserDTO user = userService.loginUser(userDTO.getUsername(), userDTO.getPassword());
-            return ResponseEntity.ok(user);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
-        try {
-            userService.registerUser(userDTO);
-            return ResponseEntity.ok("User registered successfully");
-        } catch (UserRegistrationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-     */
 
 }

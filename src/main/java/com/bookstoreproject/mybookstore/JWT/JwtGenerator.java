@@ -30,7 +30,7 @@ public class JwtGenerator {
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElse("CUSTOMER"); // Default role if not found
+                .orElse("DEFAULT_ROLE"); // Default role if not found
 
         // Build the token with role included in claims
         String token = Jwts

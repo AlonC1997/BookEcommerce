@@ -14,12 +14,12 @@ import java.util.List;
 @Data
 public class OrderDTO {
     private Long userId;
-    private List<CartItemDTO> cartItems;
+    private List<CartBookDTO> cartBooks;
 
     public OrderDTO() {}
 
-    public OrderDTO(Long userId, List<CartItemDTO> cartItems) {
+    public OrderDTO(Long userId, List<CartBookDTO> cartBooks) {
         this.userId = userId;
-        this.cartItems = cartItems;
+        this.cartBooks = cartBooks;
     }
 }

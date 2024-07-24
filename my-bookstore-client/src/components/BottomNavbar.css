@@ -1,0 +1,45 @@
+/* BottomNavbar.css */
+.bottom-navbar {
+  margin-top: 0 !important; /*Override any unintended margin */
+  background-color: #a6c0af !important;
+  border-top: 1px solid #ddd;
+  padding: 10px 0;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.bottom-navbar-details {
+  flex: 1;
+}
+
+.bottom-navbar-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.bottom-navbar-advertisement {
+  text-align: right;
+}
+
+.bottom-navbar-advertisement p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.join-us-button {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.join-us-button:hover {
+  text-decoration: underline;
+}

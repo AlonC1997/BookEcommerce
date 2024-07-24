@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
+@CrossOrigin(origins = "http://localhost:3000/**")
 public class BookController {
 
     @Autowired
@@ -34,9 +35,9 @@ public class BookController {
 
     //@PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getBook")
-    public ResponseEntity<BookDTO> getBookById(@RequestParam Long id) {
+    public ResponseEntity<BookDTO> getBookById(@RequestParam Long bookId) {
         try {
-            BookDTO bookDTO = bookService.getBookById(id);
+            BookDTO bookDTO = bookService.getBookById(bookId);
             return ResponseEntity.ok(bookDTO);
         } catch (BookNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -56,20 +57,21 @@ public class BookController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/deleteBook")
-    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
         try {
-            bookService.deleteBook(id);
+            bookService.deleteBook(bookId);
             return ResponseEntity.ok("Book deleted successfully");
         } catch (BookNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    //@PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getStockQuantity")
-    public ResponseEntity<Integer> getStockQuantity(@RequestParam Long id) {
-        System.out.println("Received request for stock quantity with ID: " + id);
-        int stockQuantity = bookService.getStockQuantity(id);
-        System.out.println("Stock quantity for ID " + id + ": " + stockQuantity);
+    public ResponseEntity<Integer> getStockQuantity(@RequestParam Long bookId) {
+        System.out.println("Received request for stock quantity with ID: " + bookId);
+        int stockQuantity = bookService.getStockQuantity(bookId);
+        System.out.println("Stock quantity for ID " + bookId + ": " + stockQuantity);
         return new ResponseEntity<>(stockQuantity, HttpStatus.OK);
     }
 

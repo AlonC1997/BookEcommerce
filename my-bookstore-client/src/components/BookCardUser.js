@@ -1,29 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import './BookCard.css';
 import axios from 'axios';
+import './BookCardUser.css';
 
-const BookCard = ({ book }) => {
+const BookCardUser = ({ book, onCartUpdate }) => {
   const [stockQuantity, setStockQuantity] = useState(null);
 
   useEffect(() => {
-    console.log('Book object:', book); // Log the book object to check its properties
     if (book && book.id) {
       const fetchStockQuantity = async () => {
         try {
           const response = await axios.get(`http://localhost:8080/books/getStockQuantity?bookId=${book.id}`);
-          console.log('Stock quantity response:', response); // Log the full response
           setStockQuantity(response.data);
         } catch (error) {
           console.error('Error fetching stock quantity', error);
         }
       };
       
-
       fetchStockQuantity();
-    } else {
-      console.error('Invalid book object or id:', book);
     }
   }, [book]);
+
+  const handleAddToCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`http://localhost:8080/carts/addOneBook?bookId=${book.id}`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (onCartUpdate) {
+        onCartUpdate(); // Notify Home component to refresh cart
+      }
+    } catch (error) {
+      console.error('Error adding book to cart:', error);
+    }
+  };
 
   const getStockStatus = () => {
     if (stockQuantity === null) {
@@ -41,18 +51,22 @@ const BookCard = ({ book }) => {
 
   return (
     <div className="book-card">
-      <div className="book-image">
-        <img src={imageSrc} alt={book.name} />
-      </div>
+      <img src={imageSrc} alt={book.name} />
       <div className="book-details">
         <h3>{book.name}</h3>
         <p><strong>Author:</strong> {book.author}</p>
         <p>{book.description}</p>
-        <h5>Price: {book.price} $</h5>
+        <h5>Price: ${book.price}</h5>
         <h5>Stock: {getStockStatus()}</h5>
+        <button
+          onClick={handleAddToCart}
+          disabled={stockQuantity === 0 || !localStorage.getItem('token')}
+        >
+          {stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+        </button>
       </div>
     </div>
   );
 };
 
-export default BookCard;
+export default BookCardUser;

@@ -30,7 +30,7 @@ public class User implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private String role;
+    private String role; /* "ADMIM" or "USER"*/
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cart cart;
