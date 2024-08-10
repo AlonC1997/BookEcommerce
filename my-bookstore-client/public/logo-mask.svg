@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 100" width="500" height="100">
+  <defs>
+    <mask id="text-mask" x="0" y="0" width="500" height="100">
+      <!-- White background to show masked areas -->
+      <rect width="100%" height="100%" fill="#fff"/>
+      <!-- Text to be used for masking -->
+      <text x="50%" y="50%" font-family="Arial" font-size="60" fill="#000" text-anchor="middle" alignment-baseline="middle">
+        InalaBOOK
+      </text>
+    </mask>
+  </defs>
+  <!-- Background image or color where the mask will be applied -->
+  <rect width="100%" height="100%" fill="#a6c0af" mask="url(#text-mask)"/>
+</svg>

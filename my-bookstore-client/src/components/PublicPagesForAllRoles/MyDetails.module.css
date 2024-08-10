@@ -1,0 +1,82 @@
+.container {
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 60px; /* Adjusted to ensure visibility below navbar */
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .field {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input {
+    width: calc(100% - 20px);
+    padding: 6px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .editButton, .updateButton, .closeButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+  }
+  
+  .updateButton {
+    background-color: #28a745;
+  }
+  
+  .closeButton {
+    background-color: #dc3545;
+  }
+  
+  .editContainer, .passwordContainer {
+    display: flex;
+    flex-direction: column; /* Ensure elements are stacked vertically */
+    align-items: flex-start; /* Align items to start for better alignment */
+  }
+  
+  .fieldContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .errorMessage {
+    color: #dc3545;
+    margin-top: 10px; /* Increase margin to better separate from other elements */
+    width: 100%; /* Ensure it takes full width for better visibility */
+  }
+  
+  .passwordContainer {
+    margin-top: 20px; /* Ensure some space above the password validation section */
+  }
+  

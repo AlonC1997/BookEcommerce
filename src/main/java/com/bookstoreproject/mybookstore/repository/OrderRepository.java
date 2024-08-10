@@ -1,7 +1,5 @@
 package com.bookstoreproject.mybookstore.repository;
 
-import com.bookstoreproject.mybookstore.dto.OrderBookDTO;
-import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +11,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUserId(Long userId);
+
+    @Query("SELECT MAX(o.id) FROM Order o WHERE o.user.id = :userId")
+    Long findMaxOrderIdByUserId(@Param("userId") Long userId);
 }

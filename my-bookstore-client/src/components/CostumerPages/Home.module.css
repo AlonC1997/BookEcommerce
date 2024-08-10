@@ -1,0 +1,126 @@
+
+.homeContainer {
+  padding: 20px;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.header h1 {
+  font-size: 2em;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchBox {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.checkboxes label {
+  margin: 5px;
+}
+
+.subHeader {
+  font-size: 1.5em;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.booksList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.bookCard {
+  flex: 0 1 calc(33.333% - 20px);
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.paginationButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.cancelPolicy {
+  font-size: 14px;
+  color: #777;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cartToggle {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: #a6c0af;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 4.5em;
+  z-index: 1001;
+}
+
+.cartToggle:hover {
+  background-color: #218838;
+}
+
+.leftSidebar {
+  position: fixed;
+  left: 20px;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.userGreeting {
+  background-color: #f4f4f4;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(16, 3, 97, 0.2);
+  font-size: 2em;
+  color: #688136;
+}

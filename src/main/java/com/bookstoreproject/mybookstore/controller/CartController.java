@@ -2,10 +2,9 @@ package com.bookstoreproject.mybookstore.controller;
 
 import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.CartNotFoundException;
+import com.bookstoreproject.mybookstore.Exceptions.OrderNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
-import com.bookstoreproject.mybookstore.dto.CartDTO;
 import com.bookstoreproject.mybookstore.dto.CartBookDTO;
-import com.bookstoreproject.mybookstore.service.CartBookService;
 import com.bookstoreproject.mybookstore.service.CartService;
 import com.bookstoreproject.mybookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -22,7 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/carts")
-@CrossOrigin(origins = "http://localhost:3000/**")
 public class CartController {
 
     @Autowired
@@ -75,7 +72,10 @@ public class CartController {
             return ResponseEntity.ok("Cart submitted successfully");
         } catch (CartNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (OrderNotFoundException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+
 
     }
 

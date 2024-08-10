@@ -10,16 +10,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Component
 public class JwtGenerator {
-
-    public long JWT_EXPIRATION = 3600000;
+    public long JWT_EXPIRATION = 86400000;
     private Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -33,13 +31,13 @@ public class JwtGenerator {
                 .orElse("DEFAULT_ROLE"); // Default role if not found
 
         // Build the token with role included in claims
-        String token = Jwts
-                .builder()
+        String token = Jwts.builder()
                 .setSubject(username)
                 .claim("role", role) // Inclusion of role in claims
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
         return token;
     }
 
@@ -62,7 +60,5 @@ public class JwtGenerator {
         Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
         return claims.get("role", String.class);
     }
-
-
 
 }

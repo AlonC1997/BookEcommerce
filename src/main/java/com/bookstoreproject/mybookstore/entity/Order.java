@@ -6,8 +6,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +25,6 @@ public class Order implements Serializable {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Column
-    private OffsetDateTime createdAt;
-
-    @Column
-    private OffsetDateTime updatedAt;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -45,23 +38,29 @@ public class Order implements Serializable {
     private List<Book> books = new ArrayList<>();
 
     public enum OrderStatus {
-        CANCELLED,
-        READY,
         ARRIVED,
-        INPROCESS
+        CANCELLED,
+        INPROCESS,
+        READY
     }
 
     public Order() {
     }
 
+    @Column
+    private LocalDateTime createdAt;
+    @Column
+    private LocalDateTime updatedAt;
+
     @PrePersist
     protected void onCreate() {
-        createdAt = OffsetDateTime.now(ZoneId.of("Asia/Jerusalem"));
-        updatedAt = OffsetDateTime.now(ZoneId.of("Asia/Jerusalem"));
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = OffsetDateTime.now(ZoneId.of("Asia/Jerusalem"));
+        updatedAt = LocalDateTime.now();
     }
 }

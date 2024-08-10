@@ -1,0 +1,72 @@
+.footer {
+    background-color: #a6c0af; /* Light green background */
+    border-top: 1px solid #ddd;
+    padding: 10px 1%; /* Adjust padding as necessary */
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure it spans the full width */
+    display: flex;
+    justify-content: center;
+    z-index: 1000; /* Ensure it stays above other content */
+  }
+  
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 960px;
+    width: 100%;
+  }
+  
+  .logoContainer {
+    flex: 1;
+    text-align: center;
+    overflow: hidden; /* Ensure the image doesn't overflow */
+  }
+  
+  .logo {
+    max-height: 50px;
+    object-fit: cover; /* Maintain aspect ratio and fill container */
+    transform: scale(2.7); /* Zoom in on the logo */
+    clip-path: inset(2% 5% 2% 5%); /* Crop 10% from the left and right sides */
+  }
+  
+  .footerDetails {
+    flex: 2;
+    text-align: center;
+  }
+  
+  .footerDetails p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .footerAdvertisement {
+    flex: 2;
+    text-align: center;
+  }
+  
+  .footerAdvertisement p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .link {
+    color: #007bff; /* Link color */
+    text-decoration: none;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  .joinUsButton {
+    color: #007bff; /* Button color */
+    text-decoration: none;
+  }
+  
+  .joinUsButton:hover {
+    text-decoration: underline;
+  }
+  

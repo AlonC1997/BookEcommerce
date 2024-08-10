@@ -105,9 +105,9 @@ public class BookService {
     }
 
     @Transactional
-    public void increaseStockQuantity(Long id) {
+    public void increaseStockQuantity(Long id, int quantity) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
-        book.setStockQuantity(book.getStockQuantity() + 1);
+        book.setStockQuantity(book.getStockQuantity() + quantity);
         bookRepository.save(book);
     }
 }

@@ -5,26 +5,66 @@ import com.bookstoreproject.mybookstore.Exceptions.UserNotFoundException;
 import com.bookstoreproject.mybookstore.dto.OrderBookDTO;
 import com.bookstoreproject.mybookstore.dto.OrderDTO;
 import com.bookstoreproject.mybookstore.service.OrderService;
-import org.modelmapper.ModelMapper;
+import com.bookstoreproject.mybookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@CrossOrigin(origins = "http://localhost:3000/**")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    private UserService userService;
+
+    @GetMapping("/getLastOrderId")
+    public ResponseEntity<?> getLastOrderIdForUser() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            Long userId = userService.getUserIdByUsername(username);
+            Long lastOrderId = orderService.getLastOrderIdForUser(userId);
+            return ResponseEntity.ok(lastOrderId);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.ok(0);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }
+    }
+
+    @GetMapping("/getUserOrders")
+    public ResponseEntity<List<OrderDTO>> getAllOrdersForUser(@RequestParam Long userId) {
+        try {
+            List<OrderDTO> orders = orderService.getAllOrdersForUser(userId);
+            return ResponseEntity.ok(orders);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/getUserOrdersWithOutId")
+    public ResponseEntity<List<OrderDTO>> getAllOrdersWithOutId(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            Long userId = userService.getUserIdByUsername(username);
+            List<OrderDTO> orders = orderService.getAllOrdersForUser(userId);
+            return ResponseEntity.ok(orders);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -37,17 +77,6 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/getUserOrders")
-    public ResponseEntity<List<OrderDTO>> getAllOrdersForUser(@RequestParam Long userId) {
-        try {
-            List<OrderDTO> orders = orderService.getAllOrdersForUser(userId);
-            return ResponseEntity.ok(orders);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -77,7 +106,7 @@ public class OrderController {
         return ResponseEntity.ok(orderBooks);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @DeleteMapping("/deleteOrder")
     public ResponseEntity<?> deleteOrder(@RequestParam Long orderId) {
         try {
@@ -102,4 +131,6 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
+
+
 }

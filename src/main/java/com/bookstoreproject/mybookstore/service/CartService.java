@@ -3,7 +3,7 @@ package com.bookstoreproject.mybookstore.service;
 import com.bookstoreproject.mybookstore.Exceptions.BookNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.CartNotFoundException;
 import com.bookstoreproject.mybookstore.Exceptions.EmptyCartException;
-import com.bookstoreproject.mybookstore.dto.CartBookDTO;
+import com.bookstoreproject.mybookstore.Exceptions.OrderNotFoundException;
 import com.bookstoreproject.mybookstore.dto.CartBookDTO;
 import com.bookstoreproject.mybookstore.dto.CartDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
@@ -12,8 +12,6 @@ import com.bookstoreproject.mybookstore.entity.Order;
 import com.bookstoreproject.mybookstore.repository.BookRepository;
 import com.bookstoreproject.mybookstore.repository.CartRepository;
 import com.bookstoreproject.mybookstore.repository.OrderRepository;
-import com.bookstoreproject.mybookstore.repository.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +37,9 @@ public class CartService {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private OrderService orderService;
 
     public CartService(BookService bookService) {
         this.bookService = bookService;
@@ -79,15 +80,14 @@ public class CartService {
             cart.getBooks().remove(book);
             cartRepository.save(cart);
             // Increase the stock quantity by one
-            bookService.increaseStockQuantity(bookId);
+            bookService.increaseStockQuantity(bookId, 1);
         } else {
             throw new IllegalArgumentException("Book is not in the cart");
         }
     }
 
     @Transactional
-    public void submitCart(Long cartId) throws CartNotFoundException, EmptyCartException {
-
+    public void submitCart(Long cartId) throws CartNotFoundException, EmptyCartException, OrderNotFoundException {
         // Retrieve the cart by its ID
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
@@ -98,16 +98,29 @@ public class CartService {
         }
 
         // Create a new Order
-        Order order = new Order();
-        order.setUser(cart.getUser());
-        order.setBooks(new ArrayList<>(cart.getBooks()));
-        order.setStatus(Order.OrderStatus.INPROCESS);
+        long userId = cart.getUser().getId();
+        System.out.println("User ID: " + userId);
 
         // Calculate the total price of the order
         BigDecimal totalPrice = cart.getBooks().stream()
                 .map(Book::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        order.setTotalPrice(totalPrice);
+
+        // Determine if this is the user's first order
+        boolean isFirstOrder = orderService.getLastOrderIdForUser(userId) == 0;
+        System.out.println("Is first order: " + isFirstOrder);
+
+        // Apply discount if it's the first order
+        BigDecimal discountedPrice = isFirstOrder ? totalPrice.multiply(BigDecimal.valueOf(0.95)) : totalPrice;
+        System.out.println("Total Price: " + totalPrice);
+        System.out.println("Discounted Price: " + discountedPrice);
+
+        // Create and save the order
+        Order order = new Order();
+        order.setUser(cart.getUser());
+        order.setBooks(new ArrayList<>(cart.getBooks()));
+        order.setStatus(Order.OrderStatus.INPROCESS);
+        order.setTotalPrice(discountedPrice);
 
         // Save the order
         orderRepository.save(order);
@@ -115,9 +128,12 @@ public class CartService {
         // Clear the cart's books and update the cart
         cart.getBooks().clear();
         cartRepository.save(cart);
+
+        System.out.println("Order submitted successfully. Order ID: " + order.getId());
     }
 
 
+    @Transactional
     public BigDecimal sumAllCartProducts(Long cartId) throws CartNotFoundException {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
@@ -125,6 +141,8 @@ public class CartService {
                 .map(Book::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+
     @Transactional
     public CartDTO getCartById(Long id) throws CartNotFoundException {
         Cart cart = cartRepository.findById(id)

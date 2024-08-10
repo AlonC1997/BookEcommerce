@@ -1,0 +1,149 @@
+
+.cart {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 65%;
+  background-color: rgba(202, 210, 212, 0.966);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 65vh; /* Prevent cart from growing beyond viewport height */
+}
+
+.visible {
+  transform: translateX(0);
+}
+
+.hidden {
+  transform: translateX(-100%);
+}
+
+.closeCart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #a8a0a1; 
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.closeCart:hover {
+  background-color: #c82333; 
+}
+
+.header {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.img {
+  width: 80px;
+  height: auto;
+  margin-right: 10px;
+}
+.details {
+  flex: 1;
+  display: flex;
+  justify-content: space-between; /* Distribute space between elements */
+}
+
+.info {
+  flex: 1;
+  margin: 0 2%; /* Add spacing between items */
+}
+
+.button {
+  background-color: #35dc5c; 
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin:  3%;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button:hover:not(:disabled) {
+  background-color: #28a745; 
+}
+
+.button.remove { 
+  background-color: #dc3545; 
+}
+
+.button.remove:hover:not(:disabled) {
+  background-color: #ff0019;
+}
+
+.submitButton {
+  background-color: #28a745; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 20px; 
+}
+
+.submitButton:hover {
+  background-color: #1e7e34; 
+}
+
+.summary {
+  margin-top: 20px;
+}
+
+.summary p {
+  margin: 5px 0;
+  font-size: 1.2em;
+}
+
+.summary p:last-of-type {
+  font-weight: bold;
+}
+
+.shippingMessage {
+  font-size: 5.9em;
+  color: #135726;
+}
+
+.outOfStockMessage {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
+}
+
+.cancelPolicy {
+  font-size: 0.1em;
+  color: #777;
+  margin-top: 20px;
+  text-align: left;
+}

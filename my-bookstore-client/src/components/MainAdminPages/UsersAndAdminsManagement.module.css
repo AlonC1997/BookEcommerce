@@ -1,0 +1,167 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-top: 8%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchBox {
+  width: 200px;
+  margin-left: 6%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.checkboxes {
+  display: flex;
+  gap: 15px;
+}
+
+.checkboxes label {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+}
+
+.checkboxes input {
+  margin-right: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.table button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f44336;
+  color: white;
+}
+
+.table button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.formContainer {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.subTitle {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  width: 97%;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 95%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 0.875em;
+}
+
+.formButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1em;
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f44336;
+  /* Red */
+  color: white;
+  font-size: 1em;
+}
+
+.addButtonOut {
+  background-color: green; /* Green color for "Add New Admin" */
+  color: white; /* Text color */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.cancelButtonOut {
+  background-color: #f44336; /* Red color for "Cancel" */
+  color: white; /* Text color */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}

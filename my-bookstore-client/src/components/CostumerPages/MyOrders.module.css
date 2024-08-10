@@ -1,0 +1,118 @@
+.myOrders {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 5%;
+  text-align: center;
+}
+
+.searchFilter {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.searchFilter input,
+.searchFilter select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.searchFilter button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.searchFilter button:disabled {
+  background-color: #ccc;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orderSection {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.orderItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: calc(50% - 10px);
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+}
+
+.orderItemInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orderItemImage {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+}
+
+.orderItemDetails {
+  flex: 1;
+}
+
+.orderItemDetails p {
+  margin: 0;
+}
+
+.cancelPolicy {
+  font-size: 14px;
+  color: #777;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageButton {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.pageButton.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

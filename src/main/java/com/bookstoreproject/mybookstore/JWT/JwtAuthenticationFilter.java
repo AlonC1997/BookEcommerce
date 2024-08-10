@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtGenerator tokenGenerator;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = tokenGenerator.getRolesFromJWT(token).toString(); // Change to get a single role string
 
             // Create authorities from the single role string
-            List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(/*"ROLE_" +*/ role));
+            List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticationToken =

@@ -1,12 +1,11 @@
 package com.bookstoreproject.mybookstore.cofigSec;
 
-
 import com.bookstoreproject.mybookstore.JWT.JwtAuthEntryPoint;
 import com.bookstoreproject.mybookstore.JWT.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,7 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -42,26 +40,72 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults()) // Apply CORS configuration
+                .cors(withDefaults()) // Enable Cross-Origin Resource Sharing
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection if not using cookies for sessions
+
+                // Configure session management
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless session management for JWT-based authentication
+                )
+
+                // Configure exception handling
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(authEntryPoint) // Custom authentication entry point
+                )
+
+                // Configure security for HTTP requests
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers( "/auth/**","/books/getAllBooks", "/books/getStockQuantity", "books/getBook").permitAll()
-                        .requestMatchers("/carts/**").hasAuthority(USER)
-                        .requestMatchers("/books/**", "/orders/**").hasAuthority(ADMIN)
-                        .requestMatchers("/users/**").hasAuthority(MAIN_ADMIN)
+                        // Publicly accessible endpoints
+                        .requestMatchers(
+                                "/auth/**",
+                                "/books/getAllBooks",
+                                "/books/getStockQuantity",
+                                "/books/getBook",
+                                "/orders/getUserOrders",
+                                "/users/getLoggedInUserId",
+                                "/orders/getLastOrderId",
+                                "/orders/deleteOrder"
+                        ).permitAll()
+
+                        // Endpoints accessible by USER role
+                        .requestMatchers(
+                                "/carts/**",
+                                "/users/getLoggedInUser",
+                                "/users/setAddress",
+                                "/users/setName",
+                                "/orders/getUserOrdersWithOutId"
+                        ).hasAuthority(USER)
+
+                        // Endpoints accessible by ADMIN role
+                        .requestMatchers(
+                                "/books/**",
+                                "/orders/**"
+                        ).hasAuthority(ADMIN)
+
+                        // Endpoints accessible by MAIN_ADMIN role
+                        .requestMatchers(
+                                "/users/**"
+                        ).hasAuthority(MAIN_ADMIN)
+
+                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable);
+
+                // Add custom JWT authentication filter
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = "MAIN_ADMIN > ADMIN\nADMIN > USER";
+
+        /* Attention !!!! So you wont be confused... */
+        String hierarchy = "MAIN_ADMIN > ADMIN\nADMIN > USER"; /* This means that MAIN_ADMIN has all the privileges of ADMIN and USER, and ADMIN has all the privileges of USER BUT!!!
+        MAIN_ADMIN and ADMIN  don't have access for some USER functions USER and vice versa.  (You can see it in filterChain function and in addition in the frontend side implementation. */
+
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }
@@ -84,7 +128,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow all origins with pattern matching
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -93,4 +137,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

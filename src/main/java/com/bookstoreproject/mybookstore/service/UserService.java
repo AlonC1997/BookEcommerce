@@ -55,6 +55,13 @@ public class UserService {
     }
 
     @Transactional
+    public UserDTO getUserByUsername(String username) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Transactional
     public void updateUser(Long id, UserDTO userDTO) throws UserNotFoundException {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
@@ -87,4 +94,39 @@ public class UserService {
         return userRepository.save(admin);
     }
 
+    @Transactional
+    public boolean checkIfUserExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getUserIdByUsername(String username) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return user.getId();
+    }
+
+    @Transactional
+    public void updateName(String username, String newName) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        user.setName(newName);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void updateAddress(String username, String newAddress) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        user.setAddress(newAddress);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void updatePassword(String username, String newPassword) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

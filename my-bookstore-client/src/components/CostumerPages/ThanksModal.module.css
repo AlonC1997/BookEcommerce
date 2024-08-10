@@ -1,0 +1,53 @@
+.modalContent {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 50%;
+  background-color: rgba(205, 212, 202, 0.966);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 2000;
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 50vh; /* Prevent cart from growing beyond viewport height */
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1500; /* Ensure it's above other content */
+}
+
+.orderDetails {
+  margin-top: 20px;
+}
+
+.modalActions {
+  display: flex;
+  margin-top: 20px;
+
+}
+
+.actionButton {
+  background-color: rgb(176, 46, 46);
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-top: 20px; 
+
+}
+
+.closeButton {
+  background-color: rgb(44, 173, 53);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 20px; 
+}
