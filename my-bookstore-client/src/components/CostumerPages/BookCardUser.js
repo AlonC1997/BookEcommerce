@@ -26,8 +26,9 @@ const BookCardUser = ({ book, onAddToCart, setCartVisible }) => {
 			await axios.post(`http://localhost:8080/carts/addOneBook?bookId=${book.id}`, null, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
+			setStockQuantity(prevQuantity => (prevQuantity > 0 ? prevQuantity - 1 : 0))
 			if (onAddToCart) {
-				onAddToCart() // Notify Home component to refresh cart immediately
+				onAddToCart()
 			}
 		} catch (error) {
 			console.error('Error adding book to cart:', error)

@@ -11,8 +11,9 @@ import Home from './components/CostumerPages/Home'
 import OrderManagement from './components/AdminAndMainAdminPages/OrdersManagement'
 import StockManagement from './components/AdminAndMainAdminPages/StockManagement'
 import UsersAndAdminsManagement from './components/MainAdminPages/UsersAndAdminsManagement'
-import MyDetails from './components/PublicPagesForAllRoles/MyDetails' // Import MyDetails component
-import MyOrders from './components/CostumerPages/MyOrders' // Import MyOrders component
+import MyDetails from './components/PublicPagesForAllRoles/MyDetails'
+import MyOrders from './components/CostumerPages/MyOrders' 
+import AdminCareerPage from './components/MainAdminPages/CarrersManagement'
 import axios from 'axios'
 
 const App = () => {
@@ -31,7 +32,6 @@ const App = () => {
 				setIsMainAdmin(decodedToken.role === 'MAIN_ADMIN')
 				setUserRole(decodedToken.role)
 			} else {
-				// Invalid token; clear state and redirect to login
 				localStorage.removeItem('token')
 				setIsLoggedIn(false)
 				setIsAdmin(false)
@@ -44,7 +44,7 @@ const App = () => {
 			setIsMainAdmin(false)
 			setUserRole(null)
 		}
-	}, []) // Empty dependency array ensures this runs only on mount
+	}, []) 
 
 	const handleLogin = async (username, password) => {
 		try {
@@ -100,6 +100,7 @@ const App = () => {
 						<Route path="/order-management" element={isLoggedIn && (isAdmin || isMainAdmin) ? <OrderManagement /> : <Navigate to="/login" />} />
 						<Route path="/stock-management" element={isLoggedIn && (isAdmin || isMainAdmin) ? <StockManagement /> : <Navigate to="/login" />} />
 						<Route path="/users-and-admins-management" element={isLoggedIn && isMainAdmin ? <UsersAndAdminsManagement /> : <Navigate to="/login" />} />
+						<Route path="/admin-careers" element={isLoggedIn && isMainAdmin ? <AdminCareerPage /> : <Navigate to="/login" />} /> 
 						<Route path="/" element={<Navigate to={isLoggedIn ? '/home' : '/login'} />} />
 					</Routes>
 				</div>

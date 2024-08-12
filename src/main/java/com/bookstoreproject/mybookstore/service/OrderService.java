@@ -7,7 +7,6 @@ import com.bookstoreproject.mybookstore.dto.OrderDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.entity.Order;
 import com.bookstoreproject.mybookstore.entity.User;
-import com.bookstoreproject.mybookstore.repository.BookRepository;
 import com.bookstoreproject.mybookstore.repository.OrderRepository;
 import com.bookstoreproject.mybookstore.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -26,9 +25,6 @@ public class OrderService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -107,19 +103,16 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
 
-        // Increase stock quantities for each book in the order
         for (Book book : order.getBooks()) {
-            bookService.increaseStockQuantity(book.getId(), 1); // Adjust quantity as needed
+            bookService.increaseStockQuantity(book.getId(), 1);
         }
 
         orderRepository.delete(order);
     }
 
     private OrderDTO convertToOrderDTO(Order order) {
-        // Convert basic order details
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
 
-        // Calculate book quantities and total prices
         Map<Long, OrderBookDTO> bookMap = order.getBooks().stream()
                 .collect(Collectors.toMap(
                         Book::getId,
@@ -131,17 +124,14 @@ public class OrderService {
                                 book.getPrice()
                         ),
                         (existing, replacement) -> {
-                            // Update existing entry with new quantity and total price
                             existing.setQuantity(existing.getQuantity() + 1);
                             existing.setTotalPrice(existing.getTotalPrice().add(replacement.getPrice()));
                             return existing;
                         }
                 ));
 
-        // Convert map values to list
         List<OrderBookDTO> orderBookDTOs = bookMap.values().stream().collect(Collectors.toList());
 
-        // Set the list of OrderBookDTOs to the OrderDTO
         orderDTO.setOrderBooks(orderBookDTOs);
 
         return orderDTO;
@@ -162,17 +152,13 @@ public class OrderService {
 
     @Transactional
     public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException, OrderNotFoundException {
-        // Check if user exists
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        // Fetch the max order ID for the user
         Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
-        /*if (maxOrderId == null) {
-            throw new OrderNotFoundException("No orders found for user with id: " + userId);
-        }*/
+
         if (maxOrderId == null) {
-            return 0L; // Return 0 if no orders found
+            return 0L;
         }
         System.out.println(maxOrderId);
         return maxOrderId;

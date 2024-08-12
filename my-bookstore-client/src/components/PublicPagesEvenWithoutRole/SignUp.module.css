@@ -28,7 +28,7 @@
 }
 
 .errorMessage {
-  color: #e53935; /* Red color for error messages */
+  color: #e53935;
   font-size: 14px;
   margin-bottom: 20px;
 }
@@ -84,7 +84,7 @@
 
 .passwordStrengthStatus {
   font-size: 14px;
-  color: #e53935; /* Red color for the strength indicator */
+  color: #e53935;
 }
 
 .popup {

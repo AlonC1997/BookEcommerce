@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import styles from './BookCard.module.css' // Import CSS Module
+import styles from './BookCard.module.css' 
 import axios from 'axios'
 
 const BookCard = ({ book }) => {
 	const [stockQuantity, setStockQuantity] = useState(null)
 
 	useEffect(() => {
-		console.log('Book object:', book) // Log the book object to check its properties
+		console.log('Book object:', book) 
 		if (book && book.id) {
 			const fetchStockQuantity = async () => {
 				try {
 					const response = await axios.get(`http://localhost:8080/books/getStockQuantity?bookId=${book.id}`)
-					console.log('Stock quantity response:', response) // Log the full response
+					console.log('Stock quantity response:', response)
 					setStockQuantity(response.data)
 				} catch (error) {
 					console.error('Error fetching stock quantity', error)

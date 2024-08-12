@@ -16,6 +16,7 @@ const Home = () => {
 	const [showGreeting, setShowGreeting] = useState(true)
 	const [cartVisible, setCartVisible] = useState(false)
 	const [hasPreviousOrder, setHasPreviousOrder] = useState(false)
+	const [cartPosition, setCartPosition] = useState({ top: '15%', right: '5%' })
 
 	useEffect(() => {
 		const fetchBooks = async () => {
@@ -64,16 +65,16 @@ const Home = () => {
 			.filter((book) => book.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
 		setFilteredBooks(filtered)
-		setCurrentPage(1) // Reset to the first page when filters or search change
+		setCurrentPage(1) 
 	}, [books, searchTerm, categoryFilter])
 
 	useEffect(() => {
 		if (userName) {
 			const timer = setTimeout(() => {
 				setShowGreeting(false)
-			}, 10000) // Hide greeting after 10 seconds
+			}, 10000) 
 
-			return () => clearTimeout(timer) // Cleanup timer on component unmount
+			return () => clearTimeout(timer)
 		}
 	}, [userName])
 
@@ -91,7 +92,7 @@ const Home = () => {
 				const book = books.find((b) => b.id === item.bookId)
 				return { ...item, img_link: book.img_link }
 			})
-			setCartItems(cartItemsWithDetails) // Update cartItems state
+			setCartItems(cartItemsWithDetails) 
 		} catch (error) {
 			console.error('Error fetching cart:', error)
 		}
@@ -107,12 +108,12 @@ const Home = () => {
 
 	const handleCategoryChange = (category) => {
 		setCategoryFilter((prev) => ({ ...prev, [category]: !prev[category] }))
-		setCurrentPage(1) // Reset to the first page when filters change
+		setCurrentPage(1) 
 	}
 
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value)
-		setCurrentPage(1) // Reset to the first page when search changes
+		setCurrentPage(1) 
 	}
 
 	const handlePrevPage = () => {
@@ -127,9 +128,33 @@ const Home = () => {
 		}
 	}
 
+	const handleDragStart = (e) => {
+		e.dataTransfer.setData('text/plain', ''); 
+	}
+
+	const handleDrag = (e) => {
+		e.preventDefault();
+	}
+
+	const handleDragEnd = (e) => {
+		const x = e.clientX;
+		const y = e.clientY;
+		setCartPosition({ top: `${y}px`, left: `${x}px` });
+	}
+	
+
 	return (
 		<div className={styles.homeContainer}>
-			<button className={styles.cartToggle} draggable="true" onClick={() => setCartVisible(!cartVisible)}>
+			<button
+				id="cartIcon"
+				className={styles.cartToggle}
+				draggable="true"
+				onDragStart={handleDragStart}
+				onDrag={handleDrag}
+				onDragEnd={handleDragEnd}
+				onClick={() => setCartVisible(!cartVisible)}
+				style={{ top: cartPosition.top, left: cartPosition.left }}
+			>
 				🛒
 			</button>
 

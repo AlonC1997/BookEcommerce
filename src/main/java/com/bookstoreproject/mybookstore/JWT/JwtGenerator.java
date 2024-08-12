@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
-
 @Component
 public class JwtGenerator {
     public long JWT_EXPIRATION = 86400000;
@@ -24,16 +23,14 @@ public class JwtGenerator {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + JWT_EXPIRATION);
 
-        // Extract a single role from the authentication object
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElse("DEFAULT_ROLE"); // Default role if not found
+                .orElse("DEFAULT_ROLE");
 
-        // Build the token with role included in claims
         String token = Jwts.builder()
                 .setSubject(username)
-                .claim("role", role) // Inclusion of role in claims
+                .claim("role", role)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)

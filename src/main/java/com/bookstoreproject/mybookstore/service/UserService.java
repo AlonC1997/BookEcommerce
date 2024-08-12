@@ -66,7 +66,6 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
 
-        // Update user details
         existingUser.setUsername(userDTO.getUsername());
         existingUser.setName(userDTO.getName());
         existingUser.setAddress(userDTO.getAddress());

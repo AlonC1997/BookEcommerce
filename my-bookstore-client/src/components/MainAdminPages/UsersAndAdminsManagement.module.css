@@ -143,14 +143,14 @@
   border-radius: 5px;
   cursor: pointer;
   background-color: #f44336;
-  /* Red */
+ 
   color: white;
   font-size: 1em;
 }
 
 .addButtonOut {
-  background-color: green; /* Green color for "Add New Admin" */
-  color: white; /* Text color */
+  background-color: green;
+  color: white;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -158,8 +158,8 @@
 }
 
 .cancelButtonOut {
-  background-color: #f44336; /* Red color for "Cancel" */
-  color: white; /* Text color */
+  background-color: #f44336;
+  color: white;
   border: none;
   padding: 10px 20px;
   cursor: pointer;

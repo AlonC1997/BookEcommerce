@@ -1,97 +1,204 @@
-import React, { useState } from 'react'
-import styles from './CareerPage.module.css'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styles from './CareerPage.module.css';
 
 const CareerPage = () => {
-	const [searchTerm, setSearchTerm] = useState('')
+  const [careers, setCareers] = useState([]);
+  const [filteredCareers, setFilteredCareers] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedLevels, setSelectedLevels] = useState([]);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [cvFile, setCvFile] = useState(null);
+  const [searchId, setSearchId] = useState('');
 
-	const jobs = {
-		experienced: [
-			{
-				title: 'Frontend Developer',
-				description: 'Create user-friendly and visually appealing interfaces for our e-commerce platform. Proficiency in React, JavaScript, and CSS is required.',
-				type: 'Experienced',
-			},
-			{
-				title: 'Backend Developer',
-				description: 'Develop and maintain server-side logic. Experience with Spring Boot, Java, and RESTful APIs is essential.',
-				type: 'Experienced',
-			},
-			{
-				title: 'UI/UX Designer',
-				description: 'Enhance user experience with intuitive and engaging designs. Experience with design tools and a strong portfolio required.',
-				type: 'Experienced',
-			},
-			{
-				title: 'Marketing Specialist',
-				description: 'Promote our platform through marketing strategies, social media campaigns, and market analysis. Strong communication skills needed.',
-				type: 'Experienced',
-			},
-			{
-				title: 'Senior Software Engineer',
-				description: 'Lead and mentor a team of developers. Extensive experience in software development, project management, and team leadership required.',
-				type: 'Senior',
-			},
-		],
-		entry: [
-			{
-				title: 'Junior Frontend Developer',
-				description: 'Assist in creating and maintaining user interfaces. Basic knowledge of React, JavaScript, and CSS is sufficient.',
-				type: 'Entry Level',
-			},
-			{
-				title: 'Junior Backend Developer',
-				description: 'Support backend development tasks. Familiarity with Spring Boot, Java, and RESTful APIs is helpful.',
-				type: 'Entry Level',
-			},
-		],
-		intern: [
-			{
-				title: 'Software Engineering Intern',
-				description: 'Gain hands-on experience in software development. Must be pursuing a BSc in Software Engineering.',
-				type: 'Intern',
-			},
-			{
-				title: 'UI/UX Design Intern',
-				description: 'Assist in designing user interfaces and user experiences. Must be pursuing a BSc in Software Engineering.',
-				type: 'Intern',
-			},
-		],
-	}
+  useEffect(() => {
+    fetchCareers();
+  }, []);
 
-	const filteredJobs = Object.values(jobs)
-		.flat()
-		.filter((job) => job.title.toLowerCase().includes(searchTerm.toLowerCase()))
+  useEffect(() => {
+    filterCareers();
+  }, [selectedCategories, selectedLevels, selectedLocations, careers]);
 
-	return (
-		<div className={styles.container}>
-			<h1 className={styles.title}>Join Our Team</h1>
-			<p className={styles.description}>
-				At InalaBook, we are dedicated to revolutionizing the way people discover and enjoy books. We are a global e-commerce platform committed to providing an exceptional shopping experience for
-				book lovers everywhere. Join us in our mission to make books accessible to everyone and be a part of our dynamic team.
-			</p>
+  const fetchCareers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/careers/getAllCareers');
+      setCareers(response.data);
+      setFilteredCareers(response.data);
+    } catch (error) {
+      console.error('Error fetching careers:', error);
+    }
+  };
 
-			<input type="text" placeholder="Search for jobs..." className={styles.searchInput} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+  const filterCareers = () => {
+    let filtered = careers;
 
-			<div className={styles.jobs}>
-				{Object.entries(jobs).map(([category, jobList]) => (
-					<div key={category} className={styles.jobCategory}>
-						<h2 className={styles.categoryTitle}>{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
-						{jobList.length > 0 ? (
-							jobList.map((job, index) => (
-								<div key={index} className={styles.job}>
-									<h3 className={styles.jobTitle}>{job.title}</h3>
-									<p className={styles.jobDescription}>{job.description}</p>
-									<button className={styles.applyButton}>Apply Now</button>
-								</div>
-							))
-						) : (
-							<p>No jobs available in this category.</p>
-						)}
-					</div>
-				))}
-			</div>
-		</div>
-	)
-}
+    if (searchId) {
+      filtered = filtered.filter(career => career.id.toString().includes(searchId));
+    }
 
-export default CareerPage
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(career => selectedCategories.includes(career.category));
+    }
+
+    if (selectedLevels.length > 0) {
+      filtered = filtered.filter(career => selectedLevels.includes(career.level));
+    }
+
+    if (selectedLocations.length > 0) {
+      filtered = filtered.filter(career => selectedLocations.includes(career.location));
+    }
+
+    setFilteredCareers(filtered);
+  };
+
+  const handleCheckboxChange = (event, type) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+
+    switch (type) {
+      case 'category':
+        setSelectedCategories(prev =>
+          isChecked ? [...prev, value] : prev.filter(item => item !== value)
+        );
+        break;
+      case 'level':
+        setSelectedLevels(prev =>
+          isChecked ? [...prev, value] : prev.filter(item => item !== value)
+        );
+        break;
+      case 'location':
+        setSelectedLocations(prev =>
+          isChecked ? [...prev, value] : prev.filter(item => item !== value)
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleCvChange = (event) => {
+    setCvFile(event.target.files[0]);
+  };
+
+  const handleSubmitCv = async (careerId) => {
+    if (!cvFile) {
+      alert('Please select a CV file to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('careerId', careerId);
+    formData.append('files', cvFile);
+
+    try {
+      await axios.post('http://localhost:8080/careers/uploadFiles', formData);
+      alert('CV submitted successfully!');
+      setCvFile(null); 
+    } catch (error) {
+      console.error('Error submitting CV:', error);
+      alert('Failed to submit CV.');
+    }
+  };
+
+  const uniqueCategories = [...new Set(careers.map(career => career.category))];
+  const uniqueLevels = [...new Set(careers.map(career => career.level))];
+  const uniqueLocations = [...new Set(careers.map(career => career.location))];
+
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Career Opportunities</h1>
+      </header>
+
+      <div className={styles.search}>
+        <input
+          type="text"
+          placeholder="Search by Job ID"
+          value={searchId}
+          onChange={(e) => {
+            setSearchId(e.target.value);
+            filterCareers();
+          }}
+          className={styles.searchInput}
+        />
+      </div>
+
+      <div className={styles.filters}>
+        <div className={styles.filterSection}>
+          <h3>Filter by Category</h3>
+          {uniqueCategories.map(category => (
+            <label key={category}>
+              <input
+                type="checkbox"
+                value={category}
+                onChange={(e) => handleCheckboxChange(e, 'category')}
+              />
+              {category}
+            </label>
+          ))}
+        </div>
+
+        <div className={styles.filterSection}>
+          <h3>Filter by Level</h3>
+          {uniqueLevels.map(level => (
+            <label key={level}>
+              <input
+                type="checkbox"
+                value={level}
+                onChange={(e) => handleCheckboxChange(e, 'level')}
+              />
+              {level}
+            </label>
+          ))}
+        </div>
+
+        <div className={styles.filterSection}>
+          <h3>Filter by Location</h3>
+          {uniqueLocations.map(location => (
+            <label key={location}>
+              <input
+                type="checkbox"
+                value={location}
+                onChange={(e) => handleCheckboxChange(e, 'location')}
+              />
+              {location}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.careerList}>
+        {filteredCareers.length === 0 ? (
+          <p>No careers available</p>
+        ) : (
+          filteredCareers.map(career => (
+            <div key={career.id} className={styles.careerItem}>
+              <h2>Job ID: {career.id}</h2>
+              <h3>{career.title}</h3>
+              <p><strong>Description:</strong> {career.description}</p>
+              <p><strong>Category:</strong> {career.category}</p>
+              <p><strong>Location:</strong> {career.location}</p>
+              <p><strong>Level:</strong> {career.level}</p>
+              <p><strong>Requirements:</strong> {career.requirements}</p>
+              <p><strong>Date Posted:</strong> {new Date(career.datePosted).toLocaleDateString()}</p>
+
+              <input
+                type="file"
+                onChange={handleCvChange}
+                className={styles.fileInput}
+              />
+              <button
+                onClick={() => handleSubmitCv(career.id)}
+                className={styles.submitButton}
+              >
+                Submit CV
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CareerPage;

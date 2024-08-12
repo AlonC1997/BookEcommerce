@@ -24,7 +24,7 @@ const UsersAndAdminsManagement = () => {
 		USER: true,
 	})
 
-	const token = localStorage.getItem('token') // Get the token from local storage
+	const token = localStorage.getItem('token')
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -50,8 +50,6 @@ const UsersAndAdminsManagement = () => {
 		const { name, value } = e.target
 		setNewUser((prevState) => ({ ...prevState, [name]: value }))
 
-		// Instant feedback for email validation
-
 		if (name === 'username') {
 			if (!validateEmail(value)) {
 				setEmailError('Invalid email format. Please enter a valid email address, e.g., example@domain.com')
@@ -59,7 +57,7 @@ const UsersAndAdminsManagement = () => {
 				setEmailError('')
 			}
 		}
-		// Reset password error if the password field changes
+
 		if (name !== '' && (name === 'password' || name === 'passwordAgain')) {
 			setPasswordError('')
 		}
@@ -89,7 +87,7 @@ const UsersAndAdminsManagement = () => {
 		if (!passwordsMatch) {
 			return 'Passwords do not match.'
 		}
-		return '' // All criteria met
+		return '' 
 	}
 
 	const handleAddUser = async (e) => {
@@ -204,7 +202,7 @@ const UsersAndAdminsManagement = () => {
 							<td>
 								<button
 									onClick={() => handleDeleteUser(user.userID)}
-									disabled={user.role === 'MAIN_ADMIN'} // Prevent deletion of MAIN_ADMIN
+									disabled={user.role === 'MAIN_ADMIN'}
 								>
 									Delete
 								</button>

@@ -1,14 +1,14 @@
 .App {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensure the content area takes up at least the full viewport height */
-    position: relative; /* Ensure the layout is positioned correctly */
+    min-height: 100vh;
+    position: relative;
 
 }
   
 .mainContent {
-    flex: 1; /* Allow this section to grow and fill the space between the header and footer */
-    position: relative; /* Make sure this section does not interfere with the modal */
+    flex: 1;
+    position: relative;
 
 }
   

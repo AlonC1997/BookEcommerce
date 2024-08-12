@@ -27,8 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-
-        // Convert the single role to a GrantedAuthority collection
         Collection<GrantedAuthority> authorities = mapRoleToAuthorities(user.getRole());
 
         // Return a new User object from Spring Security's UserDetails, not the entity class!!!

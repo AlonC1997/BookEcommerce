@@ -20,7 +20,6 @@ public class OrderDTO {
 
     private Long userId;
 
-    /*private List<CartBookDTO> cartBooks;*/
     private List<OrderBookDTO> orderBooks;
 
     public OrderDTO() {}
@@ -32,7 +31,6 @@ public class OrderDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userId = userId;
-        /*this.cartBooks = cartBooks;*/
         this.orderBooks = orderBooks;
     }
 }

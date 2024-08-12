@@ -12,7 +12,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 	const [showModal, setShowModal] = useState(false)
 	const [modalMessage, setModalMessage] = useState('')
 	const [orderDetails, setOrderDetails] = useState(null)
-	const [outOfStockMessage, setOutOfStockMessage] = useState('')
+	const [setOutOfStockMessage] = useState('')
 
 	useEffect(() => {
 		if (cartVisible) {
@@ -43,7 +43,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			})
 
 			setCartItems(cartItemsWithDetails)
-			console.log('Cart items after fetch:', cartItemsWithDetails) // Log cart items
+			console.log('Cart items after fetch:', cartItemsWithDetails) 
 
 			const stockRequests = cartResponse.data.map((item) => axios.get(`http://localhost:8080/books/getStockQuantity?bookId=${item.bookId}`))
 			const stockResponses = await Promise.all(stockRequests)
@@ -65,15 +65,15 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			total += item.price * item.quantity
 		})
 		setCartTotal(total)
-		setDiscount(hasPreviousOrder ? 0 : total * 0.05) // 5% discount only if no previous orders
-		setVat(total * 0.17) // 17% VAT
+		setDiscount(hasPreviousOrder ? 0 : total * 0.05) 
+		setVat(total * 0.17) 
 	}
 
 	const refreshCart = async () => {
 		try {
-			await fetchCartItems() // Re-fetch and update cart items
+			await fetchCartItems() 
 			if (onCartUpdate) {
-				onCartUpdate() // Notify parent component if necessary
+				onCartUpdate() 
 			}
 		} catch (error) {
 			console.error('Error refreshing cart:', error)
@@ -89,9 +89,9 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				await refreshCart()
-				setOutOfStockMessage('') // Clear any previous out-of-stock message
+				setOutOfStockMessage('') 
 			} else {
-				setOutOfStockMessage('Out of Stock') // Set the out-of-stock message
+				setOutOfStockMessage('Out of Stock')
 			}
 		} catch (error) {
 			console.error('Error adding book to cart:', error)
@@ -123,7 +123,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			setCartVisible(true)
 			setModalMessage('Thank you for your order! Your cart has been submitted.')
 			setShowModal(true)
-			fetchLastOrderDetails() // Fetch last order details
+			fetchLastOrderDetails() 
 			if (onCartUpdate) {
 				onCartUpdate()
 			}
@@ -144,7 +144,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			const orders = ordersResponse.data
-			const lastOrder = orders[orders.length - 1] // Fetch the last item in the list
+			const lastOrder = orders[orders.length - 1] 
 
 			if (lastOrder) {
 				setOrderDetails({

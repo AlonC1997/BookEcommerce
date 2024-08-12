@@ -1,24 +1,24 @@
-/* Navbar.module.css */
+
 
 .navbar {
   font-family: 'Open Sans', sans-serif;
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(190, 132, 17, 0.8); /* Green background with 80% opacity */
+  background-color: rgba(190, 132, 17, 0.8);
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  backdrop-filter: blur(10px); /* Apply blur effect for transparency */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  z-index: 1000; /* Ensure navbar stays on top of other content */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 .brand {
   font-family: 'Lora', sans-serif;
   font-size: 1.5rem;
-  color: rgb(7, 10, 4); /* White text color */
+  color: rgb(7, 10, 4);
   text-decoration: none;
   font-weight: bold;
 }
@@ -29,43 +29,31 @@
 }
 
 .navLinks a, .continueWithoutLogin, .button {
-  color: white; /* White text color for links */
+  color: white;
   text-decoration: none;
   padding: 10px 20px;
-  margin-right: 20px; /* Adjust margin to reduce the right spacing */
+  margin-right: 20px;
   transition: all 0.3s ease;
-  border-radius: 5px; /* Add border radius */
+  border-radius: 5px;
   background: none;
   display: flex;
-  align-items: center; /* Vertically align items */
+  align-items: center;
 }
 
 .navLinks a:hover, .continueWithoutLogin:hover, .button:hover {
-  background-color: rgba(141, 99, 190, 0.8); /* Light green background on hover */
+  background-color: rgba(141, 99, 190, 0.8);
 }
 
 .active {
   font-weight: regular;
-  background-color: rgba(122, 121, 127, 0.8); /* Light green background for active link */
+  background-color: rgba(122, 121, 127, 0.8);
   background: gray;
   color: white;
 }
 
-.button {
-  font-size: 1rem;
-  color: rgb(146, 13, 13); /* White text color */
-  background: none;
-  border: none;
-  padding: 10px 20px; 
-  margin-left: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 5px; /* Add border radius */
-}
 
 .material-symbols-outlined {
-  font-size: 1.2rem; /* Adjust the icon size */
-  vertical-align: middle; /* Align the icon vertically */
-  margin-right: 8px; /* Space between icon and text */
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-right: 8px;
 }
-

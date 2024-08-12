@@ -28,10 +28,10 @@ const OrderManagement = () => {
 
 	const fetchOrders = async () => {
 		try {
-			const token = localStorage.getItem('token') // Retrieve the token from local storage
+			const token = localStorage.getItem('token') 
 			const response = await axios.get('http://localhost:8080/orders/getAllOrders', {
 				headers: {
-					Authorization: `Bearer ${token}`, // Add the authorization header
+					Authorization: `Bearer ${token}`, 
 				},
 			})
 			setOrders(response.data)
@@ -91,7 +91,7 @@ const OrderManagement = () => {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			const { userID, name, address } = response.data // Adjust destructuring
+			const { userID, name, address } = response.data
 			setUserDetails({ userID, name, address })
 			setIsUserModalOpen(true)
 		} catch (error) {

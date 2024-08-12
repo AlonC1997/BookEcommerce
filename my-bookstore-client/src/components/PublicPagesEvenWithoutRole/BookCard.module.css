@@ -5,9 +5,9 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 15px;
-  margin: 10px; /* Increased margin for better spacing */
+  margin: 10px;
   transition: transform 0.2s ease-in-out;
-  height: auto; /* Adjust height based on content */
+  height: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -18,14 +18,14 @@
 .bookImage {
   text-align: center;
   margin-bottom: 10px;
-  height: 200px; /* Adjust to ensure image fits */
-  overflow: hidden; /* Hide overflow */
+  height: 200px;
+  overflow: hidden;
 }
 
 .bookImage img {
-  width: 100%; /* Ensure image fits container width */
-  height: auto; /* Maintain aspect ratio */
-  object-fit: cover; /* Cover the container without stretching */
+  width: 100%;
+  height: auto;
+  object-fit: cover;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
@@ -47,7 +47,7 @@
   margin-bottom: 8px;
 }
 
-/* Stock status styles */
+
 .outOfStock {
   color: red;
 }

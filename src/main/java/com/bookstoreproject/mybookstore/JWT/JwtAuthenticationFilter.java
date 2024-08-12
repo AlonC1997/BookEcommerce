@@ -36,9 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
             String username = tokenGenerator.getUsernameFromJWT(token);
 
-            String role = tokenGenerator.getRolesFromJWT(token).toString(); // Change to get a single role string
+            String role = tokenGenerator.getRolesFromJWT(token).toString();
 
-            // Create authorities from the single role string
             List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);

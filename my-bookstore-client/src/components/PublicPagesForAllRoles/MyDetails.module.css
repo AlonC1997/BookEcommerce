@@ -6,7 +6,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
-    top: 60px; /* Adjusted to ensure visibility below navbar */
+    top: 60px;
   }
   
   .title {
@@ -55,8 +55,8 @@
   
   .editContainer, .passwordContainer {
     display: flex;
-    flex-direction: column; /* Ensure elements are stacked vertically */
-    align-items: flex-start; /* Align items to start for better alignment */
+    flex-direction: column;
+    align-items: flex-start;
   }
   
   .fieldContent {
@@ -72,11 +72,11 @@
   
   .errorMessage {
     color: #dc3545;
-    margin-top: 10px; /* Increase margin to better separate from other elements */
-    width: 100%; /* Ensure it takes full width for better visibility */
+    margin-top: 10px;
+    width: 100%;
   }
   
   .passwordContainer {
-    margin-top: 20px; /* Ensure some space above the password validation section */
+    margin-top: 20px;
   }
   

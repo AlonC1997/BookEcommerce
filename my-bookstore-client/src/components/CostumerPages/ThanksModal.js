@@ -5,12 +5,12 @@ import styles from './ThanksModal.module.css'
 const ThanksModal = ({ isOpen, onClose, message, orderDetails, setHasPreviousOrder }) => {
 	const handleLogout = () => {
 		localStorage.removeItem('token')
-		setHasPreviousOrder(true) // Set hasPreviousOrder to true on logout
-		window.location.href = '/login' // Redirect to login page
+		setHasPreviousOrder(true) 
+		window.location.href = '/login' 
 	}
 
 	const handleClose = () => {
-		setHasPreviousOrder(true) // Set hasPreviousOrder to true on close
+		setHasPreviousOrder(true) 
 		onClose()
 	}
 

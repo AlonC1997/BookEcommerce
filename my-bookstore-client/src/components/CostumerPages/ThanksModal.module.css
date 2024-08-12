@@ -9,8 +9,8 @@
   overflow-y: auto;
   transition: transform 0.3s ease;
   z-index: 2000;
-  height: auto; /* Allow height to adjust based on content */
-  max-height: 50vh; /* Prevent cart from growing beyond viewport height */
+  height: auto;
+  max-height: 50vh;
 }
 
 .modalOverlay {
@@ -20,7 +20,7 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1500; /* Ensure it's above other content */
+  z-index: 1500;
 }
 
 .orderDetails {

@@ -90,21 +90,22 @@
 
 .cartToggle {
   position: fixed;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  background-color: #a6c0af;
-  color: white;
-  border: none;
+  width: 80px; 
+  height: 80px;
+  top: 20%;    
+  right: 10%;  
+  transform: translate(-50%, -50%);
+  background-color: #8cb199;
   border-radius: 50%;
-  padding: 10px 15px;
   cursor: pointer;
-  font-size: 4.5em;
+  font-size: 3em;
   z-index: 1001;
+  transition: background-color 1.3s ease;
 }
 
+
 .cartToggle:hover {
-  background-color: #218838;
+  background-color: #747bb0;
 }
 
 .leftSidebar {

@@ -58,7 +58,7 @@ const StockManagement = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book updated successfully')
-			fetchBooks() // Refresh the list of books
+			fetchBooks() 
 		} catch (error) {
 			console.error('Error updating book:', error)
 		}
@@ -71,7 +71,7 @@ const StockManagement = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book deleted successfully')
-			fetchBooks() // Refresh the list of books
+			fetchBooks() 
 		} catch (error) {
 			console.error('Error deleting book:', error)
 		}
@@ -84,7 +84,7 @@ const StockManagement = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book restored successfully')
-			fetchBooks() // Refresh the list of books
+			fetchBooks()
 		} catch (error) {
 			console.error('Error restoring book:', error)
 		}
@@ -97,8 +97,8 @@ const StockManagement = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book added successfully')
-			fetchBooks() // Refresh the list of books
-			setIsModalOpen(false) // Close the modal
+			fetchBooks() 
+			setIsModalOpen(false) 
 			setNewBook({
 				name: '',
 				author: '',

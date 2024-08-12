@@ -10,8 +10,8 @@
   overflow-y: auto;
   transition: transform 0.3s ease;
   z-index: 1000;
-  height: auto; /* Allow height to adjust based on content */
-  max-height: 65vh; /* Prevent cart from growing beyond viewport height */
+  height: auto;
+  max-height: 65vh;
 }
 
 .visible {
@@ -24,8 +24,8 @@
 
 .closeCart {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 10%;
+  right: 10%;
   background-color: #a8a0a1; 
   color: white;
   border: none;
@@ -67,12 +67,12 @@
 .details {
   flex: 1;
   display: flex;
-  justify-content: space-between; /* Distribute space between elements */
+  justify-content: space-between;
 }
 
 .info {
   flex: 1;
-  margin: 0 2%; /* Add spacing between items */
+  margin: 0 2%;
 }
 
 .button {

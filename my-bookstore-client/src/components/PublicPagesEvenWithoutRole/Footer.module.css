@@ -1,12 +1,12 @@
 .footer {
-    background-color: #a6c0af; /* Light green background */
+    background-color: #a6c0af;
     border-top: 1px solid #ddd;
-    padding: 10px 1%; /* Adjust padding as necessary */
+    padding: 10px 1%;
     box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ensure it spans the full width */
+    width: 100%;
     display: flex;
     justify-content: center;
-    z-index: 1000; /* Ensure it stays above other content */
+    z-index: 1000;
   }
   
   .footerContent {
@@ -20,14 +20,14 @@
   .logoContainer {
     flex: 1;
     text-align: center;
-    overflow: hidden; /* Ensure the image doesn't overflow */
+    overflow: hidden;
   }
   
   .logo {
     max-height: 50px;
-    object-fit: cover; /* Maintain aspect ratio and fill container */
-    transform: scale(2.7); /* Zoom in on the logo */
-    clip-path: inset(2% 5% 2% 5%); /* Crop 10% from the left and right sides */
+    object-fit: cover;
+    transform: scale(2.7);
+    clip-path: inset(2% 5% 2% 5%);
   }
   
   .footerDetails {
@@ -53,7 +53,7 @@
   }
   
   .link {
-    color: #007bff; /* Link color */
+    color: #007bff;
     text-decoration: none;
   }
   
@@ -62,7 +62,7 @@
   }
   
   .joinUsButton {
-    color: #007bff; /* Button color */
+    color: #007bff;
     text-decoration: none;
   }
   
