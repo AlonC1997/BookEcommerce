@@ -1,0 +1,131 @@
+.container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.leftPanel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.addButton {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 300px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+}
+
+.modalContent input,
+.modalContent button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.closeButton {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tableContainer {
+    margin-top: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.table input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.updateButton,
+.deleteButton,
+.updateAllButton {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.updateButton {
+    background-color: #4CAF50;
+}
+
+.deleteButton {
+    background-color: #f44336;
+}
+
+.updateAllButton {
+    background-color: #2196F3;
+    margin-top: 20px;
+}
+
+.fileContainer {
+    margin-top: 20px;
+}
+
+.filePreview {
+    margin-top: 20px;
+}
+
+.fileImage {
+    max-width: 100%;
+    height: auto;
+}
+
+.fileIframe {
+    width: 100%;
+    height: 500px;
+}
