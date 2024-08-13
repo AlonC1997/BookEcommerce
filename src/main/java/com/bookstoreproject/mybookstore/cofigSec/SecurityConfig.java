@@ -66,7 +66,7 @@ public class SecurityConfig {
                                 "/orders/getLastOrderId",
                                 "/orders/deleteOrder",
                                 "/careers/getAllCareers",
-                                "/careers/uploadFiles"
+                                "/career-files/uploadFile"
                         ).permitAll()
 
                         // Endpoints accessible by USER role
@@ -87,7 +87,8 @@ public class SecurityConfig {
                         // Endpoints accessible by MAIN_ADMIN role
                         .requestMatchers(
                                 "/users/**",
-                                "/careers/**"
+                                "/careers/**",
+                                "/career-files/**"
                         ).hasAuthority(MAIN_ADMIN)
 
                         // All other requests require authentication

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @Entity
@@ -13,17 +15,16 @@ public class CareerFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false)
-    private String fileType;
-
-    @Lob
-    @Column(nullable = false)
+    @Column(name = "file_content", nullable = false, columnDefinition="LONGBLOB")
     private byte[] fileContent;
 
+    private LocalDate uploadDate;
+
     @ManyToOne
-    @JoinColumn(name = "career_id", nullable = false)
+    @JoinColumn(name = "career_id")
     private Career career;
+
+    private String contentType; // Add this field
 }

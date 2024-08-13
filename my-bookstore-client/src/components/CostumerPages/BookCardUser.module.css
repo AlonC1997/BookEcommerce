@@ -1,51 +1,68 @@
 .bookCard {
   border: 1px solid #ddd;
-  padding: 10px;
-  padding-bottom: 4%;
-  margin: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 250px;
+  padding: 15px;
+  padding-bottom: 5%;
+  margin: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 280px;
   display: inline-block;
   vertical-align: top;
+  background-color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .bookImage {
   width: 100%;
   height: auto;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid #ddd;
 }
 
 .bookImage img {
   width: 100%;
   height: auto;
+  border-radius: 4px;
 }
 
 .bookDetails {
-  padding: 10px;
+  padding: 15px;
 }
 
 .bookDetails h3 {
-  font-size: 1.2em;
+  font-size: 1.4em;
   margin: 0;
+  color: #333;
 }
 
 .bookDetails p {
   margin: 5px 0;
+  color: #555;
 }
 
 .bookDetails h5 {
   margin: 10px 0;
+  font-size: 1.2em;
+  color: #6698cd;
 }
 
 button {
-  background-color: #28a745;
+  background-color: #6a8db1;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 12px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #55677a;
 }
 
 button:disabled {
@@ -54,13 +71,13 @@ button:disabled {
 }
 
 .outOfStock {
-  color: red;
+  color: rgb(215, 102, 102);
 }
 
 .lowStock {
-  color: orange;
+  color: rgb(194, 171, 128);
 }
 
 .highStock {
-  color: green;
+  color: rgb(99, 158, 99);
 }

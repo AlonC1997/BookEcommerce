@@ -1,59 +1,79 @@
-
-
 .navbar {
   font-family: 'Open Sans', sans-serif;
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(190, 132, 17, 0.8);
+  background-color: #776e6e;
+  color: #fff;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
+.brandContainer {
+  flex: 1;
+}
+
 .brand {
-  font-family: 'Lora', sans-serif;
+  font-family: 'Lora', serif;
   font-size: 1.5rem;
-  color: rgb(7, 10, 4);
+  color: #ada485;
   text-decoration: none;
   font-weight: bold;
+  margin-left: 1%;
+
 }
 
 .navLinks {
   display: flex;
-  margin: 1px 30px;
+  align-items: center;
+  gap: 15px;
+  margin-right: 2%;
 }
 
 .navLinks a, .continueWithoutLogin, .button {
-  color: white;
+  color: #fff;
   text-decoration: none;
   padding: 10px 20px;
-  margin-right: 20px;
-  transition: all 0.3s ease;
-  border-radius: 5px;
-  background: none;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
   display: flex;
   align-items: center;
 }
 
 .navLinks a:hover, .continueWithoutLogin:hover, .button:hover {
-  background-color: rgba(141, 99, 190, 0.8);
+  background-color: #857b59;
+  color: #333;
+}
+
+.continueWithoutLogin {
+  background-color: transparent;
+  color: #ffffff;
 }
 
 .active {
-  font-weight: regular;
-  background-color: rgba(122, 121, 127, 0.8);
-  background: gray;
-  color: white;
+  font-weight: bold;
+  background-color: #5b5749;
+  color: #333;
 }
-
 
 .material-symbols-outlined {
   font-size: 1.2rem;
   vertical-align: middle;
   margin-right: 8px;
+}
+
+
+.button {
+  background-color: transparent;
+  color: #ada485;
+}
+
+.button:hover {
+  color: #333;
+  background-color: #f5c518;
+
 }

@@ -12,7 +12,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 	const [showModal, setShowModal] = useState(false)
 	const [modalMessage, setModalMessage] = useState('')
 	const [orderDetails, setOrderDetails] = useState(null)
-	const [setOutOfStockMessage] = useState('')
+	const [outOfStockMessage, setOutOfStockMessage] = useState('')
 
 	useEffect(() => {
 		if (cartVisible) {
@@ -88,13 +88,14 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 				await axios.post(`http://localhost:8080/carts/addOneBook?bookId=${bookId}`, null, {
 					headers: { Authorization: `Bearer ${token}` },
 				})
-				await refreshCart()
 				setOutOfStockMessage('') 
+				await refreshCart()
 			} else {
-				setOutOfStockMessage('Out of Stock')
+				setOutOfStockMessage('Out of Stock') 
 			}
 		} catch (error) {
 			console.error('Error adding book to cart:', error)
+			setOutOfStockMessage('Error adding book. Please try again.') 
 		}
 	}
 
@@ -187,10 +188,12 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 								<button className={`${styles.button} ${styles.remove}`} onClick={() => handleRemoveOne(item.bookId)}>
 									-
 								</button>
-								{item.bookId in stockQuantities && stockQuantities[item.bookId] <= 0 && <p className={styles.outOfStockMessage}>Out of Stock</p>}
 								<button className={styles.button} onClick={() => handleAddOne(item.bookId)} disabled={(stockQuantities[item.bookId] || 0) <= 0}>
 									+
 								</button>
+								{item.bookId in stockQuantities && stockQuantities[item.bookId] <= 0 && (
+									<p className={styles.outOfStockMessage}>{outOfStockMessage}</p>
+								)}
 							</li>
 						))}
 					</ul>

@@ -10,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,40 +72,5 @@ public class CareerService {
         careerRepository.delete(career);
     }
 
-    @Transactional
-    public void uploadFiles(Long careerId, MultipartFile[] files) throws IOException {
-        Career career = careerRepository.findById(careerId)
-                .orElseThrow(() -> new RuntimeException("Career not found"));
-
-        for (MultipartFile file : files) {
-            CareerFile careerFile = new CareerFile();
-            careerFile.setFileName(file.getOriginalFilename());
-            careerFile.setFileContent(file.getBytes());
-            careerFile.setCareer(career);
-            careerFileRepository.save(careerFile);
-        }
-    }
-
-    @Transactional
-    public CareerFile getFileById(Long fileId) {
-        return careerFileRepository.findById(fileId)
-                .orElseThrow(() -> new RuntimeException("File not found"));
-    }
-
-    @Transactional
-    public List<CareerFileDTO> getAllFiles() {
-        List<CareerFile> careerFiles = careerFileRepository.findAll();
-        return careerFiles.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    private CareerFileDTO convertToDTO(CareerFile careerFile) {
-        CareerFileDTO dto = new CareerFileDTO();
-        dto.setId(careerFile.getId());
-        dto.setFileName(careerFile.getFileName());
-        dto.setFileType(careerFile.getFileType());
-        return dto;
-    }
 
 }

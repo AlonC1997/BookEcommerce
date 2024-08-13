@@ -1,72 +1,74 @@
 .footer {
-    background-color: #a6c0af;
-    border-top: 1px solid #ddd;
-    padding: 10px 1%;
-    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .footerContent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 960px;
-    width: 100%;
-  }
-  
-  .logoContainer {
-    flex: 1;
-    text-align: center;
-    overflow: hidden;
-  }
-  
-  .logo {
-    max-height: 50px;
-    object-fit: cover;
-    transform: scale(2.7);
-    clip-path: inset(2% 5% 2% 5%);
-  }
-  
-  .footerDetails {
-    flex: 2;
-    text-align: center;
-  }
-  
-  .footerDetails p {
-    margin: 0;
-    font-size: 14px;
-  }
-  
-  .footerAdvertisement {
-    flex: 2;
-    text-align: center;
-  }
-  
-  .footerAdvertisement p {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .link {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
-  .joinUsButton {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .joinUsButton:hover {
-    text-decoration: underline;
-  }
-  
+  background-color: #776e6e;
+  border-top: 1px solid #e2e6ea;
+  padding: 10px 3%;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  width: 100%;
+  gap: 20px;
+}
+
+.logoContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+}
+
+.logo {
+  max-height: 115px;
+  margin-right: 50px;
+  object-fit: contain;
+  clip-path: inset(25% 0% 25% 4%);
+}
+
+
+.footerDetails {
+  flex: 3;
+  text-align: center;
+}
+
+.footerDetails p {
+  margin: 9px 0;
+  font-size: 16px;
+  color: #212529;
+}
+
+.footerAdvertisement {
+  margin-right: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.footerAdvertisement p {
+  margin-top:  8%;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  white-space: pre-line;
+  line-height: 1.4;
+}
+
+
+.link, .joinUsButton {
+  color: #ada485;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.link:hover, .joinUsButton:hover {
+  text-decoration: underline;
+}

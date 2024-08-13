@@ -1,7 +1,7 @@
-
 .homeContainer {
   padding: 20px;
   position: relative;
+  background-color: #f5f5f5;
 }
 
 .header {
@@ -10,8 +10,10 @@
 }
 
 .header h1 {
-  font-size: 2em;
+  font-size: 2.5em;
   color: #333;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
 }
 
 .filters {
@@ -23,11 +25,12 @@
 
 .searchBox {
   width: 100%;
-  max-width: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 320px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .checkboxes {
@@ -38,14 +41,18 @@
 
 .checkboxes label {
   margin: 5px;
+  font-size: 1em;
+  color: #555;
 }
 
 .subHeader {
-  font-size: 1.5em;
-  color: #555;
+  font-size: 1.6em;
+  color: #444;
   margin-top: 20px;
   margin-bottom: 10px;
   text-align: center;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
 }
 
 .booksList {
@@ -57,6 +64,12 @@
 .bookCard {
   flex: 0 1 calc(33.333% - 20px);
   margin-bottom: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .pagination {
@@ -66,14 +79,19 @@
 }
 
 .paginationButton {
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 12px 24px;
+  margin: 0 8px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: #007bff;
   color: white;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.1em;
+  transition: background-color 0.3s;
+}
+
+.paginationButton:hover {
+  background-color: #0056b3;
 }
 
 .paginationButton:disabled {
@@ -83,30 +101,35 @@
 
 .cancelPolicy {
   font-size: 14px;
-  color: #777;
+  color: #666;
   margin-top: 20px;
   text-align: center;
 }
 
 .cartToggle {
   position: fixed;
-  width: 80px; 
+  width: 80px;
   height: 80px;
-  top: 20%;    
-  right: 10%;  
+  top: 20%;
+  right: 10%;
   transform: translate(-50%, -50%);
-  background-color: #8cb199;
+  background-color: #7aac86;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 3em;
+  font-size: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1001;
-  transition: background-color 1.3s ease;
+  transition: background-color 0.3s, transform 0.3s;
 }
-
 
 .cartToggle:hover {
-  background-color: #747bb0;
+  background-color: #6f83aa;
+  transform: scale(1.1);
 }
+
+
 
 .leftSidebar {
   position: fixed;
@@ -118,10 +141,11 @@
 }
 
 .userGreeting {
-  background-color: #f4f4f4;
-  padding: 10px 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(16, 3, 97, 0.2);
-  font-size: 2em;
-  color: #688136;
+  background-color: #ffffff;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.5em;
+  color: #4a7f4f;
+  font-family: 'Arial', sans-serif;
 }

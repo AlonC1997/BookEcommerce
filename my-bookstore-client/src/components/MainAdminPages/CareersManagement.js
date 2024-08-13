@@ -6,7 +6,6 @@ const AdminCareerPage = () => {
     const [careers, setCareers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newCareer, setNewCareer] = useState({
-        id: '',
         title: '',
         description: '',
         category: '',
@@ -18,7 +17,6 @@ const AdminCareerPage = () => {
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         fetchCareers();
@@ -38,7 +36,7 @@ const AdminCareerPage = () => {
 
     const fetchFileList = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/careers/getAllFiles', {
+            const response = await axios.get('http://localhost:8080/career-files/getAllFiles', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
             setFileList(response.data);
@@ -110,45 +108,38 @@ const AdminCareerPage = () => {
 
     const handleViewFile = async (fileId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/careers/getFile?fileId=${fileId}`, {
+            const response = await axios.get(`http://localhost:8080/career-files/download?fileId=${fileId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 responseType: 'blob',
             });
 
-            const contentType = response.headers['content-type'];
-            const url = URL.createObjectURL(new Blob([response.data]));
+            const contentDisposition = response.headers['content-disposition'];
+            const fileName = contentDisposition ? contentDisposition.split('filename=')[1].replace(/"/g, '') : 'downloaded-file';
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+            const url = URL.createObjectURL(blob);
 
-            setSelectedFile({ url, contentType });
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName); 
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url); 
         } catch (error) {
             console.error('Error fetching file:', error);
         }
     };
 
-    const renderFilePreview = () => {
-        if (!selectedFile) return null;
-
-        const { url, contentType } = selectedFile;
-
-        if (contentType.includes('image')) {
-            return <img src={url} alt="Preview" className={styles.fileImage} />;
+    const handleDeleteFile = async (fileId) => {
+        try {
+            await axios.delete(`http://localhost:8080/career-files/deleteFile?fileId=${fileId}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            });
+            alert('File deleted successfully');
+            fetchFileList();
+        } catch (error) {
+            console.error('Error deleting file:', error);
         }
-
-        if (contentType.includes('pdf')) {
-            return <iframe src={url} title="PDF Preview" className={styles.fileIframe}></iframe>;
-        }
-
-        if (contentType.includes('text')) {
-            return <iframe src={url} title="Text Preview" className={styles.fileIframe}></iframe>;
-        }
-
-        return (
-            <div>
-                <p>Cannot preview this file type.</p>
-                <a href={url} download>
-                    Download File
-                </a>
-            </div>
-        );
     };
 
     const filteredCareers = (careers) =>
@@ -175,7 +166,7 @@ const AdminCareerPage = () => {
 
             <div className={styles.leftPanel}>
                 <button className={styles.addButton} onClick={() => setIsModalOpen(true)}>
-                    Add New Career
+                    Add New job
                 </button>
 
                 <input
@@ -326,28 +317,43 @@ const AdminCareerPage = () => {
                                     />
                                 </td>
                                 <td>
-                                    <button className={styles.updateButton} onClick={() => handleUpdateCareer(career)}>Update</button>
-                                    <button className={styles.deleteButton} onClick={() => handleDeleteCareer(career.id)}>Delete</button>
+                                    <button onClick={() => handleUpdateCareer(career)} className={styles.updateButton}>Update</button>
+                                    <button onClick={() => handleDeleteCareer(career.id)} className={styles.deleteButton}>Delete</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                <button className={styles.updateAllButton} onClick={handleUpdateAll}>
-                    Update All Careers
-                </button>
+                <button onClick={handleUpdateAll} className={styles.updateAllButton}>Update All</button>
             </div>
 
-            <div className={styles.fileContainer}>
-                <h2>File List</h2>
-                <ul>
-                    {fileList.map((file) => (
-                        <li key={file.id}>
-                            <button onClick={() => handleViewFile(file.id)}>{file.fileName}</button>
-                        </li>
-                    ))}
-                </ul>
-                <div className={styles.filePreview}>{renderFilePreview()}</div>
+            <div className={styles.fileListContainer}>
+                <h2>Files</h2>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>File Name</th>
+                            <th>Upload Date</th>
+                            <th>Job ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {fileList.map((file) => (
+                            <tr key={file.id}>
+                                <td>{file.id}</td>
+                                <td>{file.fileName}</td>
+                                <td>{new Date(file.uploadDate).toLocaleDateString()}</td>
+                                <td>{file.careerId}</td>
+                                <td>
+                                    <button onClick={() => handleDeleteFile(file.id)} className={styles.deleteButton}>Delete</button>
+                                    <button onClick={() => handleViewFile(file.id)} className={styles.downloadButton}>Download</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

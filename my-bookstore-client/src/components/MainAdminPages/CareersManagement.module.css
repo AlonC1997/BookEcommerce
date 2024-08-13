@@ -1,11 +1,14 @@
 .container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
 }
 
 .header {
+    text-align: center;
     margin-bottom: 20px;
-}
+    margin-top: 5%;
+  }
 
 .leftPanel {
     display: flex;
@@ -14,9 +17,9 @@
 }
 
 .addButton {
-    background-color: #2196F3;
+    background-color: #7979b1;
     color: white;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -24,21 +27,20 @@
 
 .search {
     padding: 10px;
-    border-radius: 5px;
     border: 1px solid #ccc;
-    width: 300px;
+    border-radius: 5px;
 }
 
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .modalContent {
@@ -48,20 +50,24 @@
     width: 400px;
 }
 
-.modalContent input,
-.modalContent button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-}
-
 .closeButton {
     background-color: #f44336;
     color: white;
-    border: none;
     padding: 10px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.updateAllButton {
+    background-color: #126515;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
 }
 
 .tableContainer {
@@ -75,57 +81,44 @@
 
 .table th,
 .table td {
-    border: 1px solid #ddd;
+    border: 2px solid #e8dada;
     padding: 8px;
+    text-align: center;
 }
 
 .table th {
-    background-color: #f2f2f2;
-}
-
-.table input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-}
-
-.updateButton,
-.deleteButton,
-.updateAllButton {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: white;
-}
-
-.updateButton {
-    background-color: #4CAF50;
+    background-color: #f4f4f4;
 }
 
 .deleteButton {
     background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
 }
 
-.updateAllButton {
+.updateButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.downloadButton {
     background-color: #2196F3;
-    margin-top: 20px;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.fileContainer {
-    margin-top: 20px;
-}
-
-.filePreview {
-    margin-top: 20px;
-}
-
-.fileImage {
-    max-width: 100%;
-    height: auto;
-}
-
-.fileIframe {
-    width: 100%;
-    height: 500px;
+.fileListContainer {
+    margin-top: 40px;
 }

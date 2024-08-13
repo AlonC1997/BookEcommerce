@@ -6,23 +6,24 @@
   background-image: url('/public/Images/SignUpBackGround.jpg');
   background-size: cover;
   background-position: center;
+  filter: brightness(85%);
 }
 
 .signupForm {
   width: 100%;
   max-width: 400px;
   padding: 30px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #dddddd;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
   margin: 20px;
 }
 
 .signupTitle {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 700;
   color: #004d40;
   margin-bottom: 20px;
 }
@@ -40,7 +41,7 @@
 }
 
 .label {
-  font-weight: bold;
+  font-weight: 600;
   color: #00796b;
   margin-bottom: 5px;
   text-align: left;
@@ -49,7 +50,7 @@
 .input {
   padding: 12px;
   border: 1px solid #004d40;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 16px;
   width: 100%;
   box-sizing: border-box;
@@ -60,14 +61,16 @@
   background-color: #00796b;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   width: 100%;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .signupButton:hover {
   background-color: #004d40;
+  transform: scale(1.02);
 }
 
 .passwordStrength {
@@ -78,7 +81,7 @@
 }
 
 .passwordStrengthLabel {
-  font-weight: bold;
+  font-weight: 600;
   color: #00796b;
 }
 
@@ -105,28 +108,27 @@
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .popupMessage {
   color: #00796b;
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .popupButton {
   margin: 0 10px;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: #00796b;
   color: white;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 .popupButton:hover {
   background-color: #004d40;
 }
-
-

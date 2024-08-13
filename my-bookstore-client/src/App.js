@@ -13,7 +13,7 @@ import StockManagement from './components/AdminAndMainAdminPages/StockManagement
 import UsersAndAdminsManagement from './components/MainAdminPages/UsersAndAdminsManagement'
 import MyDetails from './components/PublicPagesForAllRoles/MyDetails'
 import MyOrders from './components/CostumerPages/MyOrders' 
-import AdminCareerPage from './components/MainAdminPages/CarrersManagement'
+import AdminCareerPage from './components/MainAdminPages/CareersManagement'
 import axios from 'axios'
 
 const App = () => {

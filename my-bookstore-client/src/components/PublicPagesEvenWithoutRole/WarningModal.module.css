@@ -12,34 +12,58 @@
 }
 
 .modal {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 500px;
-  width: 80%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.modal h2 {
-  margin-top: 0;
+.title {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.message {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 20px;
 }
 
 .modalButtons {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.modalButtons button {
-  padding: 10px 20px;
+.signupButton, .discoverButton {
+  padding: 12px 25px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: rgba(190, 132, 17, 0.8);
-  color: white;
   font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.modalButtons button:hover {
-  background-color: #617183;
+.signupButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.signupButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.discoverButton {
+  background-color: #6c757d;
+  color: white;
+}
+
+.discoverButton:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
 }

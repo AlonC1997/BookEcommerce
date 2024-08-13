@@ -1,70 +1,122 @@
+/* CareerPage.module.css */
+
 .container {
   padding: 20px;
   background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
 }
 
 .header {
+  margin: 3% ;
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: 5%;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2.5em;
+  color: #333;
 }
 
 .search {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .searchInput {
-  padding: 10px;
+  padding: 12px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .filters {
-  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .filterSection {
-  margin-bottom: 10px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 200px;
 }
 
 .filterSection h3 {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+  color: #333;
 }
 
 .filterSection label {
-  display: block;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filterSection input[type="checkbox"] {
+  margin-right: 10px;
 }
 
 .careerList {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
 .careerItem {
   background: #fff;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .careerItem h2 {
   margin-top: 0;
+  font-size: 1.5em;
+  color: #007bff;
 }
 
-.fileInput {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.careerItem h3 {
+  color: #555;
 }
 
-.submitButton {
-  background-color: #28a745;
+.careerItem p {
+  margin: 5px 0;
+}
+
+.careerItem .fileInput {
+  margin-top: 15px;
+}
+
+.careerItem .submitButton {
+  background-color: #7090b3;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 25px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.careerItem .submitButton:hover {
+  background-color: #537daa;
+}
+
+.careerItem .submitButton:active {
+  background-color: #004494;
+}
+
+.noCareers {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
 }

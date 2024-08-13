@@ -1,82 +1,116 @@
 .container {
-    padding: 40px 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f4f4f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: 60px;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: 60px;
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.field {
+  margin-bottom: 25px;
+}
+
+.label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.input {
+  width: calc(100% - 22px);
+  padding: 12px;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.editButton, .updateButton, .closeButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: background-color 0.3s ease;
+}
+
+.editButton {
+  background-color: #007bff;
+}
+
+.updateButton {
+  background-color: #28a745;
+}
+
+.closeButton {
+  background-color: #dc3545;
+}
+
+.editButton:hover, .updateButton:hover, .closeButton:hover {
+  opacity: 0.9;
+}
+
+.editContainer, .passwordContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fieldContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.errorMessage {
+  color: #dc3545;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.passwordContainer {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+      padding: 20px;
+      top: 30px;
   }
-  
+
   .title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
+      font-size: 24px;
+      margin-bottom: 20px;
   }
-  
-  .field {
-    margin-bottom: 20px;
-  }
-  
-  .label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
+
   .input {
-    width: calc(100% - 20px);
-    padding: 6px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+      padding: 10px;
+      font-size: 14px;
   }
-  
+
   .editButton, .updateButton, .closeButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0 5px;
+      padding: 8px 12px;
+      font-size: 14px;
   }
-  
-  .updateButton {
-    background-color: #28a745;
-  }
-  
-  .closeButton {
-    background-color: #dc3545;
-  }
-  
-  .editContainer, .passwordContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .fieldContent {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .buttonGroup {
-    display: flex;
-    justify-content: flex-start;
-  }
-  
-  .errorMessage {
-    color: #dc3545;
-    margin-top: 10px;
-    width: 100%;
-  }
-  
-  .passwordContainer {
-    margin-top: 20px;
-  }
-  
+}

@@ -19,7 +19,6 @@ const SignUp = () => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		// Check if email and password are valid
 		const emailValidity = validateEmail(username)
 		const passwordValidity = validatePassword() === ''
 		setIsEmailValid(emailValidity)
@@ -63,7 +62,7 @@ const SignUp = () => {
 		if (!passwordsMatch) {
 			return 'Passwords do not match.'
 		}
-		return '' // All criteria met
+		return '' 
 	}
 
 	const handleSubmit = async (e) => {

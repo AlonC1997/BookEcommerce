@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import styles from './BookCard.module.css' 
+import styles from './BookCard.module.css'
 import axios from 'axios'
 
 const BookCard = ({ book }) => {
 	const [stockQuantity, setStockQuantity] = useState(null)
 
 	useEffect(() => {
-		console.log('Book object:', book) 
+		console.log('Book object:', book)
 		if (book && book.id) {
 			const fetchStockQuantity = async () => {
 				try {

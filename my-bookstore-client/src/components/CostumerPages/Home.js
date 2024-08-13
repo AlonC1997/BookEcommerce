@@ -155,7 +155,7 @@ const Home = () => {
 				onClick={() => setCartVisible(!cartVisible)}
 				style={{ top: cartPosition.top, left: cartPosition.left }}
 			>
-				🛒
+			 🛒
 			</button>
 
 			<header className={styles.header}>
@@ -187,7 +187,7 @@ const Home = () => {
 				{currentBooks
 					.filter((book) => book.category === 'Football')
 					.map((book) => (
-						<BookCardUser key={book.id} book={book} onAddToCart={handleCartUpdate} /*new*/ cartVisible={cartVisible} setCartVisible={setCartVisible} />
+						<BookCardUser key={book.id} book={book} onAddToCart={handleCartUpdate} cartVisible={cartVisible} setCartVisible={setCartVisible} />
 					))}
 			</div>
 
@@ -196,7 +196,7 @@ const Home = () => {
 				{currentBooks
 					.filter((book) => book.category === 'Other')
 					.map((book) => (
-						<BookCardUser key={book.id} book={book} onAddToCart={handleCartUpdate} /*new*/ cartVisible={cartVisible} setCartVisible={setCartVisible} />
+						<BookCardUser key={book.id} book={book} onAddToCart={handleCartUpdate} cartVisible={cartVisible} setCartVisible={setCartVisible} />
 					))}
 			</div>
 			<p className={styles.cancelPolicy}>Cancellation Policy: Orders can only be canceled within 24 hours of placement.</p>

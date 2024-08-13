@@ -1,35 +1,35 @@
-import React, { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import styles from './Navbar.module.css'
-import WarningModal from './WarningModal'
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import styles from './Navbar.module.css';
+import WarningModal from './WarningModal';
 
 const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLogout = () => {
-    onLogout()
-    navigate('/login')
-  }
- 
+    onLogout();
+    navigate('/login');
+  };
+
   const handleContinueWithoutLogin = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const handleSignup = () => {
-    setIsModalOpen(false)
-    navigate('/signup')
-  }
+    setIsModalOpen(false);
+    navigate('/signup');
+  };
 
   const handleDiscover = () => {
-    setIsModalOpen(false)
-    navigate('/book-catalog')
-  }
+    setIsModalOpen(false);
+    navigate('/book-catalog');
+  };
 
   const renderAdminLinks = () => (
     <>
@@ -53,7 +53,7 @@ const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
         My Details
       </Link>
     </>
-  )
+  );
 
   const renderUserLinks = () => (
     <>
@@ -67,36 +67,34 @@ const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
         My Orders
       </Link>
     </>
-  )
+  );
 
   return (
     <>
       <nav className={styles.navbar}>
         <div className={styles.brandContainer}>
-          <Link to={isLoggedIn ? '/home' : '/login'} className={styles.brand}> {' '} InalaBook{' '} </Link>
+          <Link to={isLoggedIn ? (isAdmin || isMainAdmin ? '/order-management' : '/home') : '/login'} className={styles.brand}>
+            InalaBook
+          </Link>
         </div>
         <div className={styles.navLinks}>
           {isLoggedIn ? (
             <>
               {isAdmin || isMainAdmin ? renderAdminLinks() : renderUserLinks()}
               <button onClick={handleLogout} className={styles.button}>
-                {' '} <span className="material-symbols-outlined">logout</span> Logout{' '}
+                <span className="material-symbols-outlined">logout</span> Logout
               </button>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className={`${location.pathname === '/login' ? styles.active : ''} ${styles.loginLink}`}
-              >
-                {' '}
-                <span className="material-symbols-outlined">login</span> Login{' '}
+              <Link to="/login" className={`${location.pathname === '/login' ? styles.active : ''} ${styles.loginLink}`}>
+                <span className="material-symbols-outlined">login</span> Login
               </Link>
               <Link to="/signup" className={location.pathname === '/signup' ? styles.active : ''}>
                 Sign Up
               </Link>
               {location.pathname !== '/login' && location.pathname !== '/book-catalog' && (
-                <button onClick={handleContinueWithoutLogin} className={styles.continueWithoutLogin}> Collection </button>
+                <button onClick={handleContinueWithoutLogin} className={styles.continueWithoutLogin}>Collection</button>
               )}
             </>
           )}
@@ -104,7 +102,7 @@ const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
       </nav>
       <WarningModal isOpen={isModalOpen} onRequestClose={closeModal} onSignup={handleSignup} onDiscover={handleDiscover} />
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
