@@ -20,7 +20,7 @@
 }
 
 .addButton {
-  background-color: #4CAF50;
+  background-color: #4f7450;
   color: white;
   border: none;
   padding: 10px 20px; 
@@ -83,7 +83,7 @@
 }
 
 .modalContent button {
-  background-color: #4eaf4c;
+  background-color: #90be8f;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -109,25 +109,38 @@
   border-collapse: collapse;
 }
 
-.table th, .table td {
-  border: 1px solid #ddd;
-  padding: 5px;
-  text-align: center;
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 2px solid #e8dada;
+  height: 30px; /* Adjust as needed for better visibility */
+  padding: 8px;
+  text-align: center; /* Align text to the left for better readability */
 }
 
 .table th {
   background-color: #f4f4f4;
 }
-
 .table td input {
-  width: 95%;
-  border: 1px solid rgb(30, 14, 14);
-  padding: 1px;
-  border-radius: 4px;
+  width: 100%;
+    border: none; /* Removes border */
+    resize:none; /* Prevents resizing */
+    height: 50px; /* Adjust as needed for better visibility */
+
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    background: transparent; /* Makes background transparent */
+    overflow: hidden; /* Prevents internal scrollbars */
+    display: block; /* Ensures it takes the full width of its container */
+    min-height: 40px; /* Adjust as needed for better visibility */
+    justify-content: center;
 }
 
 .deleteButton {
-  background-color: #f44336;
+  background-color: #ce9f9c;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -137,7 +150,7 @@
 }
 
 .updateButton {
-  background-color: #4CAF50;
+  background-color: #6ea0b4;
   color: white;
   border: none;
   padding: 10px 20px;

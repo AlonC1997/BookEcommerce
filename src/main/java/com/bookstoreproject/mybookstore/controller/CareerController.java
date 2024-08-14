@@ -39,6 +39,20 @@ public class CareerController {
         }
     }
 
+    @PostMapping("/createCareers")
+    @PreAuthorize("hasAuthority('MAIN_ADMIN')")
+    public ResponseEntity<String> createCareers(@RequestBody List<CareerDTO> careerDTOs) {
+        try {
+            for (CareerDTO careerDTO : careerDTOs) {
+                careerService.createCareer(careerDTO);
+            }
+            return new ResponseEntity<>("Careers created successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to create careers", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @PutMapping("/updateCareer")
     @PreAuthorize("hasAuthority('MAIN_ADMIN')")
     public ResponseEntity<String> updateCareer(@RequestParam Long id,

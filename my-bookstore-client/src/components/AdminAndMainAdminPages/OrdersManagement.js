@@ -143,7 +143,7 @@ const OrderManagement = () => {
 	return (
 		<div className={styles.container}>
 			<header className={styles.header}>
-				<h1>Order Management</h1>
+				<h1>Orders Management</h1>
 			</header>
 			<div className={styles.searchContainer}>
 				<div>

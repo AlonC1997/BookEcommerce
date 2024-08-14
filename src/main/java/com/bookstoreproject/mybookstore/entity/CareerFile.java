@@ -26,5 +26,5 @@ public class CareerFile {
     @JoinColumn(name = "career_id")
     private Career career;
 
-    private String contentType; // Add this field
+    private String contentType;
 }

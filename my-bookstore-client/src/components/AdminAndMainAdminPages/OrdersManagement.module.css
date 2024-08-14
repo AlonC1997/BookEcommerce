@@ -75,22 +75,22 @@
 }
 
 .updateButton {
-    background-color: green;
+    background-color: rgb(127, 179, 127);
     color: white;
 }
 
 .deleteButton {
-    background-color: rgb(214, 11, 11);
+    background-color: rgb(211, 125, 125);
     color: white;
 }
 
 .seeBooksButton {
-    background-color: rgb(81, 81, 138);
+    background-color: rgb(124, 124, 175);
     color: white;
 }
 
 .viewUserButton {
-    background-color: rgb(222, 167, 65);
+    background-color: rgb(165, 154, 133);
     color: white;
 }
 

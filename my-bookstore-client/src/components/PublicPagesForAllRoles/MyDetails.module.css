@@ -1,7 +1,7 @@
 .container {
   padding: 40px 20px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 70px auto;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
 }
 
 .editButton, .updateButton, .closeButton {
-  background-color: #007bff;
+  background-color: #a9c3df;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -51,15 +51,15 @@
 }
 
 .editButton {
-  background-color: #007bff;
+  background-color: #5f8ab9;
 }
 
 .updateButton {
-  background-color: #28a745;
+  background-color: #8bb895;
 }
 
 .closeButton {
-  background-color: #dc3545;
+  background-color: #b1666d;
 }
 
 .editButton:hover, .updateButton:hover, .closeButton:hover {
