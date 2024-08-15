@@ -10,31 +10,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
+    }
     @Transactional(readOnly = true)
     public Long getLoggedInUserCartId(String username) throws UserNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
 
-        Cart cart = user.getCart();
-        if (cart == null) {
-            throw new UserNotFoundException("Cart not found for user with username: " + username);
-        }
+        Cart cart = Optional.ofNullable(user.getCart())
+                .orElseThrow(() -> new UserNotFoundException("Cart not found for user with username: " + username));
 
         return cart.getId();
     }
@@ -47,14 +50,23 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    /**
+     * Retrieves a user by ID and maps to UserDTO.
+     * Throws UserNotFoundException if the user is not found.
+     */
+    @Transactional(readOnly = true)
     public UserDTO getUserById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         return modelMapper.map(user, UserDTO.class);
     }
 
-    @Transactional
+    /**
+     * Retrieves a user by username and maps to UserDTO.
+     * Caches the result to improve performance.
+     */
+    @Transactional(readOnly = true)
+    @Cacheable(value = "users", key = "#username")
     public UserDTO getUserByUsername(String username) throws UserNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));

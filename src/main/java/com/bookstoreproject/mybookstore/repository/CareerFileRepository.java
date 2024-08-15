@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface CareerFileRepository extends JpaRepository<CareerFile, Long> {
-    List<CareerFile> findByCareerId(Long careerId);
 }

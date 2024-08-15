@@ -36,7 +36,7 @@
 .checkboxes {
   display: flex;
   gap: 15px;
-  margin-right: 8%;
+  margin-right: 5%;
 }
 
 .checkboxes label {
@@ -71,7 +71,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #f44336;
+  background-color: #b8524a;
   color: white;
 }
 
@@ -132,7 +132,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #4CAF50;
+  background-color: rgb(103, 150, 103);
   color: white;
   font-size: 1em;
 }
@@ -142,13 +142,14 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #f44336;
+  background-color: #b8524a;
   color: white;
   font-size: 1em;
 }
 
 .addButtonOut {
-  background-color: green;
+  background-color: rgb(103, 150, 103);
+  margin-right: 7%;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -157,7 +158,8 @@
 }
 
 .cancelButtonOut {
-  background-color: #f44336;
+  background-color: #b8524a;
+  margin-right: 7%;
   color: white;
   border: none;
   padding: 10px 20px;

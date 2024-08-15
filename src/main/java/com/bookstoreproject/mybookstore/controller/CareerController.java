@@ -52,7 +52,6 @@ public class CareerController {
         }
     }
 
-
     @PutMapping("/updateCareer")
     @PreAuthorize("hasAuthority('MAIN_ADMIN')")
     public ResponseEntity<String> updateCareer(@RequestParam Long id,

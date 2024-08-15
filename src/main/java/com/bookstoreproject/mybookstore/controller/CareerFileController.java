@@ -1,13 +1,13 @@
 package com.bookstoreproject.mybookstore.controller;
 
-import com.bookstoreproject.mybookstore.Exceptions.ResourceNotFoundException;
 import com.bookstoreproject.mybookstore.dto.CareerFileDTO;
-import com.bookstoreproject.mybookstore.entity.CareerFile;
 import com.bookstoreproject.mybookstore.service.CareerFileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +19,11 @@ import java.util.List;
 @RequestMapping("/career-files")
 public class CareerFileController {
 
-    @Autowired
-    private CareerFileService careerFileService;
+    private final CareerFileService careerFileService;
 
+    public CareerFileController(CareerFileService careerFileService) {
+        this.careerFileService = careerFileService;
+    }
     @PostMapping("/uploadFile")
     public ResponseEntity<CareerFileDTO> uploadFile(@RequestParam("file") MultipartFile file,
                                                     @RequestParam("careerId") Long careerId) {
@@ -50,9 +52,6 @@ public class CareerFileController {
                 .body(resource);
     }
 
-
-
-
     @GetMapping("/getAllFiles")
     @PreAuthorize("hasAuthority('MAIN_ADMIN')")
     public ResponseEntity<List<CareerFileDTO>> getAllFiles() {
@@ -77,6 +76,4 @@ public class CareerFileController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }

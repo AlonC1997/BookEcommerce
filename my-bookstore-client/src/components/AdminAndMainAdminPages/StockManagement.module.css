@@ -117,9 +117,9 @@
 .table th,
 .table td {
   border: 2px solid #e8dada;
-  height: 30px; /* Adjust as needed for better visibility */
+  height: 30px;
   padding: 8px;
-  text-align: center; /* Align text to the left for better readability */
+  text-align: center;
 }
 
 .table th {
@@ -127,15 +127,14 @@
 }
 .table td input {
   width: 100%;
-    border: none; /* Removes border */
-    resize:none; /* Prevents resizing */
-    height: 50px; /* Adjust as needed for better visibility */
-
-    box-sizing: border-box; /* Ensures padding is included in the width */
-    background: transparent; /* Makes background transparent */
-    overflow: hidden; /* Prevents internal scrollbars */
-    display: block; /* Ensures it takes the full width of its container */
-    min-height: 40px; /* Adjust as needed for better visibility */
+    border: none;
+    resize:none;
+    height: 50px;
+    box-sizing: border-box;
+    background: transparent;
+    overflow: hidden;
+    display: block;
+    min-height: 40px;
     justify-content: center;
 }
 

@@ -5,25 +5,30 @@ import com.bookstoreproject.mybookstore.entity.Career;
 import com.bookstoreproject.mybookstore.entity.CareerFile;
 import com.bookstoreproject.mybookstore.repository.CareerFileRepository;
 import com.bookstoreproject.mybookstore.repository.CareerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CareerFileService {
 
-    @Autowired
-    private CareerFileRepository careerFileRepository;
+    private final CareerFileRepository careerFileRepository;
+    private final CareerRepository careerRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private CareerRepository careerRepository;
+    public CareerFileService(CareerFileRepository careerFileRepository, CareerRepository careerRepository, ModelMapper modelMapper) {
+        this.careerFileRepository = careerFileRepository;
+        this.careerRepository = careerRepository;
+        this.modelMapper = modelMapper;
+    }
 
+    @Transactional
     public CareerFileDTO uploadFile(MultipartFile file, Long careerId) throws IOException {
         Career career = careerRepository.findById(careerId)
                 .orElseThrow(() -> new RuntimeException("Career not found"));
@@ -33,43 +38,39 @@ public class CareerFileService {
         careerFile.setFileContent(file.getBytes());
         careerFile.setUploadDate(LocalDate.now());
         careerFile.setCareer(career);
-        careerFile.setContentType(file.getContentType()); // Save content type
+        careerFile.setContentType(file.getContentType());
 
         CareerFile savedFile = careerFileRepository.save(careerFile);
         return convertToDTO(savedFile);
     }
 
+    @Transactional(readOnly = true)
     public CareerFileDTO getFileById(Long fileId) {
-        Optional<CareerFile> fileOptional = careerFileRepository.findById(fileId);
-        if (fileOptional.isPresent()) {
-            CareerFile file = fileOptional.get();
-            CareerFileDTO dto = convertToDTO(file);
-            dto.setFileContent(file.getFileContent()); // Ensure file content is set
-            dto.setContentType(file.getContentType()); // Ensure content type is set
-            return dto;
-        } else {
-            throw new RuntimeException("File not found");
-        }
-    }
+        CareerFile file = careerFileRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found"));
 
-
-    public List<CareerFileDTO> getAllFiles() {
-        List<CareerFile> files = careerFileRepository.findAll();
-        return files.stream().map(this::convertToDTO).collect(Collectors.toList());
-    }
-
-    private CareerFileDTO convertToDTO(CareerFile file) {
-        CareerFileDTO dto = new CareerFileDTO();
-        dto.setId(file.getId());
-        dto.setFileName(file.getFileName());
-        dto.setUploadDate(file.getUploadDate());
-        dto.setCareerId(file.getCareer().getId());
+        CareerFileDTO dto = convertToDTO(file);
+        dto.setFileContent(file.getFileContent());
+        dto.setContentType(file.getContentType());
         return dto;
     }
 
+    @Transactional(readOnly = true)
+    public List<CareerFileDTO> getAllFiles() {
+        List<CareerFile> files = careerFileRepository.findAll();
+        return files.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public void deleteFile(Long fileId) {
         CareerFile careerFile = careerFileRepository.findById(fileId)
                 .orElseThrow(() -> new RuntimeException("File not found"));
         careerFileRepository.delete(careerFile);
+    }
+
+    private CareerFileDTO convertToDTO(CareerFile file) {
+        return modelMapper.map(file, CareerFileDTO.class);
     }
 }

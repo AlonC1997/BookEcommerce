@@ -1,133 +1,3 @@
-/*
-.container {
-    display: flex;
-    flex-direction: column;
-    margin: 20px;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 5%;
-    
-  }
-
-.leftPanel {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.addButton {
-    background-color: #8989b7;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.search {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modalContent {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 400px;
-}
-
-.closeButton {
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.updateAllButton {
-    background-color: #486c4a;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.tableContainer {
-    margin-top: 20px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th,
-.table td {
-    border: 2px solid #e8dada;
-    padding: 8px;
-    text-align: center;
-}
-
-.table th {
-    background-color: #f4f4f4;
-}
-
-.deleteButton {
-    background-color: #b58e8a;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.updateButton {
-    background-color: #79a57a;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.downloadButton {
-    background-color: #93adc3;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.fileListContainer {
-    margin-top: 40px;
-}
-*/
-
-/* CareersManagement.module.css */
-
 .container {
     display: flex;
     flex-direction: column;
@@ -158,15 +28,15 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
-    width: 300px; /* Adjust width as needed */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for interaction effects */
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .search:focus {
-    border-color: #798da3; /* Highlight border color on focus */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Enhance shadow on focus */
-    outline: none; /* Remove default outline */
+    border-color: #798da3;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    outline: none;
 }
 
 .dropdownContainer {
@@ -182,7 +52,7 @@
 }
 .tableContainer {
     margin-top: 20px;
-    overflow-x: auto; /* Optional: enables horizontal scrolling for the table container if needed */
+    overflow-x: auto;
 }
 
 .table {
@@ -193,9 +63,9 @@
 .table th,
 .table td {
     border: 2px solid #e8dada;
-    height: 30px; /* Adjust as needed for better visibility */
+    height: 30px;
     padding: 8px;
-    text-align: center; /* Align text to the left for better readability */
+    text-align: center;
 }
 
 .table th {
@@ -204,15 +74,15 @@
 
 .table textarea {
     width: 100%;
-    border: none; /* Removes border */
-    resize:none; /* Prevents resizing */
-    height: 50px; /* Adjust as needed for better visibility */
+    border: none;
+    resize:none;
+    height: 50px;
 
-    box-sizing: border-box; /* Ensures padding is included in the width */
-    background: transparent; /* Makes background transparent */
-    overflow: hidden; /* Prevents internal scrollbars */
-    display: block; /* Ensures it takes the full width of its container */
-    min-height: 40px; /* Adjust as needed for better visibility */
+    box-sizing: border-box;
+    background: transparent;
+    overflow: hidden;
+    display: block;
+    min-height: 40px;
 }
 
 
@@ -247,32 +117,32 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* Ensure the modal is above other content */
+    z-index: 1000;
 }
 
 .modalContent {
-    background: #ffffff; /* White background */
-    padding: 30px; /* Increased padding for a more spacious feel */
-    border-radius: 10px; /* Rounded corners for a modern look */
-    width: 500px; /* Increased width for more space */
-    max-width: 90%; /* Ensure it doesn't overflow on smaller screens */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    overflow-y: auto; /* Add scrollbar if content overflows */
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    gap: 20px; /* Space between fields */
-    z-index: 1001; /* Ensure modal content is above the overlay */
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1001;
 }
 
 
 .modalContent label {
     display: flex;
-    flex-direction: column; /* Stack label and input vertically */
-    gap: 5px; /* Space between label and input */
+    flex-direction: column;
+    gap: 5px;
 }
 
 .modalContent input, 
@@ -284,32 +154,32 @@
 
 .addButton, 
 .closeButton {
-    padding: 12px 24px; /* Consistent padding for buttons */
+    padding: 12px 24px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
 }
 
 .addButton {
-    background-color: #80b68d; /* Green for 'Add' */
+    background-color: #80b68d;
     color: white;
     border: none;
     transition: background-color 0.3s;
 }
 
 .addButton:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #218838;
 }
 
 .closeButton {
-    background-color: #966e73; /* Red for 'Close' */
+    background-color: #966e73;
     color: white;
     border: none;
     transition: background-color 0.3s;
 }
 
 .closeButton:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
 }
 
 

@@ -6,7 +6,6 @@ import com.bookstoreproject.mybookstore.dto.OrderBookDTO;
 import com.bookstoreproject.mybookstore.dto.OrderDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.entity.Order;
-import com.bookstoreproject.mybookstore.entity.User;
 import com.bookstoreproject.mybookstore.repository.OrderRepository;
 import com.bookstoreproject.mybookstore.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -20,19 +19,23 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final BookService bookService;
 
     @Autowired
-    private UserRepository userRepository;
+    public OrderService(OrderRepository orderRepository,
+                        UserRepository userRepository,
+                        ModelMapper modelMapper,
+                        BookService bookService) {
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+        this.bookService = bookService;
+    }
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private BookService bookService;
-
-    @Transactional
+    @Transactional(readOnly = true)
     public OrderDTO getOrderById(Long orderId) throws OrderNotFoundException {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
 
@@ -71,7 +74,7 @@ public class OrderService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrdersForUser(Long userId) throws UserNotFoundException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
@@ -89,7 +92,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrders() {
         System.out.println("I Got here 2!!!");
         List<Order> orders = orderRepository.findAll();
@@ -150,11 +153,8 @@ public class OrderService {
         return modelMapper.map(updatedOrder, OrderDTO.class);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException, OrderNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-
         Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
 
         if (maxOrderId == null) {

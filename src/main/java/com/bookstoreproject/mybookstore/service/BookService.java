@@ -6,7 +6,6 @@ import com.bookstoreproject.mybookstore.dto.BookDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.repository.BookRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +15,17 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    public BookService(BookRepository bookRepository, ModelMapper modelMapper) {
+        this.bookRepository = bookRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Transactional(readOnly = true)
     public List<BookDTO> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
+        return bookRepository.findAll().stream()
                 .filter(book -> !book.getIsDeleted())
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .collect(Collectors.toList());
@@ -40,8 +40,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<BookDTO> getDeletedBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
+        return bookRepository.findAll().stream()
                 .filter(Book::getIsDeleted)
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .collect(Collectors.toList());
@@ -49,7 +48,8 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public int getStockQuantity(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
         return book.getStockQuantity();
     }
 
@@ -65,14 +65,7 @@ public class BookService {
         Book existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
 
-        existingBook.setName(bookDTO.getName());
-        existingBook.setAuthor(bookDTO.getAuthor());
-        existingBook.setPrice(bookDTO.getPrice());
-        existingBook.setStockQuantity(bookDTO.getStockQuantity());
-        existingBook.setImg_link(bookDTO.getImg_link());
-        existingBook.setDescription(bookDTO.getDescription());
-        existingBook.setCategory(bookDTO.getCategory());
-        existingBook.setIsDeleted(bookDTO.getIsDeleted());
+        modelMapper.map(bookDTO, existingBook); // Use ModelMapper to copy properties
 
         bookRepository.save(existingBook);
     }
@@ -95,7 +88,9 @@ public class BookService {
 
     @Transactional
     public void decreaseStockQuantity(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+
         if (book.getStockQuantity() > 0) {
             book.setStockQuantity(book.getStockQuantity() - 1);
             bookRepository.save(book);
@@ -106,7 +101,8 @@ public class BookService {
 
     @Transactional
     public void increaseStockQuantity(Long id, int quantity) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
         book.setStockQuantity(book.getStockQuantity() + quantity);
         bookRepository.save(book);
     }

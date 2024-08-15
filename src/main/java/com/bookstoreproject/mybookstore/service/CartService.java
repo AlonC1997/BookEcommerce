@@ -26,23 +26,23 @@ import java.util.stream.Collectors;
 @Service
 public class CartService {
 
-    @Autowired
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
+    private final BookRepository bookRepository;
+    private final OrderRepository orderRepository;
+    private final BookService bookService;
+    private final OrderService orderService;
 
     @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private OrderService orderService;
-
-    public CartService(BookService bookService) {
+    public CartService(CartRepository cartRepository,
+                       BookRepository bookRepository,
+                       OrderRepository orderRepository,
+                       BookService bookService,
+                       OrderService orderService) {
+        this.cartRepository = cartRepository;
+        this.bookRepository = bookRepository;
+        this.orderRepository = orderRepository;
         this.bookService = bookService;
+        this.orderService = orderService;
     }
 
     @Transactional
@@ -82,7 +82,6 @@ public class CartService {
 
     @Transactional
     public void submitCart(Long cartId) throws CartNotFoundException, EmptyCartException, OrderNotFoundException {
-        // Retrieve the cart by its ID
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found with id: " + cartId));
 
