@@ -17,7 +17,7 @@ public class CareerFile {
 
     private String fileName;
 
-    @Column(name = "file_content", nullable = false, columnDefinition="LONGBLOB")
+    @Column(name = "file_content", columnDefinition="longblob")
     private byte[] fileContent;
 
     private LocalDate uploadDate;
