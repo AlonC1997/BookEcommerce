@@ -70,7 +70,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setName(userDTO.getName());
         user.setAddress(userDTO.getAddress());
-        user.setRole("USER"); // Automatically set role to "USER"
+        user.setRole("USER"); // Automatically set role to "USER" because only users can register through this method (admins are created by other main admins)
 
         Cart cart = new Cart();
         cart.setUser(user);
@@ -86,7 +86,6 @@ public class AuthController {
         boolean userExists = userService.checkIfUserExists(username);
 
         if (userExists) {
-            // Logic to send a password reset link to the user's email
             return ResponseEntity.ok("Thank you! We have sent a link to " + username + " to reset your password.");
         } else {
             return ResponseEntity.badRequest().body("Email not found. Please check the email address and try again.");

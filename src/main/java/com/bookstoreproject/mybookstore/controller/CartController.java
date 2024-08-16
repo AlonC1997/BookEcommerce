@@ -52,7 +52,6 @@ public class CartController {
         String username = authentication.getName();
 
         try {
-            // Retrieve the logged-in user's cart ID
             Long cartId = userService.getLoggedInUserCartId(username);
             cartService.removeBookFromCart(cartId, bookId);
             return ResponseEntity.ok("Book removed from cart successfully");
@@ -75,8 +74,6 @@ public class CartController {
         } catch (OrderNotFoundException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-
     }
 
     @PreAuthorize("hasAuthority('USER')")

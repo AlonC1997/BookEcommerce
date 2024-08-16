@@ -111,7 +111,7 @@ const AdminCareerPage = () => {
 		}
 	}
 
-	const handleViewFile = async (fileId) => {
+	const handleDownloadFile = async (fileId) => {
 		try {
 			const response = await axios.get(`http://localhost:8080/career-files/download?fileId=${fileId}`, {
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -323,7 +323,7 @@ const AdminCareerPage = () => {
 								<td>{file.uploadDate}</td>
 								<td>{file.careerId}</td>
 								<td>
-									<button className={styles.downloadButton} onClick={() => handleViewFile(file.id)}>
+									<button className={styles.downloadButton} onClick={() => handleDownloadFile(file.id)}>
 										Download
 									</button>
 									<button className={styles.deleteButton} onClick={() => handleDeleteFile(file.id)}>

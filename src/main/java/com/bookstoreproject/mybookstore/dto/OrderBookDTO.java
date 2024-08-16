@@ -25,4 +25,10 @@ public class OrderBookDTO {
     }
 
     public OrderBookDTO() {}
+
+    public OrderBookDTO(Long id, String name, BigDecimal price) {
+        this.bookId = id;
+        this.bookName = name;
+        this.price = price;
+    }
 }

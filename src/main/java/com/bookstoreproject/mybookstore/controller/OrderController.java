@@ -36,9 +36,7 @@ public class OrderController {
             return ResponseEntity.ok(lastOrderId);
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (OrderNotFoundException e) {
-            return ResponseEntity.ok(0);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
@@ -101,7 +99,7 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getOrderBooksById")
-    public ResponseEntity<?> getOrderBooksById(@RequestParam Long orderId) {
+    public ResponseEntity<?> getOrderBooksById(@RequestParam Long orderId) throws OrderNotFoundException {
         List<OrderBookDTO> orderBooks = orderService.getOrderBooksById(orderId);
         return ResponseEntity.ok(orderBooks);
     }
@@ -123,8 +121,8 @@ public class OrderController {
     @PutMapping("/updateOrder")
     public ResponseEntity<?> updateOrder(@RequestBody OrderDTO orderDTO) {
         try {
-            OrderDTO updatedOrder = orderService.updateOrder(orderDTO);
-            return ResponseEntity.ok(updatedOrder);
+            orderService.updateOrder(orderDTO);
+            return ResponseEntity.ok("Order updated successfully");
         } catch (OrderNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {

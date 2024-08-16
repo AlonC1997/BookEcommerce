@@ -10,6 +10,10 @@ import com.bookstoreproject.mybookstore.repository.OrderRepository;
 import com.bookstoreproject.mybookstore.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,18 +40,15 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "orders", key = "#orderId")
     public OrderDTO getOrderById(Long orderId) throws OrderNotFoundException {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
-
-        if (!orderOptional.isPresent()) {
-            throw new OrderNotFoundException("Order not found with id: " + orderId);
-        }
-
-        Order order = orderOptional.get();
-        return modelMapper.map(order, OrderDTO.class);
+        return orderRepository.findById(orderId)
+                .map(order -> modelMapper.map(order, OrderDTO.class))
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "orderBooks", key = "#orderId")
     public List<OrderBookDTO> getOrderBooksById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -73,8 +74,8 @@ public class OrderService {
         return new ArrayList<>(bookMap.values());
     }
 
-
     @Transactional(readOnly = true)
+    @Cacheable(value = "userOrders", key = "#userId")
     public List<OrderDTO> getAllOrdersForUser(Long userId) throws UserNotFoundException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
@@ -85,16 +86,21 @@ public class OrderService {
     }
 
     @Transactional
+    @CacheEvict(value = "orders", key = "#orderId")
     public void updateOrderStatus(Long orderId, String status) throws OrderNotFoundException {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
-        order.setStatus(Order.OrderStatus.valueOf(status));
-        orderRepository.save(order);
+        try {
+            order.setStatus(Order.OrderStatus.valueOf(status));
+            orderRepository.save(order);
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            throw new RuntimeException("Order update failed due to concurrent modification", ex);
+        }
     }
 
     @Transactional(readOnly = true)
+    @Cacheable("allOrders")
     public List<OrderDTO> getAllOrders() {
-        System.out.println("I Got here 2!!!");
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
                 .map(this::convertToOrderDTO)
@@ -102,6 +108,11 @@ public class OrderService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "orders", key = "#id"),
+            @CacheEvict(value = "userOrders", allEntries = true),
+            @CacheEvict(value = "allOrders", allEntries = true)
+    })
     public void deleteOrder(Long id) throws OrderNotFoundException {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
@@ -111,6 +122,35 @@ public class OrderService {
         }
 
         orderRepository.delete(order);
+    }
+
+    @Transactional
+    @CacheEvict(value = "orders", key = "#orderId")
+    public OrderDTO updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderDTO.getId())
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderDTO.getId()));
+        try {
+            order.setTotalPrice(orderDTO.getTotalPrice());
+            order.setStatus(Order.OrderStatus.valueOf(orderDTO.getStatus()));
+            order.setUpdatedAt(orderDTO.getUpdatedAt());
+
+            Order updatedOrder = orderRepository.save(order);
+            return modelMapper.map(updatedOrder, OrderDTO.class);
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            throw new RuntimeException("Order update failed due to concurrent modification", ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "lastOrderId", key = "#userId")
+    public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException, OrderNotFoundException {
+        Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
+
+        if (maxOrderId == null) {
+            return 0L;
+        }
+
+        return maxOrderId;
     }
 
     private OrderDTO convertToOrderDTO(Order order) {
@@ -138,29 +178,5 @@ public class OrderService {
         orderDTO.setOrderBooks(orderBookDTOs);
 
         return orderDTO;
-    }
-
-    @Transactional
-    public OrderDTO updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
-        Order order = orderRepository.findById(orderDTO.getId())
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderDTO.getId()));
-
-        order.setTotalPrice(orderDTO.getTotalPrice());
-        order.setStatus(Order.OrderStatus.valueOf(orderDTO.getStatus()));
-        order.setUpdatedAt(orderDTO.getUpdatedAt());
-
-        Order updatedOrder = orderRepository.save(order);
-        return modelMapper.map(updatedOrder, OrderDTO.class);
-    }
-
-    @Transactional(readOnly = true)
-    public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException, OrderNotFoundException {
-        Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
-
-        if (maxOrderId == null) {
-            return 0L;
-        }
-        System.out.println(maxOrderId);
-        return maxOrderId;
     }
 }

@@ -6,6 +6,9 @@ import com.bookstoreproject.mybookstore.dto.BookDTO;
 import com.bookstoreproject.mybookstore.entity.Book;
 import com.bookstoreproject.mybookstore.repository.BookRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "books", key = "'allBooks'")
     public List<BookDTO> getAllBooks() {
         return bookRepository.findAll().stream()
                 .filter(book -> !book.getIsDeleted())
@@ -32,6 +36,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "books", key = "#id")
     public BookDTO getBookById(Long id) throws BookNotFoundException {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
@@ -39,6 +44,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "books", key = "'deletedBooks'")
     public List<BookDTO> getDeletedBooks() {
         return bookRepository.findAll().stream()
                 .filter(Book::getIsDeleted)
@@ -47,13 +53,14 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public int getStockQuantity(Long id) {
+    public int getStockQuantity(Long id) throws BookNotFoundException {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
         return book.getStockQuantity();
     }
 
     @Transactional
+    @CacheEvict(value = "books", allEntries = true)
     public void addBook(BookDTO bookDTO) {
         Book book = modelMapper.map(bookDTO, Book.class);
         book.setIsDeleted(false);
@@ -61,49 +68,74 @@ public class BookService {
     }
 
     @Transactional
+    @CacheEvict(value = "books", allEntries = true)
     public void updateBook(Long id, BookDTO bookDTO) throws BookNotFoundException {
-        Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
+        try {
+            Book existingBook = bookRepository.findById(id)
+                    .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
 
-        modelMapper.map(bookDTO, existingBook); // Use ModelMapper to copy properties
+            modelMapper.map(bookDTO, existingBook); // Use ModelMapper to copy properties
 
-        bookRepository.save(existingBook);
-    }
-
-    @Transactional
-    public void deleteBook(Long id) throws BookNotFoundException {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
-        book.setIsDeleted(true);
-        bookRepository.save(book);
-    }
-
-    @Transactional
-    public void restoreBook(Long id) throws BookNotFoundException {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
-        book.setIsDeleted(false);
-        bookRepository.save(book);
-    }
-
-    @Transactional
-    public void decreaseStockQuantity(Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
-
-        if (book.getStockQuantity() > 0) {
-            book.setStockQuantity(book.getStockQuantity() - 1);
-            bookRepository.save(book);
-        } else {
-            throw new IllegalArgumentException("Stock quantity cannot be less than zero");
+            bookRepository.save(existingBook);
+        } catch (OptimisticLockingFailureException e) {
+            throw new BookNotFoundException("Conflict occurred while updating book with id: " + id);
         }
     }
 
     @Transactional
+    @CacheEvict(value = "books", allEntries = true)
+    public void deleteBook(Long id) throws BookNotFoundException {
+        try {
+            Book book = bookRepository.findById(id)
+                    .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
+            book.setIsDeleted(true);
+            bookRepository.save(book);
+        } catch (OptimisticLockingFailureException e) {
+            throw new BookNotFoundException("Conflict occurred while deleting book with id: " + id);
+        }
+    }
+
+    @Transactional
+    @CacheEvict(value = "books", allEntries = true)
+    public void restoreBook(Long id) throws BookNotFoundException {
+        try {
+            Book book = bookRepository.findById(id)
+                    .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
+            book.setIsDeleted(false);
+            bookRepository.save(book);
+        } catch (OptimisticLockingFailureException e) {
+            throw new BookNotFoundException("Conflict occurred while restoring book with id: " + id);
+        }
+    }
+
+    @Transactional
+    @CacheEvict(value = "books", allEntries = true)
+    public void decreaseStockQuantity(Long id) {
+        try {
+            Book book = bookRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+
+            if (book.getStockQuantity() > 0) {
+                book.setStockQuantity(book.getStockQuantity() - 1);
+                bookRepository.save(book);
+            } else {
+                throw new IllegalArgumentException("Stock quantity cannot be less than zero");
+            }
+        } catch (OptimisticLockingFailureException e) {
+            throw new ResourceNotFoundException("Conflict occurred while decreasing stock quantity for book with id: " + id);
+        }
+    }
+
+    @Transactional
+    @CacheEvict(value = "books", allEntries = true)
     public void increaseStockQuantity(Long id, int quantity) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
-        book.setStockQuantity(book.getStockQuantity() + quantity);
-        bookRepository.save(book);
+        try {
+            Book book = bookRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+            book.setStockQuantity(book.getStockQuantity() + quantity);
+            bookRepository.save(book);
+        } catch (OptimisticLockingFailureException e) {
+            throw new ResourceNotFoundException("Conflict occurred while increasing stock quantity for book with id: " + id);
+        }
     }
 }

@@ -52,6 +52,11 @@ public class Order implements Serializable {
     @Column
     private LocalDateTime updatedAt;
 
+    @Version
+    @Column(nullable = false)
+    private Integer version;
+
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();

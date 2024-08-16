@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -24,6 +26,7 @@ public class CareerFileController {
     public CareerFileController(CareerFileService careerFileService) {
         this.careerFileService = careerFileService;
     }
+
     @PostMapping("/uploadFile")
     public ResponseEntity<CareerFileDTO> uploadFile(@RequestParam("file") MultipartFile file,
                                                     @RequestParam("careerId") Long careerId) {
@@ -45,8 +48,11 @@ public class CareerFileController {
 
         ByteArrayResource resource = new ByteArrayResource(file.getFileContent());
 
+        // Encode the filename - this is needed to support special characters in the filename (e.g. spaces or hebrew characters in the filename)
+        String encodedFileName = UriUtils.encode(file.getFileName(), StandardCharsets.UTF_8);
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"; filename*=UTF-8''" + encodedFileName)
                 .contentType(MediaType.parseMediaType(file.getContentType() != null ? file.getContentType() : "application/octet-stream"))
                 .contentLength(file.getFileContent().length)
                 .body(resource);
