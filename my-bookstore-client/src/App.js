@@ -12,7 +12,7 @@ import OrderManagement from './components/AdminAndMainAdminPages/OrdersManagemen
 import StockManagement from './components/AdminAndMainAdminPages/StockManagement'
 import UsersAndAdminsManagement from './components/MainAdminPages/UsersAndAdminsManagement'
 import MyDetails from './components/PublicPagesForAllRoles/MyDetails'
-import MyOrders from './components/CostumerPages/MyOrders' 
+import MyOrders from './components/CostumerPages/MyOrders'
 import AdminCareerPage from './components/MainAdminPages/CareersManagement'
 import axios from 'axios'
 
@@ -22,10 +22,15 @@ const App = () => {
 	const [isMainAdmin, setIsMainAdmin] = useState(false)
 	const [userRole, setUserRole] = useState(null)
 
+	/**
+	 * useEffect hook to check if the user is logged in by verifying the token stored in localStorage.
+	 * If the token is valid, it sets the user's login status and role.
+	 */
 	useEffect(() => {
 		const token = localStorage.getItem('token')
 		if (token) {
 			const decodedToken = parseJwt(token)
+			console.log('Decoded Token:', decodedToken)
 			if (decodedToken && decodedToken.exprt * 1000 > Date.now()) {
 				setIsLoggedIn(true)
 				setIsAdmin(decodedToken.role === 'ADMIN')
@@ -44,8 +49,15 @@ const App = () => {
 			setIsMainAdmin(false)
 			setUserRole(null)
 		}
-	}, []) 
+	}, [])
 
+	/**
+	 * Handles user login by sending a request to the backend with the provided username and password.
+	 * If the login is successful, it stores the token in localStorage and updates the user's login status and role.
+	 *
+	 * @param {string} username - The username of the user.
+	 * @param {string} password - The password of the user.
+	 */
 	const handleLogin = async (username, password) => {
 		try {
 			const response = await axios.post('http://localhost:8080/auth/login', {
@@ -68,6 +80,12 @@ const App = () => {
 		}
 	}
 
+	/**
+	 * Parses a JWT token to extract the payload.
+	 *
+	 * @param {string} token - The JWT token to parse.
+	 * @returns {object|null} The parsed payload of the token, or null if parsing fails.
+	 */
 	const parseJwt = (token) => {
 		try {
 			return JSON.parse(atob(token.split('.')[1]))
@@ -76,6 +94,9 @@ const App = () => {
 		}
 	}
 
+	/**
+	 * Handles user logout by removing the token from localStorage and resetting the user's login status and role.
+	 */
 	const handleLogout = () => {
 		localStorage.removeItem('token')
 		setIsLoggedIn(false)
@@ -100,7 +121,7 @@ const App = () => {
 						<Route path="/order-management" element={isLoggedIn && (isAdmin || isMainAdmin) ? <OrderManagement /> : <Navigate to="/login" />} />
 						<Route path="/stock-management" element={isLoggedIn && (isAdmin || isMainAdmin) ? <StockManagement /> : <Navigate to="/login" />} />
 						<Route path="/users-and-admins-management" element={isLoggedIn && isMainAdmin ? <UsersAndAdminsManagement /> : <Navigate to="/login" />} />
-						<Route path="/admin-careers" element={isLoggedIn && isMainAdmin ? <AdminCareerPage /> : <Navigate to="/login" />} /> 
+						<Route path="/admin-careers" element={isLoggedIn && isMainAdmin ? <AdminCareerPage /> : <Navigate to="/login" />} />
 						<Route path="/" element={<Navigate to={isLoggedIn ? '/home' : '/login'} />} />
 					</Routes>
 				</div>

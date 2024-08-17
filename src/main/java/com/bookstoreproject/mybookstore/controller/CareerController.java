@@ -39,6 +39,7 @@ public class CareerController {
         }
     }
 
+    /* This method was added to create multiple careers at once, so its will look nicely in carrer site. you wont see any other use of it in frontend code.*/
     @PostMapping("/createCareers")
     @PreAuthorize("hasAuthority('MAIN_ADMIN')")
     public ResponseEntity<String> createCareers(@RequestBody List<CareerDTO> careerDTOs) {

@@ -27,18 +27,17 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #e63946;
+  background-color: #827e7e;
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 50%;
   cursor: pointer;
   font-size: 1.5em;
   transition: background-color 0.3s;
 }
 
 .closeCart:hover {
-  background-color: #d62839;
+  background-color: #be747b;
 }
 
 .header {
@@ -90,7 +89,7 @@
 }
 
 .button {
-  background-color: #35dc5c;
+  background-color: #8cc199;
   color: white;
   padding: 5px 15px;
   border-radius: 5px;
@@ -110,7 +109,8 @@
 }
 
 .button.remove {
-  background-color: #dc3545;
+  background-color: #c76771;
+
 }
 
 .button.remove:hover:not(:disabled) {
@@ -118,7 +118,7 @@
 }
 
 .submitButton {
-  background-color: #28a745;
+  background-color: #8cc199;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -130,7 +130,7 @@
 }
 
 .submitButton:hover {
-  background-color: #1e7e34;
+  background-color: #8fab96;
 }
 
 .summary {

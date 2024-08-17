@@ -75,6 +75,13 @@ const CareerPage = () => {
 		}
 	}
 
+	/*
+	 * Handles the change event of the file input element.
+	 * @param {Object} event - The event object.
+	 * @returns {void}
+	 * @example
+	 */
+
 	const handleCvChange = (event) => {
 		setCvFile(event.target.files[0])
 	}

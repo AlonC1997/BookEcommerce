@@ -13,6 +13,10 @@ const MyDetails = () => {
 	const [passwordError, setPasswordError] = useState('')
 	const [isPasswordValid, setIsPasswordValid] = useState(false)
 
+	/**
+	 * Fetches the details of the logged-in user from the backend and sets the user state.
+	 * Also sets the name and address state with the fetched user details.
+	 */
 	useEffect(() => {
 		const fetchUserDetails = async () => {
 			try {
@@ -31,6 +35,10 @@ const MyDetails = () => {
 		fetchUserDetails()
 	}, [])
 
+	/**
+	 * Updates the name of the logged-in user by sending a request to the backend.
+	 * If successful, it stops the editing mode for the name field.
+	 */
 	const handleUpdateName = async () => {
 		try {
 			const token = localStorage.getItem('token')
@@ -47,6 +55,10 @@ const MyDetails = () => {
 		}
 	}
 
+	/**
+	 * Updates the address of the logged-in user by sending a request to the backend.
+	 * If successful, it stops the editing mode for the address field.
+	 */
 	const handleUpdateAddress = async () => {
 		try {
 			const token = localStorage.getItem('token')
@@ -63,6 +75,10 @@ const MyDetails = () => {
 		}
 	}
 
+	/**
+	 * Changes the password of the logged-in user by sending a request to the backend.
+	 * If the password is valid and the request is successful, it stops the editing mode for the password field.
+	 */
 	const handleChangePassword = async () => {
 		if (!isPasswordValid) return
 		try {

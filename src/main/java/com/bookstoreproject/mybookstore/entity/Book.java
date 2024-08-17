@@ -49,9 +49,10 @@ public class Book implements Serializable {
     @Column
     private Boolean isDeleted = false;
 
+
     @Version
     @Column(nullable = false)
-    private Integer  version;
+    private Integer version;
 
     public Book() {}
 }

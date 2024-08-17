@@ -25,6 +25,7 @@ public class Career {
     private LocalDate datePosted;
     private boolean available;
 
+
     @Version
     @Column(nullable = false)
     private Integer version;

@@ -37,6 +37,9 @@ const AdminCareerPage = () => {
 		}
 	}
 
+	/*
+	 * Fetches the list of uploaded files from the backend and sets the fileList state.
+	 */
 	const fetchFileList = async () => {
 		try {
 			const response = await axios.get('http://localhost:8080/career-files/getAllFiles', {
@@ -163,7 +166,7 @@ const AdminCareerPage = () => {
 		const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
 		setCareers(careers.map((career) => (career.id === id ? { ...career, [field]: value } : career)))
 	}
-	
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.header}>Career Management</div>
@@ -220,40 +223,40 @@ const AdminCareerPage = () => {
 						</tr>
 					</thead>
 					<tbody>
-                    {filteredCareers(careers).map((career) => (
-                    <tr key={career.id}>
-                        <td>{career.id}</td>
-                        <td>
-                            <textarea value={career.title} onChange={(e) => handleInputChange(e, career.id, 'title')} />
-                        </td>
-                        <td>
-                            <textarea value={career.description} onChange={(e) => handleInputChange(e, career.id, 'description')} />
-                        </td>
-                        <td>
-                            <textarea value={career.category} onChange={(e) => handleInputChange(e, career.id, 'category')} />
-                        </td>
-                        <td>
-                            <textarea value={career.location} onChange={(e) => handleInputChange(e, career.id, 'location')} />
-                        </td>
-                        <td>
-                            <textarea value={career.level} onChange={(e) => handleInputChange(e, career.id, 'level')} />
-                        </td>
-                        <td>
-                            <textarea value={career.requirements} onChange={(e) => handleInputChange(e, career.id, 'requirements')} />
-                        </td>
-                        <td>
-                            <input type="date" value={career.datePosted} onChange={(e) => handleInputChange(e, career.id, 'datePosted')} />
-                        </td>
-                        <td>
-                            <input type="checkbox" checked={career.available} onChange={(e) => handleInputChange(e, career.id, 'available')} />
-                        </td>
-                        <td>
-                            <button onClick={() => handleUpdateCareer(career)} className={styles.updateButton}>
-                                Update
-                            </button>
-                            <button onClick={() => handleDeleteCareer(career.id)} className={styles.deleteButton}>
-                                Delete
-                            </button>
+						{filteredCareers(careers).map((career) => (
+							<tr key={career.id}>
+								<td>{career.id}</td>
+								<td>
+									<textarea value={career.title} onChange={(e) => handleInputChange(e, career.id, 'title')} />
+								</td>
+								<td>
+									<textarea value={career.description} onChange={(e) => handleInputChange(e, career.id, 'description')} />
+								</td>
+								<td>
+									<textarea value={career.category} onChange={(e) => handleInputChange(e, career.id, 'category')} />
+								</td>
+								<td>
+									<textarea value={career.location} onChange={(e) => handleInputChange(e, career.id, 'location')} />
+								</td>
+								<td>
+									<textarea value={career.level} onChange={(e) => handleInputChange(e, career.id, 'level')} />
+								</td>
+								<td>
+									<textarea value={career.requirements} onChange={(e) => handleInputChange(e, career.id, 'requirements')} />
+								</td>
+								<td>
+									<input type="date" value={career.datePosted} onChange={(e) => handleInputChange(e, career.id, 'datePosted')} />
+								</td>
+								<td>
+									<input type="checkbox" checked={career.available} onChange={(e) => handleInputChange(e, career.id, 'available')} />
+								</td>
+								<td>
+									<button onClick={() => handleUpdateCareer(career)} className={styles.updateButton}>
+										Update
+									</button>
+									<button onClick={() => handleDeleteCareer(career.id)} className={styles.deleteButton}>
+										Delete
+									</button>
 								</td>
 							</tr>
 						))}

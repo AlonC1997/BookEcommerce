@@ -65,14 +65,14 @@ const Home = () => {
 			.filter((book) => book.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
 		setFilteredBooks(filtered)
-		setCurrentPage(1) 
+		setCurrentPage(1)
 	}, [books, searchTerm, categoryFilter])
 
 	useEffect(() => {
 		if (userName) {
 			const timer = setTimeout(() => {
 				setShowGreeting(false)
-			}, 10000) 
+			}, 10000)
 
 			return () => clearTimeout(timer)
 		}
@@ -92,7 +92,7 @@ const Home = () => {
 				const book = books.find((b) => b.id === item.bookId)
 				return { ...item, img_link: book.img_link }
 			})
-			setCartItems(cartItemsWithDetails) 
+			setCartItems(cartItemsWithDetails)
 		} catch (error) {
 			console.error('Error fetching cart:', error)
 		}
@@ -108,12 +108,12 @@ const Home = () => {
 
 	const handleCategoryChange = (category) => {
 		setCategoryFilter((prev) => ({ ...prev, [category]: !prev[category] }))
-		setCurrentPage(1) 
+		setCurrentPage(1)
 	}
 
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value)
-		setCurrentPage(1) 
+		setCurrentPage(1)
 	}
 
 	const handlePrevPage = () => {
@@ -129,19 +129,18 @@ const Home = () => {
 	}
 
 	const handleDragStart = (e) => {
-		e.dataTransfer.setData('text/plain', ''); 
+		e.dataTransfer.setData('text/plain', '')
 	}
 
 	const handleDrag = (e) => {
-		e.preventDefault();
+		e.preventDefault()
 	}
 
 	const handleDragEnd = (e) => {
-		const x = e.clientX;
-		const y = e.clientY;
-		setCartPosition({ top: `${y}px`, left: `${x}px` });
+		const x = e.clientX
+		const y = e.clientY
+		setCartPosition({ top: `${y}px`, left: `${x}px` })
 	}
-	
 
 	return (
 		<div className={styles.homeContainer}>
@@ -153,9 +152,8 @@ const Home = () => {
 				onDrag={handleDrag}
 				onDragEnd={handleDragEnd}
 				onClick={() => setCartVisible(!cartVisible)}
-				style={{ top: cartPosition.top, left: cartPosition.left }}
-			>
-			 🛒
+				style={{ top: cartPosition.top, left: cartPosition.left }}>
+				🛒
 			</button>
 
 			<header className={styles.header}>

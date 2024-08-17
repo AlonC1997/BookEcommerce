@@ -18,14 +18,24 @@ const OrderManagement = () => {
 	const [isUserModalOpen, setIsUserModalOpen] = useState(false)
 	const [userDetails, setUserDetails] = useState({ userID: '', name: '', address: '' })
 
+
+	/*
+	 * useEffect hook to fetch all orders from the server when the component mounts.
+	*/
 	useEffect(() => {
 		fetchOrders()
 	}, [])
 
+	/*
+	 * useEffect hook to filter orders based on the search criteria and selected statuses.
+	*/
 	useEffect(() => {
 		filterOrders()
 	}, [orders, searchOrderId, searchUserId, selectedStatuses])
 
+	/**
+	 * Fetches all orders from the server and updates the state with the retrieved orders.
+	 */
 	const fetchOrders = async () => {
 		try {
 			const token = localStorage.getItem('token') 
@@ -40,6 +50,10 @@ const OrderManagement = () => {
 		}
 	}
 
+	/**
+	 * Fetches books associated with a specific order and opens the modal to display them.
+	 * @param {string} orderId - The ID of the order whose books are to be fetched.
+	 */
 	const fetchOrderBooks = async (orderId) => {
 		try {
 			const token = localStorage.getItem('token')
@@ -55,6 +69,10 @@ const OrderManagement = () => {
 		}
 	}
 
+	/**
+	 * Sends an update request to the server for a specific order and refreshes the list of orders.
+	 * @param {object} order - The order object containing updated information.
+	 */
 	const updateOrder = async (order) => {
 		try {
 			const token = localStorage.getItem('token')
@@ -69,6 +87,10 @@ const OrderManagement = () => {
 		}
 	}
 
+	/*
+	 * Sends a delete request to the server for a specific order and refreshes the list of orders.
+	 * @param {string} orderId - The ID of the order to be deleted.
+	 */
 	const deleteOrder = async (orderId) => {
 		try {
 			const token = localStorage.getItem('token')
@@ -83,6 +105,10 @@ const OrderManagement = () => {
 		}
 	}
 
+	/*
+	 * Fetches the details of a specific user and opens the modal to display them.
+	 * @param {string} userId - The ID of the user whose details are to be fetched.
+	 */
 	const fetchUserDetails = async (userId) => {
 		try {
 			const token = localStorage.getItem('token')
@@ -99,23 +125,52 @@ const OrderManagement = () => {
 		}
 	}
 
+	/*
+	 * Updates the state with the new value of the input field for a specific order.
+	 * @param {object} e - The event object containing the new value of the input field.
+	 * @param {string} orderId - The ID of the order to be updated.
+	 * @param {string} field - The field to be updated in the order object.
+	 */
 	const handleInputChange = (e, orderId, field) => {
 		const updatedOrders = orders.map((order) => (order.id === orderId ? { ...order, [field]: e.target.value } : order))
 		setOrders(updatedOrders)
 	}
 
+	/*
+	 * Updates the order on the server with the new information.
+	 * @param {object} order - The order object to be updated.
+	 * @returns {Promise<void>}
+	 */ 
 	const handleSaveOrder = (order) => {
 		updateOrder(order)
 	}
 
+	/*
+	 * Updates the state with the new value of the search field for Order ID.
+	 * @param {object} e - The event object containing the new value of the search field.
+	 * @returns {void}
+	 * @async.
+	 */
 	const handleSearchOrderIdChange = (e) => {
 		setSearchOrderId(e.target.value)
 	}
 
+	/*
+	 * Updates the state with the new value of the search field for User ID.
+	 * @param {object} e - The event object containing the new value of the search field.
+	 * @returns {void}
+	 * @async.
+	 */
 	const handleSearchUserIdChange = (e) => {
 		setSearchUserId(e.target.value)
 	}
 
+	/*
+	 * Updates the state with the new value of the selected status checkbox.
+	 * @param {object} e - The event object containing the new value of the selected status checkbox.
+	 * @returns {void}
+	 * @async.
+	 */
 	const handleStatusChange = (e) => {
 		const { name, checked } = e.target
 		setSelectedStatuses((prevStatuses) => ({
@@ -124,6 +179,10 @@ const OrderManagement = () => {
 		}))
 	}
 
+	/*
+	 * Filters the orders based on the search criteria and selected statuses.
+	 * @returns {void}
+	 */ 	
 	const filterOrders = () => {
 		let filtered = orders
 

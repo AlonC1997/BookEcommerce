@@ -79,13 +79,13 @@ public class SecurityConfig {
 
                         // Endpoints accessible by ADMIN role
                         .requestMatchers(
+                                "/users/**",
                                 "/books/**",
                                 "/orders/**"
                         ).hasAuthority(ADMIN)
 
                         // Endpoints accessible by MAIN_ADMIN role
                         .requestMatchers(
-                                "/users/**",
                                 "/careers/**",
                                 "/career-files/**"
                         ).hasAuthority(MAIN_ADMIN)

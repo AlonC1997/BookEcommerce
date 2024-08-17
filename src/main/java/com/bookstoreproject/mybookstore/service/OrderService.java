@@ -142,8 +142,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "lastOrderId", key = "#userId")
-    public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException, OrderNotFoundException {
+    public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException {
         Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
 
         if (maxOrderId == null) {
