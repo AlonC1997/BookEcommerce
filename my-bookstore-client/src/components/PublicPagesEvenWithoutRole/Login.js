@@ -43,7 +43,7 @@ const Login = ({ onLogin }) => {
 			setTimeout(() => {
 				setShowResetPassword(false)
 				navigate('/login')
-			}, 3000) // Redirect after 3 seconds
+			}, 3000)
 		} catch (error) {
 			setResetMessage('Email not found. Please check the email address and try again.')
 		}
@@ -104,4 +104,3 @@ const Login = ({ onLogin }) => {
 }
 
 export default Login
-

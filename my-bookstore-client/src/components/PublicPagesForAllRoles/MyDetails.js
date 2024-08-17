@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './MyDetails.module.css'
 import PasswordChecklist from 'react-password-checklist'
+import Cookies from 'js-cookie'
 
 const MyDetails = () => {
 	const [user, setUser] = useState(null)
@@ -20,7 +21,7 @@ const MyDetails = () => {
 	useEffect(() => {
 		const fetchUserDetails = async () => {
 			try {
-				const token = localStorage.getItem('token')
+				const token = Cookies.get('token')
 				const response = await axios.get('http://localhost:8080/users/getLoggedInUser', {
 					headers: { Authorization: `Bearer ${token}` },
 				})
@@ -41,7 +42,7 @@ const MyDetails = () => {
 	 */
 	const handleUpdateName = async () => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.post(
 				'http://localhost:8080/users/setName',
 				{ name },
@@ -61,7 +62,7 @@ const MyDetails = () => {
 	 */
 	const handleUpdateAddress = async () => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.post(
 				'http://localhost:8080/users/setAddress',
 				{ address },
@@ -82,7 +83,7 @@ const MyDetails = () => {
 	const handleChangePassword = async () => {
 		if (!isPasswordValid) return
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.post(
 				'http://localhost:8080/auth/setNewPassword',
 				{ password },

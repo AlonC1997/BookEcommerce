@@ -63,7 +63,7 @@ public class UserController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('MAIN_ADMIN')")
+    @PreAuthorize("hasAuthority('MAIN_ADMIN')")
     @PostMapping("/addAdmin")
     public ResponseEntity<Object> addAdmin(@RequestBody User admin) {
         User createdAdmin = userService.addAdmin(admin.getUsername(), admin.getPassword(), admin.getAddress(), admin.getName(), admin.getRole());

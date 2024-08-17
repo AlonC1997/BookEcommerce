@@ -40,6 +40,10 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'org.eclipse.jetty:jetty-server:11.0.14'
+    implementation 'org.springframework.boot:spring-boot-starter-jetty'
+
 }
 
 tasks.named('test') {
@@ -49,4 +53,3 @@ tasks.named('test') {
 tasks.withType(JavaExec).configureEach {
     jvmArgs = ["-Duser.timezone=Asia/Jerusalem"]
 }
-

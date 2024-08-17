@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import PasswordChecklist from 'react-password-checklist'
 import styles from './UsersAndAdminsManagement.module.css'
+import Cookies from 'js-cookie'
 
 const UsersAndAdminsManagement = () => {
 	const [users, setUsers] = useState([])
@@ -24,7 +25,8 @@ const UsersAndAdminsManagement = () => {
 		USER: true,
 	})
 
-	const token = localStorage.getItem('token')
+	
+	const token = Cookies.get('token');
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -97,6 +99,7 @@ const UsersAndAdminsManagement = () => {
 			return
 		}
 		try {
+			const token = Cookies.get('token');
 			await axios.post('http://localhost:8080/users/addAdmin', newUser, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -120,6 +123,7 @@ const UsersAndAdminsManagement = () => {
 
 	const handleDeleteUser = async (userId) => {
 		try {
+			const token = Cookies.get('token');
 			await axios.delete(`http://localhost:8080/users/deleteUser?userId=${userId}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})

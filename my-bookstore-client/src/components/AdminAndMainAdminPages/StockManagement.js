@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './StockManagement.module.css'
+import Cookies from 'js-cookie'
 
 const StockManagement = () => {
 	const [inStockBooks, setInStockBooks] = useState([])
@@ -25,13 +26,9 @@ const StockManagement = () => {
 		fetchBooks()
 	}, [])
 
-	const getAuthToken = () => {
-		return localStorage.getItem('token')
-	}
-
 	const fetchBooks = async () => {
 		try {
-			const token = getAuthToken()
+			const token = Cookies.get('token')
 			const responseInStock = await axios.get('http://localhost:8080/books/getAllBooks', {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -53,12 +50,12 @@ const StockManagement = () => {
 
 	const handleUpdateBook = async (book) => {
 		try {
-			const token = getAuthToken()
+			const token = Cookies.get('token')
 			await axios.put('http://localhost:8080/books/updateBook', book, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book updated successfully')
-			fetchBooks() 
+			fetchBooks()
 		} catch (error) {
 			console.error('Error updating book:', error)
 		}
@@ -66,12 +63,12 @@ const StockManagement = () => {
 
 	const handleDeleteBook = async (bookId) => {
 		try {
-			const token = getAuthToken()
+			const token = Cookies.get('token')
 			await axios.delete(`http://localhost:8080/books/deleteBook?bookId=${bookId}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book deleted successfully')
-			fetchBooks() 
+			fetchBooks()
 		} catch (error) {
 			console.error('Error deleting book:', error)
 		}
@@ -79,7 +76,7 @@ const StockManagement = () => {
 
 	const handleRestoreBook = async (bookId) => {
 		try {
-			const token = getAuthToken()
+			const token = Cookies.get('token')
 			await axios.post(`http://localhost:8080/books/restoreBook?bookId=${bookId}`, null, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -92,13 +89,13 @@ const StockManagement = () => {
 
 	const handleAddBook = async () => {
 		try {
-			const token = getAuthToken()
+			const token = Cookies.get('token')
 			await axios.post('http://localhost:8080/books/addBook', newBook, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Book added successfully')
-			fetchBooks() 
-			setIsModalOpen(false) 
+			fetchBooks()
+			setIsModalOpen(false)
 			setNewBook({
 				name: '',
 				author: '',

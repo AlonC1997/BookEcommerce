@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './Cart.module.css'
 import ThanksModal from './ThanksModal'
+import Cookies from 'js-cookie'
 
 const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, setHasPreviousOrder }) => {
 	const [cartItems, setCartItems] = useState([])
@@ -28,7 +29,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 
 	const fetchCartItems = async () => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			const cartResponse = await axios.get('http://localhost:8080/carts/getCartBooks', {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -84,7 +85,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 		try {
 			const stockQuantity = stockQuantities[bookId] || 0
 			if (stockQuantity > 0) {
-				const token = localStorage.getItem('token')
+				const token = Cookies.get('token')
 				await axios.post(`http://localhost:8080/carts/addOneBook?bookId=${bookId}`, null, {
 					headers: { Authorization: `Bearer ${token}` },
 				})
@@ -104,7 +105,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			if (cartItems.length === 1 && cartItems[0].quantity === 1) {
 				setCartVisible(false)
 			}
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.post(`http://localhost:8080/carts/removeBook?bookId=${bookId}`, null, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -116,7 +117,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 
 	const handleSubmitCart = async () => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.post('http://localhost:8080/carts/submitCart', null, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -135,7 +136,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 
 	const fetchLastOrderDetails = async () => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			const userIdResponse = await axios.get('http://localhost:8080/users/getLoggedInUserId', {
 				headers: { Authorization: `Bearer ${token}` },
 			})

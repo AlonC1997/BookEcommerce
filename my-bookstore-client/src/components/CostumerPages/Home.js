@@ -3,6 +3,7 @@ import axios from 'axios'
 import BookCardUser from './BookCardUser'
 import Cart from './Cart'
 import styles from './Home.module.css'
+import Cookies from 'js-cookie'
 
 const Home = () => {
 	const [books, setBooks] = useState([])
@@ -30,8 +31,9 @@ const Home = () => {
 
 		const fetchUser = async () => {
 			try {
+				const token = Cookies.get('token')
 				const response = await axios.get('http://localhost:8080/users/getLoggedInUser', {
-					headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+					headers: { Authorization: `Bearer ${token}` },
 				})
 				setUserName(response.data.name)
 			} catch (error) {
@@ -46,7 +48,7 @@ const Home = () => {
 	useEffect(() => {
 		const checkPreviousOrder = async () => {
 			try {
-				const token = localStorage.getItem('token')
+				const token = Cookies.get('token')
 				const response = await axios.get('http://localhost:8080/orders/getLastOrderId', {
 					headers: { Authorization: `Bearer ${token}` },
 				})
@@ -80,8 +82,9 @@ const Home = () => {
 
 	const handleCartUpdate = async () => {
 		try {
+			const token = Cookies.get('token')
 			const response = await axios.get('http://localhost:8080/carts/getCartBooks', {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 
 			const bookDetailsRequests = response.data.map((item) => axios.get(`http://localhost:8080/books/getBook?bookId=${item.bookId}`))

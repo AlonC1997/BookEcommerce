@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './BookCardUser.module.css'
+import Cookies from 'js-cookie'
 
 const BookCardUser = ({ book, onAddToCart, setCartVisible }) => {
 	const [stockQuantity, setStockQuantity] = useState(null)
@@ -22,7 +23,7 @@ const BookCardUser = ({ book, onAddToCart, setCartVisible }) => {
 	const handleAddToCart = async () => {
 		setCartVisible(false)
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token');
 			await axios.post(`http://localhost:8080/carts/addOneBook?bookId=${book.id}`, null, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
@@ -60,7 +61,7 @@ const BookCardUser = ({ book, onAddToCart, setCartVisible }) => {
 				<p>{book.description}</p>
 				<h5>Price: ${book.price}</h5>
 				<h5>Stock: {getStockStatus()}</h5>
-				<button onClick={handleAddToCart} disabled={stockQuantity === 0 || !localStorage.getItem('token')}>
+				<button onClick={handleAddToCart} disabled={stockQuantity === 0 || !Cookies.get('token')}>
 					{stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart'}
 				</button>
 			</div>

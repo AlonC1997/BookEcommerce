@@ -36,9 +36,7 @@ public class BookController {
 
     @GetMapping("/getStockQuantity")
     public ResponseEntity<Integer> getStockQuantity(@RequestParam Long bookId) throws BookNotFoundException {
-        System.out.println("Received request for stock quantity with ID: " + bookId);
         int stockQuantity = bookService.getStockQuantity(bookId);
-        System.out.println("Stock quantity for ID " + bookId + ": " + stockQuantity);
         return new ResponseEntity<>(stockQuantity, HttpStatus.OK);
     }
 

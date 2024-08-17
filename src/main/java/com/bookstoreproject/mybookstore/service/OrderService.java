@@ -125,8 +125,8 @@ public class OrderService {
     }
 
     @Transactional
-    @CacheEvict(value = "orders", key = "#orderId")
-    public OrderDTO updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
+    @CacheEvict(value = "orders" , key = "#orderId")
+    public void updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
         Order order = orderRepository.findById(orderDTO.getId())
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderDTO.getId()));
         try {
@@ -135,7 +135,7 @@ public class OrderService {
             order.setUpdatedAt(orderDTO.getUpdatedAt());
 
             Order updatedOrder = orderRepository.save(order);
-            return modelMapper.map(updatedOrder, OrderDTO.class);
+            modelMapper.map(updatedOrder, OrderDTO.class);
         } catch (ObjectOptimisticLockingFailureException ex) {
             throw new RuntimeException("Order update failed due to concurrent modification", ex);
         }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import styles from './MyOrders.module.css'
+import Cookies from 'js-cookie'
 
 const MyOrders = () => {
 	const [orders, setOrders] = useState([])
@@ -16,9 +17,11 @@ const MyOrders = () => {
 
 	const fetchOrders = async () => {
 		try {
+			const token = Cookies.get('token')
 			const { data: ordersData } = await axios.get('http://localhost:8080/orders/getUserOrdersWithOutId', {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
+
 			setOrders(ordersData)
 			fetchBookDetails(ordersData)
 		} catch (error) {
@@ -33,10 +36,11 @@ const MyOrders = () => {
 		})
 
 		try {
+			const token = Cookies.get('token')
 			const responses = await Promise.all(
 				Array.from(books).map((bookId) =>
 					axios.get(`http://localhost:8080/books/getBook?bookId=${bookId}`, {
-						headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+						headers: { Authorization: `Bearer ${token}` },
 					})
 				)
 			)
@@ -52,8 +56,9 @@ const MyOrders = () => {
 
 	const handleCancelOrder = async (orderId) => {
 		try {
+			const token = Cookies.get('token')
 			await axios.delete(`http://localhost:8080/orders/deleteOrder?orderId=${orderId}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			fetchOrders()
 		} catch (error) {

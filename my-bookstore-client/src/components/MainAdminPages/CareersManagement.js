@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './CareersManagement.module.css'
+import Cookies from 'js-cookie'
 
 const AdminCareerPage = () => {
 	const [careers, setCareers] = useState([])
@@ -28,8 +29,9 @@ const AdminCareerPage = () => {
 
 	const fetchCareers = async () => {
 		try {
+			const token = Cookies.get('token')
 			const response = await axios.get('http://localhost:8080/careers/getAllCareers', {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			setCareers(response.data)
 		} catch (error) {
@@ -42,8 +44,9 @@ const AdminCareerPage = () => {
 	 */
 	const fetchFileList = async () => {
 		try {
+			const token = Cookies.get('token')
 			const response = await axios.get('http://localhost:8080/career-files/getAllFiles', {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			setFileList(response.data)
 		} catch (error) {
@@ -53,8 +56,9 @@ const AdminCareerPage = () => {
 
 	const handleUpdateCareer = async (career) => {
 		try {
+			const token = Cookies.get('token')
 			await axios.put(`http://localhost:8080/careers/updateCareer?id=${career.id}`, career, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Career updated successfully')
 			fetchCareers()
@@ -65,10 +69,11 @@ const AdminCareerPage = () => {
 
 	const handleUpdateAll = async () => {
 		try {
+			const token = Cookies.get('token')
 			await Promise.all(
 				careers.map((career) =>
 					axios.put(`http://localhost:8080/careers/updateCareer?id=${career.id}`, career, {
-						headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+						headers: { Authorization: `Bearer ${token}` },
 					})
 				)
 			)
@@ -81,8 +86,9 @@ const AdminCareerPage = () => {
 
 	const handleDeleteCareer = async (careerId) => {
 		try {
+			const token = Cookies.get('token')
 			await axios.delete(`http://localhost:8080/careers/deleteCareer?id=${careerId}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Career deleted successfully')
 			fetchCareers()
@@ -93,8 +99,9 @@ const AdminCareerPage = () => {
 
 	const handleAddCareer = async () => {
 		try {
+			const token = Cookies.get('token')
 			await axios.post('http://localhost:8080/careers/createCareer', newCareer, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('Career added successfully')
 			fetchCareers()
@@ -116,8 +123,9 @@ const AdminCareerPage = () => {
 
 	const handleDownloadFile = async (fileId) => {
 		try {
+			const token = Cookies.get('token')
 			const response = await axios.get(`http://localhost:8080/career-files/download?fileId=${fileId}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 				responseType: 'blob',
 			})
 
@@ -140,8 +148,9 @@ const AdminCareerPage = () => {
 
 	const handleDeleteFile = async (fileId) => {
 		try {
+			const token = Cookies.get('token')
 			await axios.delete(`http://localhost:8080/career-files/deleteFile?fileId=${fileId}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			alert('File deleted successfully')
 			fetchFileList()

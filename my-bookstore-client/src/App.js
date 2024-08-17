@@ -15,6 +15,10 @@ import MyDetails from './components/PublicPagesForAllRoles/MyDetails'
 import MyOrders from './components/CostumerPages/MyOrders'
 import AdminCareerPage from './components/MainAdminPages/CareersManagement'
 import axios from 'axios'
+import './axiosInterceptor'; // Ensure this import is made to set up interceptors
+import Cookies from 'js-cookie'
+
+axios.defaults.withCredentials = true;
 
 const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -22,26 +26,19 @@ const App = () => {
 	const [isMainAdmin, setIsMainAdmin] = useState(false)
 	const [userRole, setUserRole] = useState(null)
 
-	/**
-	 * useEffect hook to check if the user is logged in by verifying the token stored in localStorage.
-	 * If the token is valid, it sets the user's login status and role.
-	 */
 	useEffect(() => {
-		const token = localStorage.getItem('token')
+		const token = Cookies.get('token')
 		if (token) {
 			const decodedToken = parseJwt(token)
 			console.log('Decoded Token:', decodedToken)
-			if (decodedToken && decodedToken.exprt * 1000 > Date.now()) {
+			if (decodedToken && decodedToken.exp * 1000 > Date.now()) {
 				setIsLoggedIn(true)
 				setIsAdmin(decodedToken.role === 'ADMIN')
 				setIsMainAdmin(decodedToken.role === 'MAIN_ADMIN')
 				setUserRole(decodedToken.role)
 			} else {
-				localStorage.removeItem('token')
-				setIsLoggedIn(false)
-				setIsAdmin(false)
-				setIsMainAdmin(false)
-				setUserRole(null)
+				// Token is expired, attempt to refresh
+				refreshToken()
 			}
 		} else {
 			setIsLoggedIn(false)
@@ -52,34 +49,59 @@ const App = () => {
 	}, [])
 
 	/**
-	 * Handles user login by sending a request to the backend with the provided username and password.
-	 * If the login is successful, it stores the token in localStorage and updates the user's login status and role.
-	 *
-	 * @param {string} username - The username of the user.
-	 * @param {string} password - The password of the user.
+	 * Refreshes the access token using the refresh token stored in cookies.
 	 */
+	 // Function to refresh token
+	 
+	 const refreshToken = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/auth/refresh-token', {}, {
+                withCredentials: true, // Send cookies with the request
+            });
+            const newAccessToken = response.data.accessToken;
+            Cookies.set('token', newAccessToken); // Update access token in cookies
+            // Update the state with the new token
+            const decodedToken = parseJwt(newAccessToken);
+            setIsLoggedIn(true);
+            setIsAdmin(decodedToken.role === 'ADMIN');
+            setIsMainAdmin(decodedToken.role === 'MAIN_ADMIN');
+            setUserRole(decodedToken.role);
+        } catch (error) {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+            setIsMainAdmin(false);
+            setUserRole(null);
+            // Optionally redirect to login page
+        }
+    };
+	
 	const handleLogin = async (username, password) => {
 		try {
 			const response = await axios.post('http://localhost:8080/auth/login', {
 				username,
 				password,
-			})
-			const token = response.data.accessToken
-			localStorage.setItem('token', token)
-
-			const decodedToken = parseJwt(token)
-			const userRole = decodedToken.role
-
-			setIsLoggedIn(true)
-			setIsAdmin(userRole === 'ADMIN')
-			setIsMainAdmin(userRole === 'MAIN_ADMIN')
-			setUserRole(userRole)
-			return userRole
+			});
+	
+			const { accessToken, refreshToken } = response.data;
+	
+			Cookies.set('token', accessToken, { expires: 1 }); // 1-day expiration
+			Cookies.set('refreshToken', refreshToken, { expires: 7 }); // 7-day expiration
+	
+			const decodedToken = parseJwt(accessToken);
+			const userRole = decodedToken.role;
+	
+			setIsLoggedIn(true);
+			setIsAdmin(userRole === 'ADMIN');
+			setIsMainAdmin(userRole === 'MAIN_ADMIN');
+			setUserRole(userRole);
+	
+			return userRole;
 		} catch (error) {
-			throw new Error('Invalid username or password')
-		}
-	}
+			console.error('Invalid username or password', error);
 
+		}
+	};
+	
 	/**
 	 * Parses a JWT token to extract the payload.
 	 *
@@ -95,10 +117,10 @@ const App = () => {
 	}
 
 	/**
-	 * Handles user logout by removing the token from localStorage and resetting the user's login status and role.
+	 * Handles user logout by removing the token from Cookies and resetting the user's login status and role.
 	 */
 	const handleLogout = () => {
-		localStorage.removeItem('token')
+		Cookies.remove('token')
 		setIsLoggedIn(false)
 		setIsAdmin(false)
 		setIsMainAdmin(false)

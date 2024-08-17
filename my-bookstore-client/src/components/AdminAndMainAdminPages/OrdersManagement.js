@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './OrdersManagement.module.css'
+import Cookies from 'js-cookie'
 
 const OrderManagement = () => {
 	const [orders, setOrders] = useState([])
@@ -18,17 +19,16 @@ const OrderManagement = () => {
 	const [isUserModalOpen, setIsUserModalOpen] = useState(false)
 	const [userDetails, setUserDetails] = useState({ userID: '', name: '', address: '' })
 
-
 	/*
 	 * useEffect hook to fetch all orders from the server when the component mounts.
-	*/
+	 */
 	useEffect(() => {
 		fetchOrders()
 	}, [])
 
 	/*
 	 * useEffect hook to filter orders based on the search criteria and selected statuses.
-	*/
+	 */
 	useEffect(() => {
 		filterOrders()
 	}, [orders, searchOrderId, searchUserId, selectedStatuses])
@@ -38,10 +38,10 @@ const OrderManagement = () => {
 	 */
 	const fetchOrders = async () => {
 		try {
-			const token = localStorage.getItem('token') 
+			const token = Cookies.get('token')
 			const response = await axios.get('http://localhost:8080/orders/getAllOrders', {
 				headers: {
-					Authorization: `Bearer ${token}`, 
+					Authorization: `Bearer ${token}`,
 				},
 			})
 			setOrders(response.data)
@@ -56,7 +56,7 @@ const OrderManagement = () => {
 	 */
 	const fetchOrderBooks = async (orderId) => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			const response = await axios.get(`http://localhost:8080/orders/getOrderBooksById?orderId=${orderId}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ const OrderManagement = () => {
 	 */
 	const updateOrder = async (order) => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.put('http://localhost:8080/orders/updateOrder', order, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const OrderManagement = () => {
 	 */
 	const deleteOrder = async (orderId) => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			await axios.delete(`http://localhost:8080/orders/deleteOrder?orderId=${orderId}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -111,7 +111,7 @@ const OrderManagement = () => {
 	 */
 	const fetchUserDetails = async (userId) => {
 		try {
-			const token = localStorage.getItem('token')
+			const token = Cookies.get('token')
 			const response = await axios.get(`http://localhost:8080/users/getUser?userId=${userId}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ const OrderManagement = () => {
 	 * Updates the order on the server with the new information.
 	 * @param {object} order - The order object to be updated.
 	 * @returns {Promise<void>}
-	 */ 
+	 */
 	const handleSaveOrder = (order) => {
 		updateOrder(order)
 	}
@@ -182,7 +182,7 @@ const OrderManagement = () => {
 	/*
 	 * Filters the orders based on the search criteria and selected statuses.
 	 * @returns {void}
-	 */ 	
+	 */
 	const filterOrders = () => {
 		let filtered = orders
 

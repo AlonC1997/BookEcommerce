@@ -62,7 +62,7 @@ const SignUp = () => {
 		if (!passwordsMatch) {
 			return 'Passwords do not match.'
 		}
-		return '' 
+		return ''
 	}
 
 	const handleSubmit = async (e) => {
