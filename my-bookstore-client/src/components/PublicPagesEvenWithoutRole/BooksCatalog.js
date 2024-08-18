@@ -18,7 +18,6 @@ const BooksCatalog = () => {
 		const fetchBooks = async () => {
 			try {
 				const response = await axios.get('http://localhost:8080/books/getAllBooks')
-				console.log('Books fetched:', response.data)
 				setBooks(response.data)
 				setLoading(false)
 			} catch (error) {

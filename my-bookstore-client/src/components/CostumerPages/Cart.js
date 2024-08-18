@@ -4,6 +4,7 @@ import styles from './Cart.module.css'
 import ThanksModal from './ThanksModal'
 import Cookies from 'js-cookie'
 
+
 const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, setHasPreviousOrder }) => {
 	const [cartItems, setCartItems] = useState([])
 	const [stockQuantities, setStockQuantities] = useState({})
@@ -114,17 +115,17 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			console.error('Error removing book from cart:', error)
 		}
 	}
-
+	  
 	const handleSubmitCart = async () => {
 		try {
 			const token = Cookies.get('token')
 			await axios.post('http://localhost:8080/carts/submitCart', null, {
 				headers: { Authorization: `Bearer ${token}` },
-			})
+			})			
+			setShowModal(true)
 			setCartItems([])
 			setCartVisible(true)
 			setModalMessage('Thank you for your order! Your cart has been submitted.')
-			setShowModal(true)
 			fetchLastOrderDetails()
 			if (onCartUpdate) {
 				onCartUpdate()
@@ -133,7 +134,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			console.error('Error submitting cart:', error)
 		}
 	}
-
+	
 	const fetchLastOrderDetails = async () => {
 		try {
 			const token = Cookies.get('token')
@@ -161,11 +162,16 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 			console.error('Error fetching last order details:', error)
 		}
 	}
+  
 
-	const handleClose = () => {
-		setShowModal(false)
-		setCartVisible(false)
-	}
+  const handleClose = () => {
+	setOrderDetails(null)
+	setCartItems([])
+	setShowModal(false)
+	setCartVisible(false)
+	setHasPreviousOrder(true)
+  }
+  
 
 	return (
 		<>
@@ -209,7 +215,7 @@ const Cart = ({ cartVisible, setCartVisible, onCartUpdate, hasPreviousOrder, set
 					</button>
 				</div>
 			</div>
-			{showModal && <ThanksModal isOpen={showModal} onClose={handleClose} message={modalMessage} orderDetails={orderDetails} setHasPreviousOrder={setHasPreviousOrder} />}
+			{<ThanksModal isOpen={showModal} onClose={handleClose} message={modalMessage} orderDetails={orderDetails} setHasPreviousOrder={setHasPreviousOrder} />}
 		</>
 	)
 }

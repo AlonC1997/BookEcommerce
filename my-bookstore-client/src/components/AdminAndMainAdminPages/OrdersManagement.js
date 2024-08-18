@@ -63,6 +63,7 @@ const OrderManagement = () => {
 				},
 			})
 			setOrderBooks(response.data)
+			setIsUserModalOpen(false)
 			setIsBooksModalOpen(true)
 		} catch (error) {
 			console.error('Error fetching order books:', error)
@@ -119,6 +120,7 @@ const OrderManagement = () => {
 			})
 			const { userID, name, address } = response.data
 			setUserDetails({ userID, name, address })
+			setIsBooksModalOpen(false)
 			setIsUserModalOpen(true)
 		} catch (error) {
 			console.error('Error fetching user details:', error)
@@ -285,7 +287,7 @@ const OrderManagement = () => {
 			</table>
 
 			{isBooksModalOpen && (
-				<div className={styles.modal}>
+				<div className={styles.modalBooks}>
 					<h2>Order Books</h2>
 					<table className={styles.modalTable}>
 						<thead>
@@ -316,7 +318,7 @@ const OrderManagement = () => {
 			)}
 
 			{isUserModalOpen && (
-				<div className={styles.modal}>
+				<div className={styles.modalUser}>
 					<h2>User Details</h2>
 					<table className={styles.modalTable}>
 						<thead>

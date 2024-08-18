@@ -210,7 +210,6 @@ const Home = () => {
 					Next
 				</button>
 			</div>
-
 			{cartVisible && <Cart cartVisible={cartVisible} setCartVisible={setCartVisible} onCartUpdate={handleCartUpdate} hasPreviousOrder={hasPreviousOrder} setHasPreviousOrder={setHasPreviousOrder} />}
 		</div>
 	)

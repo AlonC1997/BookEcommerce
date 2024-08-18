@@ -6,12 +6,10 @@ const BookCard = ({ book }) => {
 	const [stockQuantity, setStockQuantity] = useState(null)
 
 	useEffect(() => {
-		console.log('Book object:', book)
 		if (book && book.id) {
 			const fetchStockQuantity = async () => {
 				try {
 					const response = await axios.get(`http://localhost:8080/books/getStockQuantity?bookId=${book.id}`)
-					console.log('Stock quantity response:', response)
 					setStockQuantity(response.data)
 				} catch (error) {
 					console.error('Error fetching stock quantity', error)

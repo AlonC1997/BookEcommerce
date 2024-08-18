@@ -48,7 +48,6 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "orderBooks", key = "#orderId")
     public List<OrderBookDTO> getOrderBooksById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -75,7 +74,6 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "userOrders", key = "#userId")
     public List<OrderDTO> getAllOrdersForUser(Long userId) throws UserNotFoundException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
@@ -83,19 +81,6 @@ public class OrderService {
         return orders.stream()
                 .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @CacheEvict(value = "orders", key = "#orderId")
-    public void updateOrderStatus(Long orderId, String status) throws OrderNotFoundException {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
-        try {
-            order.setStatus(Order.OrderStatus.valueOf(status));
-            orderRepository.save(order);
-        } catch (ObjectOptimisticLockingFailureException ex) {
-            throw new RuntimeException("Order update failed due to concurrent modification", ex);
-        }
     }
 
     @Transactional(readOnly = true)
@@ -109,8 +94,7 @@ public class OrderService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "orders", key = "#id"),
-            @CacheEvict(value = "userOrders", allEntries = true),
+            @CacheEvict(value = "orders", allEntries = true),
             @CacheEvict(value = "allOrders", allEntries = true)
     })
     public void deleteOrder(Long id) throws OrderNotFoundException {
@@ -125,7 +109,11 @@ public class OrderService {
     }
 
     @Transactional
-    @CacheEvict(value = "orders" , key = "#orderId")
+    @Caching(evict = {
+            @CacheEvict(value = "orders", key = "#orderDTO.id"),
+            @CacheEvict(value = "allOrders", allEntries = true),
+            @CacheEvict(value = "orderBooks", key = "#orderDTO.id")
+    })
     public void updateOrder(OrderDTO orderDTO) throws OrderNotFoundException {
         Order order = orderRepository.findById(orderDTO.getId())
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderDTO.getId()));
@@ -142,7 +130,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "lastOrderIdForUser", key = "#userId")
     public Long getLastOrderIdForUser(Long userId) throws UserNotFoundException {
+        // Validate user existence
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
         Long maxOrderId = orderRepository.findMaxOrderIdByUserId(userId);
 
         if (maxOrderId == null) {

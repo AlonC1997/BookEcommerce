@@ -2,18 +2,20 @@ import React from 'react'
 import Modal from 'react-modal'
 import styles from './ThanksModal.module.css'
 import Cookies from 'js-cookie'
-Modal.setAppElement('#root');
 
+Modal.setAppElement('#root');
 const ThanksModal = ({ isOpen, onClose, message, orderDetails, setHasPreviousOrder }) => {
 	const handleLogout = () => {
+		setHasPreviousOrder(true);
+		onClose()
 		Cookies.remove('token');
-		setHasPreviousOrder(true)
+        Cookies.remove('refreshToken');		
 		window.location.href = '/login'
 	}
 
 	const handleClose = () => {
-		setHasPreviousOrder(true)
 		onClose()
+		setHasPreviousOrder(true)
 	}
 
 	return (

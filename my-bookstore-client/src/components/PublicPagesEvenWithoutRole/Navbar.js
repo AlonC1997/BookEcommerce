@@ -11,10 +11,12 @@ const Navbar = ({ isLoggedIn, isAdmin, isMainAdmin, onLogout }) => {
 
 	const handleLogout = () => {
 		onLogout()
+		setIsModalOpen(false)
 		navigate('/login')
 	}
 
 	const handleContinueWithoutLogin = () => {
+		setIsModalOpen(false)
 		setIsModalOpen(true)
 	}
 

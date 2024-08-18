@@ -79,17 +79,6 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/updateStatus")
-    public ResponseEntity<?> updateOrderStatus(@RequestParam Long orderId, @RequestParam String status) {
-        try {
-            orderService.updateOrderStatus(orderId, status);
-            return ResponseEntity.ok("Order status updated successfully");
-        } catch (OrderNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllOrders")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         System.out.println("I Got here 1!!!");
@@ -99,7 +88,7 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getOrderBooksById")
-    public ResponseEntity<?> getOrderBooksById(@RequestParam Long orderId) throws OrderNotFoundException {
+    public ResponseEntity<?> getOrderBooksById(@RequestParam Long orderId) {
         List<OrderBookDTO> orderBooks = orderService.getOrderBooksById(orderId);
         return ResponseEntity.ok(orderBooks);
     }
@@ -116,9 +105,8 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/updateOrder")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateOrder(@RequestBody OrderDTO orderDTO) {
         try {
             orderService.updateOrder(orderDTO);
